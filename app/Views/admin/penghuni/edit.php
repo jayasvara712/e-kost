@@ -1,15 +1,15 @@
-<?= $this->extend('library/template'); ?>
+<?= $this->extend('layout/template'); ?>
 <?= $this->section('content'); ?>
 
 <!-- Main Content -->
 <div class="main-content">
     <section class="section">
         <div class="section-header">
-            <h1>List Data Penghuni</h1>
+            <h1>Tambah Data Penghuni</h1>
             <div class="section-header-breadcrumb">
                 <div class="breadcrumb-item active"><a href="#">Data Master</a></div>
                 <div class="breadcrumb-item">Penghuni</div>
-                <div class="breadcrumb-item">Edit Data Penghuni</div>
+                <div class="breadcrumb-item">Tambah Data Penghuni</div>
             </div>
         </div>
 
@@ -18,168 +18,116 @@
             <div class="row">
                 <div class="col-12">
                     <div class="card">
-                        <form action="<?= site_url('penghuni/update/' . $penghuni->id_penghuni) ?>" method="post" autocomplete="off" enctype="multipart/form-data">
+                        <div class="card-body">
 
-                            <div class="card-body">
+                            <form action="<?= site_url('penghuni/update/' . $penghuni->id_penghuni) ?>" method="POST" autocomplete="off" enctype="multipart/form-data">
+                                <?= csrf_field() ?>
 
-                                <div class="form-group row mb-4">
-                                    <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Nama Lengkap</label>
-                                    <div class="col-sm-12 col-md-7">
-                                        <input type="text" class="form-control" name="nama_penghuni" value="<?= $penghuni->nama_penghuni ?>">
+                                <input type="hidden" class="form-control" name="role" value="<?= $penghuni->role ?>">
+                                <input type="hidden" class="form-control" name="id_user" value="<?= $penghuni->id_user ?>">
 
-                                        <?php if (session()->getFlashdata('error')) :
-                                            if (isset(session()->getFlashdata('error')['nama_penghuni'])) :
-                                                echo ' <div class="alert alert-danger alert-dismissible show fade">
-                                            <div class="alert-body">
-                                                <button class="close" data-dismiss="alert">
-                                                    <span>&times;</span>
-                                                </button>
-                                                ' . session()->getFlashdata('error')['nama_penghuni'] . '
-                                            </div>
-                                        </div>';
-                                            endif;
-                                        endif; ?>
-
+                                <div class="form-group">
+                                    <label>Nomor KTP</label>
+                                    <input type="text" class="form-control phone-number <?= (validation_show_error('nik_penghuni')) ? 'is-invalid' : ''; ?>" name="nik_penghuni" value="<?= $penghuni->nik_penghuni ?>">
+                                    <div class="invalid-feedback">
+                                        <?= (validation_show_error('nik_penghuni')) ? validation_show_error('nik_penghuni') : ''; ?>
                                     </div>
                                 </div>
 
-                                <div class="form-group row mb-4">
-                                    <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Tanggal Lahir</label>
-                                    <div class="col-sm-12 col-md-7">
-                                        <input type="date" class="form-control" name="tgl_lahir_penghuni" value="<?= $penghuni->tgl_lahir_penghuni ?>">
-
-                                        <?php if (session()->getFlashdata('error')) :
-                                            if (isset(session()->getFlashdata('error')['tgl_lahir_penghuni'])) :
-                                                echo ' <div class="alert alert-danger alert-dismissible show fade">
-                                            <div class="alert-body">
-                                                <button class="close" data-dismiss="alert">
-                                                    <span>&times;</span>
-                                                </button>
-                                                ' . session()->getFlashdata('error')['tgl_lahir_penghuni'] . '
-                                            </div>
-                                        </div>';
-                                            endif;
-                                        endif; ?>
+                                <div class="form-group">
+                                    <label for="name">Nama Lengkap</label>
+                                    <input type="text" class="form-control <?= (validation_show_error('nama_penghuni')) ? 'is-invalid' : ''; ?>" name="nama_penghuni" value="<?= $penghuni->nama_penghuni ?>">
+                                    <div class=" invalid-feedback">
+                                        <?= (validation_show_error('nama_penghuni')) ? validation_show_error('nama_penghuni') : ''; ?>
                                     </div>
                                 </div>
 
-                                <div class="form-group row mb-4">
-                                    <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Tempat Lahir</label>
-                                    <div class="col-sm-12 col-md-7">
-                                        <input type="text" class="form-control" name="tempat_lahir_penghuni" value="<?= $penghuni->tempat_lahir_penghuni
-                                                                                                                    ?>">
-
-                                        <?php if (session()->getFlashdata('error')) :
-                                            if (isset(session()->getFlashdata('error')['tempat_lahir_penghuni'])) :
-                                                echo ' <div class="alert alert-danger alert-dismissible show fade">
-                                            <div class="alert-body">
-                                                <button class="close" data-dismiss="alert">
-                                                    <span>&times;</span>
-                                                </button>
-                                                ' . session()->getFlashdata('error')['tempat_lahir_penghuni'] . '
-                                            </div>
-                                        </div>';
-                                            endif;
-                                        endif; ?>
+                                <div class="form-group">
+                                    <label for="username">Username</label>
+                                    <input type="text" class="form-control <?= (validation_show_error('username')) ? 'is-invalid' : ''; ?>" name="username" value="<?= $penghuni->username ?>" readonly>
+                                    <div class=" invalid-feedback">
+                                        <?= (validation_show_error('username')) ? validation_show_error('username') : ''; ?>
                                     </div>
                                 </div>
 
-                                <div class="form-group row mb-4">
-                                    <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Nomor Induk Kependudukan</label>
-                                    <div class="col-sm-12 col-md-7">
-                                        <input type="text" class="form-control" name="nik_penghuni" value="<?= $penghuni->nik_penghuni
-                                                                                                            ?>">
-
-                                        <?php if (session()->getFlashdata('error')) :
-                                            if (isset(session()->getFlashdata('error')['nik_penghuni'])) :
-                                                echo ' <div class="alert alert-danger alert-dismissible show fade">
-                                            <div class="alert-body">
-                                                <button class="close" data-dismiss="alert">
-                                                    <span>&times;</span>
-                                                </button>
-                                                ' . session()->getFlashdata('error')['nik_penghuni'] . '
-                                            </div>
-                                        </div>';
-                                            endif;
-                                        endif; ?>
+                                <div class="form-group">
+                                    <label for="email">Email</label>
+                                    <input id="email" type="email" class="form-control <?= (validation_show_error('email')) ? 'is-invalid' : ''; ?>" name="email" value="<?= $penghuni->email ?>" readonly>
+                                    <div class="invalid-feedback">
+                                        <?= (validation_show_error('email')) ? validation_show_error('email') : ''; ?>
                                     </div>
                                 </div>
 
-                                <div class="form-group row mb-4">
-                                    <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Jenis Kelamin</label>
-                                    <div class="col-sm-12 col-md-7">
-                                        <select class="form-control" name="jk_penghuni">
-                                            <option value="Laki - laki" <?php if ($penghuni->jk_penghuni == 'Laki - laki') {
-                                                                            echo 'Selected';
-                                                                        } ?>>Laki - laki</option>
-                                            <option value="Perempuan" <?php if ($penghuni->jk_penghuni == 'Perempuan') {
-                                                                            echo 'Selected';
-                                                                        } ?>>Perempuan</option>
-                                        </select>
-
-                                        <?php if (session()->getFlashdata('error')) :
-                                            if (isset(session()->getFlashdata('error')['jk_penghuni'])) :
-                                                echo ' <div class="alert alert-danger alert-dismissible show fade">
-                                            <div class="alert-body">
-                                                <button class="close" data-dismiss="alert">
-                                                    <span>&times;</span>
-                                                </button>
-                                                ' . session()->getFlashdata('error')['jk_penghuni'] . '
-                                            </div>
-                                        </div>';
-                                            endif;
-                                        endif; ?>
+                                <div class="row">
+                                    <div class="form-group col-6">
+                                        <label for="password" class="d-block">Password</label>
+                                        <input id="password" type="password" class="form-control pwstrength <?= (validation_show_error('password')) ? 'is-invalid' : ''; ?>" data-indicator="pwindicator" name="password" value="<?= old('password') ?>">
+                                        <div class="invalid-feedback">
+                                            <?= (validation_show_error('password')) ? validation_show_error('password') : ''; ?>
+                                        </div>
+                                        <div id="pwindicator" class="pwindicator">
+                                            <div class="bar"></div>
+                                            <div class="label"></div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-6">
+                                        <label for="password2" class="d-block">Konfirmasi Password</label>
+                                        <input id="password2" type="password" class="form-control <?= (validation_show_error('password_conf')) ? 'is-invalid' : ''; ?>" name="password_conf" value="<?= old('password_conf') ?>">
+                                        <div class="invalid-feedback">
+                                            <?= (validation_show_error('password_conf')) ? validation_show_error('password_conf') : ''; ?>
+                                        </div>
                                     </div>
                                 </div>
 
-                                <div class="form-group row mb-4">
-                                    <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">No Telp</label>
-                                    <div class="col-sm-12 col-md-7">
-                                        <input type="text" class="form-control" name="no_telp_penghuni" value="<?= $penghuni->no_telp_penghuni
-                                                                                                                ?>">
-
-                                        <?php if (session()->getFlashdata('error')) :
-                                            if (isset(session()->getFlashdata('error')['no_telp_penghuni'])) :
-                                                echo ' <div class="alert alert-danger alert-dismissible show fade">
-                                            <div class="alert-body">
-                                                <button class="close" data-dismiss="alert">
-                                                    <span>&times;</span>
-                                                </button>
-                                                ' . session()->getFlashdata('error')['no_telp_penghuni'] . '
-                                            </div>
-                                        </div>';
-                                            endif;
-                                        endif; ?>
+                                <div class="form-group">
+                                    <label>Nomor Telepon</label>
+                                    <input type="text" class="form-control phone-number <?= (validation_show_error('no_telp_penghuni')) ? 'is-invalid' : ''; ?>" name="no_telp_penghuni" value="<?= $penghuni->no_telp_penghuni ?>">
+                                    <div class="invalid-feedback">
+                                        <?= (validation_show_error('no_telp_penghuni')) ? validation_show_error('no_telp_penghuni') : ''; ?>
                                     </div>
                                 </div>
 
-                                <div class="form-group row mb-4">
-                                    <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Alamat</label>
-                                    <div class="col-sm-12 col-md-7">
-                                        <textarea class="form-control" name="alamat_penghuni"><?= $penghuni->alamat_penghuni ?></textarea>
+                                <div class="row">
+                                    <div class="form-group col-6">
+                                        <label>Tempat Lahir</label>
+                                        <input type="text" class="form-control <?= (validation_show_error('tempat_lahir_penghuni')) ? 'is-invalid' : ''; ?>" name="tempat_lahir_penghuni" value="<?= $penghuni->tempat_lahir_penghuni ?>">
+                                        <div class="invalid-feedback">
+                                            <?= (validation_show_error('tempat_lahir_penghuni')) ? validation_show_error('tempat_lahir_penghuni') : ''; ?>
+                                        </div>
+                                    </div>
 
-                                        <?php if (session()->getFlashdata('error')) :
-                                            if (isset(session()->getFlashdata('error')['alamat_penghuni'])) :
-                                                echo ' <div class="alert alert-danger alert-dismissible show fade">
-                                            <div class="alert-body">
-                                                <button class="close" data-dismiss="alert">
-                                                    <span>&times;</span>
-                                                </button>
-                                                ' . session()->getFlashdata('error')['alamat_penghuni'] . '
-                                            </div>
-                                        </div>';
-                                            endif;
-                                        endif; ?>
+                                    <div class="form-group col-6">
+                                        <label>Tanggal Lahir</label>
+                                        <input type="text" class="form-control datepicker <?= (validation_show_error('tgl_lahir_penghuni')) ? 'is-invalid' : ''; ?>" name="tgl_lahir_penghuni" value="<?= $penghuni->tgl_lahir_penghuni ?>">
+                                        <div class="invalid-feedback">
+                                            <?= (validation_show_error('tgl_lahir_penghuni')) ? validation_show_error('tgl_lahir_penghuni') : ''; ?>
+                                        </div>
                                     </div>
                                 </div>
 
-                                <div class="form-group row mb-4">
-                                    <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3"></label>
-                                    <div class="col-sm-12 col-md-7">
-                                        <button class="btn btn-success"><i class="fas fa-save"></i> Simpan</button>
+                                <div class="form-group">
+                                    <label>Jenis Kelamin</label>
+                                    <select class="form-control selectric <?= (validation_show_error('jk_penghuni')) ? 'is-invalid' : ''; ?>" name="jk_penghuni">
+                                        <option value="Laki-laki" <?= ($penghuni->jk_penghuni == 'Laki-laki') ? 'selected' : '' ?>>Laki-laki</option>
+                                        <option value="Perempuan" <?= ($penghuni->jk_penghuni == 'Perempuan') ? 'selected' : '' ?>>Perempuan</option>
+                                    </select>
+                                    <div class="invalid-feedback">
+                                        <?= (validation_show_error('jk_penghuni')) ? validation_show_error('jk_penghuni') : ''; ?>
                                     </div>
                                 </div>
-                            </div>
+
+                                <div class="form-group">
+                                    <label>Alamat</label>
+                                    <input type="text" class="form-control <?= (validation_show_error('alamat_penghuni')) ? 'is-invalid' : ''; ?>" name="alamat_penghuni" value="<?= $penghuni->alamat_penghuni ?>">
+                                    <div class="invalid-feedback">
+                                        <?= (validation_show_error('alamat_penghuni')) ? validation_show_error('alamat_penghuni') : ''; ?>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <button class="btn btn-success"><i class="fas fa-save"></i> Simpan</button>
+                                </div>
+                        </div>
 
                         </form>
                     </div>

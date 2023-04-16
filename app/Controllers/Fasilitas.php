@@ -9,7 +9,10 @@ class Fasilitas extends ResourceController
 {
 
     private $menu = "<script language=\"javascript\">menu('m-fasilitas');</script>";
-    private $header = "<script language=\"javascript\">menu('m-page');</script>";
+    private $header = "<script language=\"javascript\">menu('m-master');</script>";
+    protected $modelFasilitas;
+    protected $helpers = ['form'];
+
     function __construct()
     {
         $this->modelFasilitas = new ModelFasilitas();
@@ -43,9 +46,8 @@ class Fasilitas extends ResourceController
      */
     public function new()
     {
-        session();
         $data = [
-            'validation' => \Config\Services::validation()
+            'validation' => \config\Services::validation()
         ];
         echo view('admin/fasilitas/add', $data) . $this->menu . $this->header;
     }
@@ -57,6 +59,7 @@ class Fasilitas extends ResourceController
      */
     public function create()
     {
+        $post = $this->request->getPost();
         $validation = $this->validate([
             'judul_fasilitas' => [
                 'required',
@@ -68,11 +71,12 @@ class Fasilitas extends ResourceController
         ]);
 
         if (!$validation) {
-            return redirect()->to(site_url('/fasilitas/new'))->withInput()->with('error', $this->validator->getErrors());
+            $validation = \config\Services::validation();
+            return redirect()->to(site_url('/fasilitas/new'))->withInput()->with('validation', $validation);
         } else {
 
             $data = [
-                'judul_fasilitas' => $this->request->getPost('judul_fasilitas')
+                'judul_fasilitas' => $post['judul_fasilitas']
             ];
             $this->modelFasilitas->insert($data);
             return redirect()->to(site_url('fasilitas'))->with('success', 'Data Fasilitas Berhasil Ditambah');
@@ -87,7 +91,6 @@ class Fasilitas extends ResourceController
     public function edit($id_fasilitas = null)
     {
         $fasilitas = $this->modelFasilitas->where('id_fasilitas', $id_fasilitas)->first();
-        session();
         $data = [
             'fasilitas' => $fasilitas,
             'validation' => \Config\Services::validation()

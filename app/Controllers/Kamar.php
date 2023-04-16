@@ -2,16 +2,22 @@
 
 namespace App\Controllers;
 
+use App\Models\ModelFasilitas;
 use App\Models\ModelKamar;
 use CodeIgniter\RESTful\ResourceController;
 
 class Kamar extends ResourceController
 {
     private $menu = "<script language=\"javascript\">menu('m-kamar');</script>";
-    private $header = "<script language=\"javascript\">menu('m-page');</script>";
+    private $header = "<script language=\"javascript\">menu('m-master');</script>";
+    protected $modelKamar;
+    protected $modelFasilitas;
+    protected $helpers = ['form'];
+
     function __construct()
     {
         $this->modelKamar = new ModelKamar();
+        $this->modelFasilitas = new ModelFasilitas();
     }
 
     /**
@@ -42,9 +48,9 @@ class Kamar extends ResourceController
      */
     public function new()
     {
-        session();
         $data = [
-            'validation' => \Config\Services::validation()
+            'validation' => \Config\Services::validation(),
+            'fasilitas' => $this->modelFasilitas->findAll()
         ];
         echo view('admin/kamar/add', $data) . $this->menu . $this->header;
     }
@@ -56,6 +62,7 @@ class Kamar extends ResourceController
      */
     public function create()
     {
+        $post = $this->request->getPost();
         $validation = $this->validate([
             'nomor_kamar' => [
                 'required',
@@ -87,13 +94,16 @@ class Kamar extends ResourceController
         if (!$validation) {
             return redirect()->to(site_url('/kamar/new'))->withInput()->with('error', '$this->validator->getErrors()');
         } else {
-
+            $id_fasilitas = '';
+            foreach (array($post['id_fasilitas']) as $key => $value) {
+                $id_fasilitas = implode(",", $value);
+            }
             $data = [
-                'nomor_kamar' => $this->request->getPost('nomor_kamar'),
-                'harga_kamar' => $this->request->getPost('harga_kamar'),
-                'id_fasilitas' => $this->request->getPost('id_fasilitas'),
-                'status_kamar' => $this->request->getPost('status_kamar'),
-                'keterangan_kamar' => $this->request->getPost('keterangan_kamar')
+                'nomor_kamar' => $post['nomor_kamar'],
+                'harga_kamar' => $post['harga_kamar'],
+                'id_fasilitas' => $id_fasilitas,
+                'status_kamar' => $post['status_kamar'],
+                'keterangan_kamar' => $post['keterangan_kamar']
             ];
             $this->modelKamar->insert($data);
             return redirect()->to(site_url('kamar'))->with('success', 'Data Kamar Berhasil Ditambah');
@@ -108,9 +118,11 @@ class Kamar extends ResourceController
     public function edit($id_kamar = null)
     {
         $kamar = $this->modelKamar->where('id_kamar', $id_kamar)->first();
-        session();
+        $id_fasilitas = explode(',', $kamar->id_fasilitas);
         $data = [
             'kamar' => $kamar,
+            'fasilitas' => $this->modelFasilitas->findAll(),
+            'temp_id_fasilitas' => $id_fasilitas,
             'validation' => \Config\Services::validation()
         ];
         if (is_object($kamar)) {
@@ -128,6 +140,7 @@ class Kamar extends ResourceController
      */
     public function update($id_kamar = null)
     {
+        $post = $this->request->getPost();
         $validation = $this->validate([
             'nomor_kamar' => [
                 'required',
@@ -158,17 +171,22 @@ class Kamar extends ResourceController
 
         if (!$validation) {
             return redirect()->to(previous_url())->withInput()->with('error', $this->validator->getErrors());
-        }
+        } else {
+            $id_fasilitas = '';
+            foreach (array($post['id_fasilitas']) as $key => $value) {
+                $id_fasilitas = implode(",", $value);
+            }
 
-        $data = [
-            'nomor_kamar' => $this->request->getPost('nomor_kamar'),
-            'harga_kamar' => $this->request->getPost('harga_kamar'),
-            'id_fasilitas' => $this->request->getPost('id_fasilitas'),
-            'status_kamar' => $this->request->getPost('status_kamar'),
-            'keterangan_kamar' => $this->request->getPost('keterangan_kamar')
-        ];
-        $this->modelKamar->update($id_kamar, $data);
-        return redirect()->to(site_url('kamar'))->with('success', 'Data Kamar Berhasil Dirubah');
+            $data = [
+                'nomor_kamar' => $post['nomor_kamar'],
+                'harga_kamar' => $post['harga_kamar'],
+                'id_fasilitas' => $id_fasilitas,
+                'status_kamar' => $post['status_kamar'],
+                'keterangan_kamar' => $post['keterangan_kamar']
+            ];
+            $this->modelKamar->update($id_kamar, $data);
+            return redirect()->to(site_url('kamar'))->with('success', 'Data Kamar Berhasil Dirubah');
+        }
     }
 
     /**

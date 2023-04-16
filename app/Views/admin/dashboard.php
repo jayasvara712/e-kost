@@ -18,21 +18,21 @@
                     <div class="card">
                         <div class="card-body">
 
-                            <div class="alert alert-success alert-dismissible show fade">
-                                <div class="alert-body">
-                                    <button class="close" data-dismiss="alert">
-                                        <span>&times;</span>
-                                    </button>
-                                    <b>ADMIN!</b> Selamat Datang, anda login sebagai Admin
+                            <?php if (session()->getFlashdata('success')) : ?>
+                                <div class="alert alert-success alert-dismissible show fade">
+                                    <div class="alert-body">
+                                        <button class="close" data-dismiss="alert">x</button>
+                                        <?= session()->getFlashdata('success') ?>
+                                    </div>
                                 </div>
-                            </div>
+                            <?php endif ?>
 
                             <div class="row">
 
                                 <div class="col-lg-3 col-md-6 col-sm-6 col-12">
                                     <div class="card card-statistic-1 card-primary">
                                         <div class="card-icon bg-primary">
-                                            <i class="fas fa-people-roof"></i>
+                                            <i class="fas fa-bath"></i>
                                         </div>
                                         <div class="card-wrap">
                                             <div class="card-header">
@@ -48,7 +48,7 @@
                                 <div class="col-lg-3 col-md-6 col-sm-6 col-12">
                                     <div class="card card-statistic-1 card-primary">
                                         <div class="card-icon bg-primary">
-                                            <i class="fas fa-house-user"></i>
+                                            <i class="fas fa-door-open"></i>
                                         </div>
                                         <div class="card-wrap">
                                             <div class="card-header">
@@ -56,22 +56,6 @@
                                             </div>
                                             <div class="card-body">
                                                 <?= $kamar ?>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="col-lg-3 col-md-6 col-sm-6 col-12">
-                                    <div class="card card-statistic-1 card-primary">
-                                        <div class="card-icon bg-primary">
-                                            <i class="fas fa-door-open"></i>
-                                        </div>
-                                        <div class="card-wrap">
-                                            <div class="card-header">
-                                                <h4>Penyewaan</h4>
-                                            </div>
-                                            <div class="card-body">
-                                                <?= $penyewaan ?>
                                             </div>
                                         </div>
                                     </div>
@@ -88,6 +72,38 @@
                                             </div>
                                             <div class="card-body">
                                                 <?= $penghuni ?>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-3 col-md-6 col-sm-6 col-12">
+                                    <div class="card card-statistic-1 card-primary">
+                                        <div class="card-icon bg-primary">
+                                            <i class="fas fa-user-tie"></i>
+                                        </div>
+                                        <div class="card-wrap">
+                                            <div class="card-header">
+                                                <h4>Karaywan</h4>
+                                            </div>
+                                            <div class="card-body">
+                                                <?= $karyawan ?>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-3 col-md-6 col-sm-6 col-12">
+                                    <div class="card card-statistic-1 card-primary">
+                                        <div class="card-icon bg-primary">
+                                            <i class="fas fa-file-invoice"></i>
+                                        </div>
+                                        <div class="card-wrap">
+                                            <div class="card-header">
+                                                <h4>Penyewaan</h4>
+                                            </div>
+                                            <div class="card-body">
+                                                <?= $penyewaan ?>
                                             </div>
                                         </div>
                                     </div>

@@ -5,11 +5,11 @@
 <div class="main-content">
     <section class="section">
         <div class="section-header">
-            <h1>Tambah Data Penghuni</h1>
+            <h1>Tambah Data karyawan</h1>
             <div class="section-header-breadcrumb">
                 <div class="breadcrumb-item active"><a href="#">Data Master</a></div>
-                <div class="breadcrumb-item">Penghuni</div>
-                <div class="breadcrumb-item">Tambah Data Penghuni</div>
+                <div class="breadcrumb-item">karyawan</div>
+                <div class="breadcrumb-item">Tambah Data karyawan</div>
             </div>
         </div>
 
@@ -20,30 +20,31 @@
                     <div class="card">
                         <div class="card-body">
 
-                            <form action="<?= site_url('penghuni') ?>" method="POST" autocomplete="off" enctype="multipart/form-data">
+                            <form action="<?= site_url('karyawan/update/' . $karyawan->id_karyawan) ?>" method="POST" autocomplete="off" enctype="multipart/form-data">
                                 <?= csrf_field() ?>
 
-                                <input type="hidden" class="form-control" name="role" value="penghuni">
+                                <input type="hidden" class="form-control" name="role" value="<?= $karyawan->role ?>">
+                                <input type="hidden" class="form-control" name="id_user" value="<?= $karyawan->id_user ?>">
 
                                 <div class="form-group">
                                     <label>Nomor KTP</label>
-                                    <input type="text" class="form-control phone-number <?= (validation_show_error('nik_penghuni')) ? 'is-invalid' : ''; ?>" name="nik_penghuni" value="<?= old('nik_penghuni') ?>">
+                                    <input type="text" class="form-control phone-number <?= (validation_show_error('nik_karyawan')) ? 'is-invalid' : ''; ?>" name="nik_karyawan" value="<?= $karyawan->nik_karyawan ?>">
                                     <div class="invalid-feedback">
-                                        <?= (validation_show_error('nik_penghuni')) ? validation_show_error('nik_penghuni') : ''; ?>
+                                        <?= (validation_show_error('nik_karyawan')) ? validation_show_error('nik_karyawan') : ''; ?>
                                     </div>
                                 </div>
 
                                 <div class="form-group">
                                     <label for="name">Nama Lengkap</label>
-                                    <input type="text" class="form-control <?= (validation_show_error('nama_penghuni')) ? 'is-invalid' : ''; ?>" name="nama_penghuni" value="<?= old('nama_penghuni') ?>">
+                                    <input type="text" class="form-control <?= (validation_show_error('nama_karyawan')) ? 'is-invalid' : ''; ?>" name="nama_karyawan" value="<?= $karyawan->nama_karyawan ?>">
                                     <div class=" invalid-feedback">
-                                        <?= (validation_show_error('nama_penghuni')) ? validation_show_error('nama_penghuni') : ''; ?>
+                                        <?= (validation_show_error('nama_karyawan')) ? validation_show_error('nama_karyawan') : ''; ?>
                                     </div>
                                 </div>
 
                                 <div class="form-group">
                                     <label for="username">Username</label>
-                                    <input type="text" class="form-control <?= (validation_show_error('username')) ? 'is-invalid' : ''; ?>" name="username" value="<?= old('username') ?>">
+                                    <input type="text" class="form-control <?= (validation_show_error('username')) ? 'is-invalid' : ''; ?>" name="username" value="<?= $karyawan->username ?>" readonly>
                                     <div class=" invalid-feedback">
                                         <?= (validation_show_error('username')) ? validation_show_error('username') : ''; ?>
                                     </div>
@@ -51,7 +52,7 @@
 
                                 <div class="form-group">
                                     <label for="email">Email</label>
-                                    <input id="email" type="email" class="form-control <?= (validation_show_error('email')) ? 'is-invalid' : ''; ?>" name="email" value="<?= old('email') ?>">
+                                    <input id="email" type="email" class="form-control <?= (validation_show_error('email')) ? 'is-invalid' : ''; ?>" name="email" value="<?= $karyawan->email ?>" readonly>
                                     <div class="invalid-feedback">
                                         <?= (validation_show_error('email')) ? validation_show_error('email') : ''; ?>
                                     </div>
@@ -80,47 +81,28 @@
 
                                 <div class="form-group">
                                     <label>Nomor Telepon</label>
-                                    <input type="text" class="form-control phone-number <?= (validation_show_error('no_telp_penghuni')) ? 'is-invalid' : ''; ?>" name="no_telp_penghuni" value="<?= old('no_telp_penghuni') ?>">
+                                    <input type="text" class="form-control phone-number <?= (validation_show_error('no_telp_karyawan')) ? 'is-invalid' : ''; ?>" name="no_telp_karyawan" value="<?= $karyawan->no_telp_karyawan ?>">
                                     <div class="invalid-feedback">
-                                        <?= (validation_show_error('no_telp_penghuni')) ? validation_show_error('no_telp_penghuni') : ''; ?>
-                                    </div>
-                                </div>
-
-                                <div class="row">
-                                    <div class="form-group col-6">
-                                        <label>Tempat Lahir</label>
-                                        <input type="text" class="form-control <?= (validation_show_error('tempat_lahir_penghuni')) ? 'is-invalid' : ''; ?>" name="tempat_lahir_penghuni" value="<?= old('tempat_lahir_penghuni') ?>">
-                                        <div class="invalid-feedback">
-                                            <?= (validation_show_error('tempat_lahir_penghuni')) ? validation_show_error('tempat_lahir_penghuni') : ''; ?>
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group col-6">
-                                        <label>Tanggal Lahir</label>
-                                        <input type="text" class="form-control datepicker <?= (validation_show_error('tgl_lahir_penghuni')) ? 'is-invalid' : ''; ?>" name="tgl_lahir_penghuni" value="<?= old('tgl_lahir_penghuni') ?>">
-                                        <div class="invalid-feedback">
-                                            <?= (validation_show_error('tgl_lahir_penghuni')) ? validation_show_error('tgl_lahir_penghuni') : ''; ?>
-                                        </div>
+                                        <?= (validation_show_error('no_telp_karyawan')) ? validation_show_error('no_telp_karyawan') : ''; ?>
                                     </div>
                                 </div>
 
                                 <div class="form-group">
                                     <label>Jenis Kelamin</label>
-                                    <select class="form-control selectric <?= (validation_show_error('jk_penghuni')) ? 'is-invalid' : ''; ?>" name="jk_penghuni" value="<?= old('jk_penghuni') ?>">
-                                        <option value="">Pilih jenis kelamin</option>
-                                        <option value="Laki-laki" <?= (old('jk_penghuni') == 'Laki-laki') ? 'selected' : '' ?>>Laki-laki</option>
-                                        <option value="Perempuan" <?= (old('jk_penghuni') == 'Perempuan') ? 'selected' : '' ?>>Perempuan</option>
+                                    <select class="form-control selectric <?= (validation_show_error('jk_karyawan')) ? 'is-invalid' : ''; ?>" name="jk_karyawan">
+                                        <option value="Laki-laki" <?= ($karyawan->jk_karyawan == 'Laki-laki') ? 'selected' : '' ?>>Laki-laki</option>
+                                        <option value="Perempuan" <?= ($karyawan->jk_karyawan == 'Perempuan') ? 'selected' : '' ?>>Perempuan</option>
                                     </select>
                                     <div class="invalid-feedback">
-                                        <?= (validation_show_error('jk_penghuni')) ? validation_show_error('jk_penghuni') : ''; ?>
+                                        <?= (validation_show_error('jk_karyawan')) ? validation_show_error('jk_karyawan') : ''; ?>
                                     </div>
                                 </div>
 
                                 <div class="form-group">
                                     <label>Alamat</label>
-                                    <input type="text" class="form-control <?= (validation_show_error('alamat_penghuni')) ? 'is-invalid' : ''; ?>" name="alamat_penghuni" value="<?= old('alamat_penghuni') ?>">
+                                    <input type="text" class="form-control <?= (validation_show_error('alamat_karyawan')) ? 'is-invalid' : ''; ?>" name="alamat_karyawan" value="<?= $karyawan->alamat_karyawan ?>">
                                     <div class="invalid-feedback">
-                                        <?= (validation_show_error('alamat_penghuni')) ? validation_show_error('alamat_penghuni') : ''; ?>
+                                        <?= (validation_show_error('alamat_karyawan')) ? validation_show_error('alamat_karyawan') : ''; ?>
                                     </div>
                                 </div>
 

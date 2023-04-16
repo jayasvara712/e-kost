@@ -20,4 +20,22 @@ class ModelKaryawan extends Model
         $query = $builder->countAll();
         return $query;
     }
+
+    public function get_all()
+    {
+        $builder = $this->db->table($this->table);
+        $builder->select('*');
+        $builder->join('user', 'user.id_user = karyawan.id_user', 'LEFT');
+        return $builder->get()->getResult();
+    }
+
+    public function get_all_where($id_karyawan)
+    {
+        $builder = $this->db->table($this->table);
+        $builder->select('*');
+        $builder->join('user', 'user.id_user = karyawan.id_user', 'LEFT');
+        $builder->where('id_karyawan', $id_karyawan);
+        $query = $builder->get()->getFirstRow();
+        return $query;
+    }
 }

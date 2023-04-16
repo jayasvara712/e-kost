@@ -5,10 +5,10 @@
 <div class="main-content">
     <section class="section">
         <div class="section-header">
-            <h1>List Data Penghuni</h1>
+            <h1>List Data Karyawan</h1>
             <div class="section-header-breadcrumb">
                 <div class="breadcrumb-item active"><a href="#">Data Master</a></div>
-                <div class="breadcrumb-item">Penghuni</div>
+                <div class="breadcrumb-item">Karyawan</div>
             </div>
         </div>
 
@@ -27,8 +27,8 @@
                         <?php endif ?>
                         <div class="card-header">
                             <p class="btn-group">
-                                <a href="<?= site_url("penghuni/new") ?>" class="btn btn-success btn-lg">
-                                    <i class="fas fa-plus"></i> Tambah Data Penghuni</a>
+                                <a href="<?= site_url("karyawan/new") ?>" class="btn btn-success btn-lg">
+                                    <i class="fas fa-plus"></i> Tambah Data Karyawan</a>
                             </p>
                         </div>
                         <div class="card-body">
@@ -44,23 +44,23 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <?php foreach ($penghuni as $key => $value) : ?>
+                                        <?php foreach ($karyawan as $key => $value) : ?>
                                             <tr>
                                                 <td>
                                                     <?= $key + 1 ?>
                                                 </td>
                                                 <td>
-                                                    <?= $value->nama_penghuni ?>
+                                                    <?= $value->nama_karyawan ?>
                                                 </td>
                                                 <td>
-                                                    <?= $value->nik_penghuni ?>
+                                                    <?= $value->nik_karyawan ?>
                                                 </td>
                                                 <td>
                                                     <?= $value->email ?>
                                                 </td>
                                                 <td>
-                                                    <a href="<?= site_url('penghuni/edit/' .  $value->id_penghuni) ?>" class="btn btn-warning"><i class="fas fa-edit"></i></a>
-                                                    <form action="<?= site_url('penghuni/delete/') . $value->id_penghuni ?>" class="d-inline" method="post">
+                                                    <a href="<?= site_url('karyawan/edit/' .  $value->id_karyawan) ?>" class="btn btn-warning"><i class="fas fa-edit"></i></a>
+                                                    <form action="<?= site_url('karyawan/delete/') . $value->id_karyawan ?>" class="d-inline" method="post">
                                                         <button class="btn btn-danger"><i class="fas fa-trash"></i></button>
                                                     </form>
                                                 </td>

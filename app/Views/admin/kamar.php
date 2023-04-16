@@ -1,4 +1,4 @@
-<?= $this->extend('library/template'); ?>
+<?= $this->extend('layout/template'); ?>
 <?= $this->section('content'); ?>
 
 <!-- Main Content -->
@@ -17,6 +17,7 @@
             <div class="row">
                 <div class="col-12">
                     <div class="card">
+
                         <?php if (session()->getFlashdata('success')) : ?>
                             <div class="alert alert-success alert-dismissible show fade">
                                 <div class="alert-body">
@@ -25,15 +26,16 @@
                                 </div>
                             </div>
                         <?php endif ?>
+
                         <div class="card-header">
-                            <p class="btn-group">
+                            <h4 class="btn-group">
                                 <a href="<?= site_url("kamar/new") ?>" class="btn btn-success btn-lg">
                                     <i class="fas fa-plus"></i> Tambah Data Kamar</a>
-                            </p>
+                            </h4>
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
-                                <table class="table table-striped" id="table-2">
+                                <table class="table table-striped" id="table-1">
                                     <thead>
                                         <tr>
                                             <th>No Kamar</th>

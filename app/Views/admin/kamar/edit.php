@@ -1,11 +1,11 @@
-<?= $this->extend('library/template'); ?>
+<?= $this->extend('layout/template'); ?>
 <?= $this->section('content'); ?>
 
 <!-- Main Content -->
 <div class="main-content">
     <section class="section">
         <div class="section-header">
-            <h1>List Data Kamar</h1>
+            <h1>Edit Data Kamar</h1>
             <div class="section-header-breadcrumb">
                 <div class="breadcrumb-item active"><a href="#">Data Master</a></div>
                 <div class="breadcrumb-item">Kamar</div>
@@ -21,48 +21,59 @@
                         <div class="card-body">
 
                             <form action="<?= site_url('kamar/update/' . $kamar->id_kamar) ?>" method="post" autocomplete="off" enctype="multipart/form-data">
+                                <?= csrf_field() ?>
 
-                                <div class="form-group row mb-4">
-                                    <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Nomor Kamar</label>
-                                    <div class="col-sm-12 col-md-7">
-                                        <input type="text" class="form-control" name="nomor_kamar" value="<?= $kamar->nomor_kamar ?>">
-                                    </div>
+                                <div class="form-group">
+                                    <label>Nomor Kamar</label>
+
+                                    <input type="text" class="form-control" name="nomor_kamar" value="<?= $kamar->nomor_kamar ?>">
                                 </div>
 
-                                <div class="form-group row mb-4">
-                                    <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Harga Kamar</label>
-                                    <div class="col-sm-12 col-md-7">
-                                        <input type="number" class="form-control" name="harga_kamar" value="<?= $kamar->harga_kamar ?>">
-                                    </div>
+                                <div class="form-group">
+                                    <label>Harga Kamar</label>
+
+                                    <input type="text" class="form-control currency" name="harga_kamar" value="<?= $kamar->harga_kamar ?>">
                                 </div>
 
-                                <div class="form-group row mb-4">
-                                    <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Fasilitas Kamar</label>
-                                    <div class="col-sm-12 col-md-7">
-                                        <input type="text" class="form-control" name="id_fasilitas" value="<?= $kamar->id_fasilitas ?>">
-                                    </div>
+                                <div class="form-group">
+                                    <label>Fasilitas Kamar</label>
+                                    <select class="form-control select2" multiple="multiple" name="id_fasilitas[]">
+                                        <?php
+                                        foreach ($fasilitas as $key1 => $fasilitas) :
+                                            $i = 0;
+                                            foreach ($temp_id_fasilitas as $key2 => $selected_fasilitas) :
+                                                if ($selected_fasilitas[$key2 - 1] == $fasilitas->id_fasilitas) {
+                                                    echo '<option value="' . $fasilitas->id_fasilitas . '" selected>' . $fasilitas->judul_fasilitas . '</option>';
+                                                    $i = 1;
+                                                    break;
+                                                }
+                                            endforeach;
+                                            if ($i == 0) {
+                                                echo '<option value="' . $fasilitas->id_fasilitas . '">' . $fasilitas->judul_fasilitas . '</option>';
+                                            }
+                                        ?>
+                                        <?php
+                                        endforeach;
+                                        ?>
+                                    </select>
                                 </div>
 
-                                <div class="form-group row mb-4">
-                                    <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Status Kamar</label>
-                                    <div class="col-sm-12 col-md-7">
-                                        <input type="text" class="form-control" name="status_kamar" value="<?= $kamar->status_kamar ?>" readonly>
-                                    </div>
+                                <div class="form-group">
+                                    <label>Status Kamar</label>
+
+                                    <input type="text" class="form-control" name="status_kamar" value="<?= $kamar->status_kamar ?>" readonly>
                                 </div>
 
-                                <div class="form-group row mb-4">
-                                    <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Keterangan Kamar</label>
-                                    <div class="col-sm-12 col-md-7">
-                                        <textarea class="form-control" name="keterangan_kamar"><?= $kamar->keterangan_kamar ?></textarea>
-                                    </div>
+                                <div class="form-group">
+                                    <label>Keterangan Kamar</label>
+
+                                    <textarea class="form-control" name="keterangan_kamar"><?= $kamar->keterangan_kamar ?></textarea>
                                 </div>
 
-                                <div class="form-group row mb-4">
-                                    <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3"></label>
-                                    <div class="col-sm-12 col-md-7">
-                                        <button type=" submit" class="btn btn-success"><i class="fas fa-save"></i> Save</button>
-                                        <button type="reset" class="btn btn-danger"><i class="fas fa-undo"></i> Reset</button>
-                                    </div>
+                                <div class="form-group">
+                                    <button type=" submit" class="btn btn-success"><i class="fas fa-save"></i> Save</button>
+                                    <button type="reset" class="btn btn-danger"><i class="fas fa-undo"></i> Reset</button>
+
                                 </div>
 
                             </form>

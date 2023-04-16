@@ -2,10 +2,26 @@
 
 namespace App\Controllers;
 
+use App\Models\ModelKaryawan;
+use App\Models\ModelUser;
 use CodeIgniter\RESTful\ResourceController;
 
 class Karyawan extends ResourceController
 {
+
+    private $menu = "<script language=\"javascript\">menu('m-karyawan');</script>";
+    private $header = "<script language=\"javascript\">menu('m-user');</script>";
+
+    protected $ModelKaryawan;
+    protected $modelUser;
+    protected $helpers = ['form'];
+
+    function __construct()
+    {
+        $this->ModelKaryawan = new ModelKaryawan();
+        $this->modelUser = new ModelUser();
+    }
+
     /**
      * Return an array of resource objects, themselves in array format
      *
@@ -13,7 +29,8 @@ class Karyawan extends ResourceController
      */
     public function index()
     {
-        //
+        $data['karyawan'] = $this->ModelKaryawan->get_all();
+        echo view('admin/karyawan', $data) . $this->menu . $this->header;
     }
 
     /**
@@ -33,7 +50,10 @@ class Karyawan extends ResourceController
      */
     public function new()
     {
-        //
+        $data = [
+            'validation' => \Config\Services::validation()
+        ];
+        echo view('admin/karyawan/add', $data) . $this->menu . $this->header;
     }
 
     /**
@@ -43,7 +63,96 @@ class Karyawan extends ResourceController
      */
     public function create()
     {
-        //
+        $post = $this->request->getPost();
+        $validation = $this->validate([
+            'nik_karyawan' => [
+                'rules'  => 'required',
+                'errors' => [
+                    'required' => 'Nomor KTP Tidak Boleh Kosong!'
+                ]
+            ],
+            'nama_karyawan' => [
+                'rules'  => 'required',
+                'errors' => [
+                    'required' => 'Nama karyawan Tidak Boleh Kosong!'
+                ]
+            ],
+            'username' => [
+                'rules'  => 'required|is_unique[user.username]',
+                'errors' => [
+                    'required' => 'Username Tidak Boleh Kosong!',
+                    'is_unique' => 'Username Sudah Terdaftar!'
+                ]
+            ],
+            'email' => [
+                'rules'  => 'required|is_unique[user.email]',
+                'errors' => [
+                    'required' => 'Email Tidak Boleh Kosong!',
+                    'is_unique' => 'Email Sudah Terdaftar!'
+                ]
+            ],
+            'password' => [
+                'rules'  => 'required|min_length[8]',
+                'errors' => [
+                    'required' => 'Password Tidak Boleh Kosong!',
+                    'min_length' => 'Password Minimal 8 Huruf',
+
+                ]
+            ],
+            'password_conf' => [
+                'rules'  => 'required|min_length[8]|matches[password]',
+                'errors' => [
+                    'required' => 'Password Tidak Boleh Kosong!',
+                    'min_length' => 'Password minimal 8 Huruf',
+                    'matches'   => 'Password Tidak Sama',
+
+                ]
+            ],
+            'no_telp_karyawan' => [
+                'rules'  => 'required|min_length[10]|max_length[13]',
+                'errors' => [
+                    'required' => 'Nomor Telepon karyawan Tidak Boleh Kosong!',
+                    'min_length' => 'Nomor Telepon Minimal 10 Angka!',
+                    'max_length' => 'Nomor Telepon Minimal 13 Angka!'
+                ]
+            ],
+            'jk_karyawan' => [
+                'rules'  => 'required',
+                'errors' => [
+                    'required' => 'Jenis Kelamin karyawan Tidak Boleh Kosong!'
+                ]
+            ],
+            'alamat_karyawan' => [
+                'rules'  => 'required',
+                'errors' => [
+                    'required' => 'Alamat karyawan Tidak Boleh Kosong!'
+                ]
+            ]
+        ]);
+
+        if (!$validation) {
+            $validation = \config\Services::validation();
+            return redirect()->to('/karyawan/new')->withInput()->with('validation', $validation);
+        } else {
+
+            $data1 = [
+                'username' => $post['username'],
+                'email' => $post['email'],
+                'password' => password_hash($post['password'], PASSWORD_BCRYPT),
+                'role' => $post['role'],
+            ];
+            $id_user = $this->modelUser->register($data1);
+            $data2 = [
+                'nik_karyawan' => $post['nik_karyawan'],
+                'nama_karyawan' => $post['nama_karyawan'],
+                'no_telp_karyawan' => $post['no_telp_karyawan'],
+                'jk_karyawan' => $post['jk_karyawan'],
+                'alamat_karyawan' => $post['alamat_karyawan'],
+                'id_user' => $id_user
+            ];
+            $this->ModelKaryawan->insert($data2);
+            return redirect()->to('/karyawan')->with('success', 'Berhasil Menambahkan Data karyawan!');
+        }
     }
 
     /**
@@ -51,9 +160,19 @@ class Karyawan extends ResourceController
      *
      * @return mixed
      */
-    public function edit($id = null)
+    public function edit($id_karyawan = null)
     {
-        //
+        $karyawan = $this->ModelKaryawan->get_all_where($id_karyawan);
+        $data = [
+            'karyawan' => $karyawan,
+            'validation' => \Config\Services::validation()
+        ];
+        if (is_object($karyawan)) {
+            $data['karyawan'] = $karyawan;
+            echo view('admin/karyawan/edit', $data) . $this->menu . $this->header;
+        } else {
+            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
+        }
     }
 
     /**
@@ -61,9 +180,97 @@ class Karyawan extends ResourceController
      *
      * @return mixed
      */
-    public function update($id = null)
+    public function update($id_karyawan = null)
     {
-        //
+        $post = $this->request->getPost();
+        $validation = $this->validate([
+            'nik_karyawan' => [
+                'rules'  => 'required',
+                'errors' => [
+                    'required' => 'Nomor KTP Tidak Boleh Kosong!'
+                ]
+            ],
+            'nama_karyawan' => [
+                'rules'  => 'required',
+                'errors' => [
+                    'required' => 'Nama karyawan Tidak Boleh Kosong!'
+                ]
+            ],
+            'username' => [
+                'rules'  => 'required',
+                'errors' => [
+                    'required' => 'Username Tidak Boleh Kosong!',
+                ]
+            ],
+            'email' => [
+                'rules'  => 'required',
+                'errors' => [
+                    'required' => 'Email Tidak Boleh Kosong!',
+                ]
+            ],
+            'password' => [
+                'rules'  => 'required|min_length[8]',
+                'errors' => [
+                    'required' => 'Password Tidak Boleh Kosong!',
+                    'min_length' => 'Password Minimal 8 Huruf',
+
+                ]
+            ],
+            'password_conf' => [
+                'rules'  => 'required|min_length[8]|matches[password]',
+                'errors' => [
+                    'required' => 'Password Tidak Boleh Kosong!',
+                    'min_length' => 'Password minimal 8 Huruf',
+                    'matches'   => 'Password Tidak Sama',
+
+                ]
+            ],
+            'no_telp_karyawan' => [
+                'rules'  => 'required|min_length[10]|max_length[13]',
+                'errors' => [
+                    'required' => 'Nomor Telepon karyawan Tidak Boleh Kosong!',
+                    'min_length' => 'Nomor Telepon Minimal 10 Angka!',
+                    'max_length' => 'Nomor Telepon Minimal 13 Angka!'
+                ]
+            ],
+            'jk_karyawan' => [
+                'rules'  => 'required',
+                'errors' => [
+                    'required' => 'Jenis Kelamin karyawan Tidak Boleh Kosong!'
+                ]
+            ],
+            'alamat_karyawan' => [
+                'rules'  => 'required',
+                'errors' => [
+                    'required' => 'Alamat karyawan Tidak Boleh Kosong!'
+                ]
+            ]
+        ]);
+
+        if (!$validation) {
+            $validation = \config\Services::validation();
+            return redirect()->to('/karyawan/edit/' . $id_karyawan)->withInput()->with('validation', $validation);
+        } else {
+
+            $id_user = $post['id_user'];
+            $data1 = [
+                'username' => $post['username'],
+                'email' => $post['email'],
+                'password' => password_hash($post['password'], PASSWORD_BCRYPT),
+                'role' => $post['role'],
+            ];
+            $this->modelUser->update($id_user, $data1);
+            $data2 = [
+                'nik_karyawan' => $post['nik_karyawan'],
+                'nama_karyawan' => $post['nama_karyawan'],
+                'no_telp_karyawan' => $post['no_telp_karyawan'],
+                'jk_karyawan' => $post['jk_karyawan'],
+                'alamat_karyawan' => $post['alamat_karyawan'],
+                'id_user' => $id_user
+            ];
+            $this->ModelKaryawan->update($id_karyawan, $data2);
+            return redirect()->to('/karyawan')->with('success', 'Data Penhuni Berhasil Dirubah!');
+        }
     }
 
     /**
@@ -71,8 +278,11 @@ class Karyawan extends ResourceController
      *
      * @return mixed
      */
-    public function delete($id = null)
+    public function delete($id_karyawan = null)
     {
-        //
+        $data = $this->ModelKaryawan->select('id_user')->where('id_karyawan', $id_karyawan)->first();
+        $this->modelUser->where('id_user', $data->id_user)->delete();
+        $this->ModelKaryawan->where('id_karyawan', $id_karyawan)->delete();
+        return redirect()->to(site_url('karyawan'))->with('success', 'Data karyawan Berhasil Dihapus');
     }
 }

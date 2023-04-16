@@ -9,7 +9,12 @@ use CodeIgniter\RESTful\ResourceController;
 class Penghuni extends ResourceController
 {
     private $menu = "<script language=\"javascript\">menu('m-penghuni');</script>";
-    private $header = "<script language=\"javascript\">menu('m-page');</script>";
+    private $header = "<script language=\"javascript\">menu('m-user');</script>";
+
+    protected $modelPenghuni;
+    protected $modelUser;
+    protected $helpers = ['form'];
+
     function __construct()
     {
         $this->modelPenghuni = new ModelPenghuni();
@@ -44,7 +49,6 @@ class Penghuni extends ResourceController
      */
     public function new()
     {
-        session();
         $data = [
             'validation' => \Config\Services::validation()
         ];
@@ -58,84 +62,109 @@ class Penghuni extends ResourceController
      */
     public function create()
     {
-        $rules = [
-            "nama_penghuni" => "required",
-            "tgl_lahir_penghuni" => "required",
-            "tempat_lahir_penghuni" => "required",
-            "nik_penghuni" => "required|is_unique[penghuni.nik_penghuni]",
-            "jk_penghuni" => "required",
-            "no_telp_penghuni" => "required|is_unique[penghuni.no_telp_penghuni]",
-            "alamat_penghuni" => "required",
-            "username" => "required|is_unique[user.username]",
-            "email" => "required|is_unique[user.email]",
-            "password" => "required",
-            "conf_password" => "required|matches[password]"
-        ];
+        $post = $this->request->getPost();
+        $validation = $this->validate([
+            'nik_penghuni' => [
+                'rules'  => 'required',
+                'errors' => [
+                    'required' => 'Nomor KTP Tidak Boleh Kosong!'
+                ]
+            ],
+            'nama_penghuni' => [
+                'rules'  => 'required',
+                'errors' => [
+                    'required' => 'Nama Penghuni Tidak Boleh Kosong!'
+                ]
+            ],
+            'username' => [
+                'rules'  => 'required|is_unique[user.username]',
+                'errors' => [
+                    'required' => 'Username Tidak Boleh Kosong!',
+                    'is_unique' => 'Username Sudah Terdaftar!'
+                ]
+            ],
+            'email' => [
+                'rules'  => 'required|is_unique[user.email]',
+                'errors' => [
+                    'required' => 'Email Tidak Boleh Kosong!',
+                    'is_unique' => 'Email Sudah Terdaftar!'
+                ]
+            ],
+            'password' => [
+                'rules'  => 'required|min_length[8]',
+                'errors' => [
+                    'required' => 'Password Tidak Boleh Kosong!',
+                    'min_length' => 'Password Minimal 8 Huruf',
 
-        $messages = [
-            "nama_penghuni" => [
-                "required" => "Nama Lengkap Tidak Boleh Kosong"
+                ]
             ],
-            "tgl_lahir_penghuni" => [
-                "required" => "Tanggal Lahir Tidak Boleh Kosong"
-            ],
-            "tempat_lahir_penghuni" => [
-                "required" => "Tempat Lahir Tidak Boleh Kosong"
-            ],
-            "nik_penghuni" => [
-                "required" => "Nomor Induk Kependudukan Tidak Boleh Kosong",
-                "is_unique" => "Nomor Induk Kependudukan Sudah Terdaftar!"
-            ],
-            "jk_penghuni" => [
-                "required" => "Jenis Kelamin Tidak Boleh Kosong"
-            ],
-            "no_telp_penghuni" => [
-                "required" => "Nomor Telepon Tidak Boleh Kosong"
-            ],
-            "alamat_penghuni" => [
-                "required" => "Alamat Tidak Boleh Kosong"
-            ],
-            "username" => [
-                "required" => "Username Tidak Boleh Kosong",
-                "is_unique" => " Username Sudah Terdaftar!"
-            ],
-            "email" => [
-                "required" => "Email Tidak Boleh Kosong",
-                "is_unique" => "Email Sudah Terdaftar!"
-            ],
-            "password" => [
-                "required" => "Password Tidak Boleh Kosong"
-            ],
-            "conf_password" => [
-                "required" => "Konrifmasi Password Tidak Boleh Kosong",
-                "matches" => "Password Tidak Sama"
-            ],
-        ];
+            'password_conf' => [
+                'rules'  => 'required|min_length[8]|matches[password]',
+                'errors' => [
+                    'required' => 'Password Tidak Boleh Kosong!',
+                    'min_length' => 'Password minimal 8 Huruf',
+                    'matches'   => 'Password Tidak Sama',
 
-        if (!$this->validate($rules, $messages)) {
-            return redirect()->to(site_url('/penghuni/new'))->withInput()->with('error', $this->validator->getErrors());
+                ]
+            ],
+            'no_telp_penghuni' => [
+                'rules'  => 'required|min_length[10]|max_length[13]',
+                'errors' => [
+                    'required' => 'Nomor Telepon Penghuni Tidak Boleh Kosong!',
+                    'min_length' => 'Nomor Telepon Minimal 10 Angka!',
+                    'max_length' => 'Nomor Telepon Minimal 13 Angka!'
+                ]
+            ],
+            'tempat_lahir_penghuni' => [
+                'rules'  => 'required',
+                'errors' => [
+                    'required' => 'Tempat Lahir Penghuni Tidak Boleh Kosong!'
+                ]
+            ],
+            'tgl_lahir_penghuni' => [
+                'rules'  => 'required',
+                'errors' => [
+                    'required' => 'Tanggal Lahir Penghuni Tidak Boleh Kosong!'
+                ]
+            ],
+            'jk_penghuni' => [
+                'rules'  => 'required',
+                'errors' => [
+                    'required' => 'Jenis Kelamin Penghuni Tidak Boleh Kosong!'
+                ]
+            ],
+            'alamat_penghuni' => [
+                'rules'  => 'required',
+                'errors' => [
+                    'required' => 'Alamat Penghuni Tidak Boleh Kosong!'
+                ]
+            ]
+        ]);
+
+        if (!$validation) {
+            $validation = \config\Services::validation();
+            return redirect()->to('/penghuni/new')->withInput()->with('validation', $validation);
         } else {
 
             $data1 = [
-                'username' => $this->request->getPost('username'),
-                'email' => $this->request->getPost('email'),
-                'password' => $this->request->getPost('password'),
-                'role' => $this->request->getPost('role'),
+                'username' => $post['username'],
+                'email' => $post['email'],
+                'password' => password_hash($post['password'], PASSWORD_BCRYPT),
+                'role' => $post['role'],
             ];
-            $this->modelUser->insert($data1);
-            $id_user = $this->modelUser->getInsertID();
+            $id_user = $this->modelUser->register($data1);
             $data2 = [
-                'nama_penghuni' => $this->request->getPost('nama_penghuni'),
-                'tgl_lahir_penghuni' => $this->request->getPost('tgl_lahir_penghuni'),
-                'tempat_lahir_penghuni' => $this->request->getPost('tempat_lahir_penghuni'),
-                'nik_penghuni' => $this->request->getPost('nik_penghuni'),
-                'jk_penghuni' => $this->request->getPost('jk_penghuni'),
-                'no_telp_penghuni' => $this->request->getPost('no_telp_penghuni'),
-                'alamat_penghuni' => $this->request->getPost('alamat_penghuni'),
+                'nik_penghuni' => $post['nik_penghuni'],
+                'nama_penghuni' => $post['nama_penghuni'],
+                'no_telp_penghuni' => $post['no_telp_penghuni'],
+                'tempat_lahir_penghuni' => $post['tempat_lahir_penghuni'],
+                'tgl_lahir_penghuni' => $post['tgl_lahir_penghuni'],
+                'jk_penghuni' => $post['jk_penghuni'],
+                'alamat_penghuni' => $post['alamat_penghuni'],
                 'id_user' => $id_user
             ];
             $this->modelPenghuni->insert($data2);
-            return redirect()->to(site_url('penghuni'))->with('success', 'Data Penghuni Berhasil Ditambah');
+            return redirect()->to('/penghuni')->with('success', 'Berhasil Menambahkan Data Penghuni!');
         }
     }
 
@@ -146,8 +175,7 @@ class Penghuni extends ResourceController
      */
     public function edit($id_penghuni = null)
     {
-        $penghuni = $this->modelPenghuni->where('id_penghuni', $id_penghuni)->first();
-        session();
+        $penghuni = $this->modelPenghuni->get_all_where($id_penghuni);
         $data = [
             'penghuni' => $penghuni,
             'validation' => \Config\Services::validation()
@@ -167,67 +195,109 @@ class Penghuni extends ResourceController
      */
     public function update($id_penghuni = null)
     {
+        $post = $this->request->getPost();
         $validation = $this->validate([
-            'nama_penghuni' => [
-                'required',
-                'errors' => [
-                    'required' => 'Masukan Nama Lengkap Anda!'
-                ]
-            ],
-            'tgl_lahir_penghuni' => [
-                'required',
-                'errors' => [
-                    'required' => 'Tanggal Lahir Tidak Boleh Kosong!'
-                ]
-            ],
-            'tempat_lahir_penghuni' => [
-                'required',
-                'errors' => [
-                    'required' => 'Tempat Lahir Tidak Boleh Kosong!'
-                ]
-            ],
             'nik_penghuni' => [
-                'required',
+                'rules'  => 'required',
                 'errors' => [
-                    'required' => 'Nomor Induk Kependudukan Tidak Boleh Kosong!'
+                    'required' => 'Nomor KTP Tidak Boleh Kosong!'
                 ]
             ],
-            'jk_penghuni' => [
-                'required',
+            'nama_penghuni' => [
+                'rules'  => 'required',
                 'errors' => [
-                    'required' => 'Pilih Jenis Kelamin!'
+                    'required' => 'Nama Penghuni Tidak Boleh Kosong!'
+                ]
+            ],
+            'username' => [
+                'rules'  => 'required',
+                'errors' => [
+                    'required' => 'Username Tidak Boleh Kosong!',
+                ]
+            ],
+            'email' => [
+                'rules'  => 'required',
+                'errors' => [
+                    'required' => 'Email Tidak Boleh Kosong!',
+                ]
+            ],
+            'password' => [
+                'rules'  => 'required|min_length[8]',
+                'errors' => [
+                    'required' => 'Password Tidak Boleh Kosong!',
+                    'min_length' => 'Password Minimal 8 Huruf',
+
+                ]
+            ],
+            'password_conf' => [
+                'rules'  => 'required|min_length[8]|matches[password]',
+                'errors' => [
+                    'required' => 'Password Tidak Boleh Kosong!',
+                    'min_length' => 'Password minimal 8 Huruf',
+                    'matches'   => 'Password Tidak Sama',
+
                 ]
             ],
             'no_telp_penghuni' => [
-                'required',
+                'rules'  => 'required|min_length[10]|max_length[13]',
                 'errors' => [
-                    'required' => 'Nomor Telepon Wajib Diisi!'
+                    'required' => 'Nomor Telepon Penghuni Tidak Boleh Kosong!',
+                    'min_length' => 'Nomor Telepon Minimal 10 Angka!',
+                    'max_length' => 'Nomor Telepon Minimal 13 Angka!'
+                ]
+            ],
+            'tempat_lahir_penghuni' => [
+                'rules'  => 'required',
+                'errors' => [
+                    'required' => 'Tempat Lahir Penghuni Tidak Boleh Kosong!'
+                ]
+            ],
+            'tgl_lahir_penghuni' => [
+                'rules'  => 'required',
+                'errors' => [
+                    'required' => 'Tanggal Lahir Penghuni Tidak Boleh Kosong!'
+                ]
+            ],
+            'jk_penghuni' => [
+                'rules'  => 'required',
+                'errors' => [
+                    'required' => 'Jenis Kelamin Penghuni Tidak Boleh Kosong!'
                 ]
             ],
             'alamat_penghuni' => [
-                'required',
+                'rules'  => 'required',
                 'errors' => [
-                    'required' => 'Alamat Wajib Diisi!'
+                    'required' => 'Alamat Penghuni Tidak Boleh Kosong!'
                 ]
             ]
-
         ]);
 
         if (!$validation) {
-            return redirect()->to(previous_url())->withInput()->with('error', $this->validator->getErrors());
-        }
+            $validation = \config\Services::validation();
+            return redirect()->to('/penghuni/edit/' . $id_penghuni)->withInput()->with('validation', $validation);
+        } else {
 
-        $data = [
-            'nama_penghuni' => $this->request->getPost('nama_penghuni'),
-            'tgl_lahir_penghuni' => $this->request->getPost('tgl_lahir_penghuni'),
-            'tempat_lahir_penghuni' => $this->request->getPost('tempat_lahir_penghuni'),
-            'nik_penghuni' => $this->request->getPost('nik_penghuni'),
-            'jk_penghuni' => $this->request->getPost('jk_penghuni'),
-            'no_telp_penghuni' => $this->request->getPost('no_telp_penghuni'),
-            'alamat_penghuni' => $this->request->getPost('alamat_penghuni')
-        ];
-        $this->modelPenghuni->update($id_penghuni, $data);
-        return redirect()->to(site_url('penghuni'))->with('success', 'Data Penghuni Berhasil Dirubah');
+            $id_user = $post['id_user'];
+            $data1 = [
+                'username' => $post['username'],
+                'email' => $post['email'],
+                'password' => password_hash($post['password'], PASSWORD_BCRYPT),
+                'role' => $post['role'],
+            ];
+            $this->modelUser->update($id_user, $data1);
+            $data2 = [
+                'nik_penghuni' => $post['nik_penghuni'],
+                'nama_penghuni' => $post['nama_penghuni'],
+                'no_telp_penghuni' => $post['no_telp_penghuni'],
+                'tempat_lahir_penghuni' => $post['tempat_lahir_penghuni'],
+                'tgl_lahir_penghuni' => $post['tgl_lahir_penghuni'],
+                'jk_penghuni' => $post['jk_penghuni'],
+                'alamat_penghuni' => $post['alamat_penghuni'],
+                'id_user' => $id_user
+            ];
+            $this->modelPenghuni->update($id_penghuni, $data2);
+            return redirect()->to('/penghuni')->with('success', 'Data Penhuni Berhasil Dirubah!');
+        }
     }
 
     /**

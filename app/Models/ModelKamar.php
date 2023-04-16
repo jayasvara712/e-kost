@@ -20,4 +20,15 @@ class ModelKamar extends Model
         $query = $builder->countAll();
         return $query;
     }
+
+    public function get_all()
+    {
+        $builder = $this->db->table($this->table);
+        $builder->select('*');
+        $builder->join('fasilitas', 'fasilitas.id_fasilitas = kamar.id_fasilitas', 'LEFT');
+        $hasil = $builder->get()->getResult();
+
+        return $hasil;
+        // memisahkan  fasilitas
+    }
 }

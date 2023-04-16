@@ -13,12 +13,18 @@ class Dashboard extends ResourceController
 {
     private $menu = "<script language=\"javascript\">menu('m-dashboard');</script>";
 
+    protected $fasilitas;
+    protected $kamar;
+    protected $penghuni;
+    protected $karyawan;
+    protected $penyewaan;
+
     function __construct()
     {
         $this->fasilitas    = new ModelFasilitas();
         $this->kamar        = new ModelKamar();
-        $this->karyawan     = new ModelKaryawan();
         $this->penghuni     = new ModelPenghuni();
+        $this->karyawan     = new ModelKaryawan();
         $this->penyewaan    = new ModelPenyewaan();
     }
     public function index()

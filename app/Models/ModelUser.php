@@ -8,7 +8,7 @@ class ModelUser extends Model
 {
     protected $table                = 'user';
     protected $primaryKey           = 'id_user';
-    protected $returnType           = 'object';
+    // protected $returnType           = 'object';
     protected $allowedFields        = [
         'username', 'email', 'password', 'role'
     ];
@@ -18,5 +18,14 @@ class ModelUser extends Model
         $builder = $this->db->table($this->table);
         $query = $builder->countAll();
         return $query;
+    }
+
+    public function register($data)
+    {
+        $builder = $this->db->table($this->table);
+        $builder->insert($data);
+        $insert_id = $this->db->insertID();
+
+        return  $insert_id;
     }
 }

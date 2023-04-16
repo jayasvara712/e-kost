@@ -39,9 +39,13 @@ $routes->presenter('penghuni');
 $routes->presenter('penyewaan');
 
 // login
-$routes->get('/admin', 'Auth::login');
+// $routes->get('/admin', 'Auth::login');
 $routes->get('/login', 'Auth::login');
-$routes->post('loginProcess', 'Auth::loginProcess');
+$routes->post('/loginProcess', 'Auth::loginProcess');
+$routes->get('/register', 'Auth::register');
+$routes->post('registerProcess', 'Auth::registerProcess');
+$routes->post('/resetProses', 'Auth::resetProses');
+$routes->post('/resetpwProses', 'Auth::resetpwProses');
 $routes->get('/logout', 'Auth::logout');
 
 

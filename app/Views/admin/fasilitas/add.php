@@ -1,11 +1,11 @@
-<?= $this->extend('library/template'); ?>
+<?= $this->extend('layout/template'); ?>
 <?= $this->section('content'); ?>
 
 <!-- Main Content -->
 <div class="main-content">
     <section class="section">
         <div class="section-header">
-            <h1>List Data Fasilitas</h1>
+            <h1>Tambah Data Fasilitas</h1>
             <div class="section-header-breadcrumb">
                 <div class="breadcrumb-item active"><a href="#">Data Master</a></div>
                 <div class="breadcrumb-item">Fasilitas</div>
@@ -16,26 +16,26 @@
         <div class="section-body">
 
             <div class="row">
-                <div class="col-12">
+                <div class="col-lg-12 col-md-12 col-sm-12">
                     <div class="card">
-                        <form action="<?= site_url('fasilitas') ?>" method="POST" autocomplete="off" enctype="multipart/form-data">
+                        <div class="card-body">
 
-                            <div class="card-body">
+                            <form action="<?= site_url('fasilitas') ?>" method="POST" autocomplete="off" enctype="multipart/form-data">
+                                <?= csrf_field() ?>
 
-                                <div class="form-group row mb-4">
-                                    <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Judul</label>
-                                    <div class="col-sm-12 col-md-7">
-                                        <input type="text" class="form-control" name="judul_fasilitas">
+                                <div class="form-group">
+                                    <label>Judul Fasilitas</label>
+                                    <input type="text" class="form-control <?= (validation_show_error('judul_fasilitas')) ? 'is-invalid' : ''; ?>"" name=" judul_fasilitas" value="<?= old('judul_fasilitas') ?>">
+                                    <div class="invalid-feedback">
+                                        <?= (validation_show_error('judul_fasilitas')) ? validation_show_error('judul_fasilitas') : ''; ?>
                                     </div>
                                 </div>
 
-                                <div class="form-group row mb-4">
-                                    <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3"></label>
-                                    <div class="col-sm-12 col-md-7">
-                                        <button class="btn btn-success"><i class="fas fa-save"></i> Simpan</button>
-                                    </div>
+                                <div class="form-group">
+                                    <label></label>
+                                    <button class="btn btn-success"><i class="fas fa-save"></i> Simpan</button>
                                 </div>
-                            </div>
+                        </div>
 
                         </form>
                     </div>

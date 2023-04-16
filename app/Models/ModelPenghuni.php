@@ -28,4 +28,14 @@ class ModelPenghuni extends Model
         $builder->join('user', 'user.id_user = penghuni.id_user', 'LEFT');
         return $builder->get()->getResult();
     }
+
+    public function get_all_where($id_penghuni)
+    {
+        $builder = $this->db->table($this->table);
+        $builder->select('*');
+        $builder->join('user', 'user.id_user = penghuni.id_user', 'LEFT');
+        $builder->where('id_penghuni', $id_penghuni);
+        $query = $builder->get()->getFirstRow();
+        return $query;
+    }
 }
