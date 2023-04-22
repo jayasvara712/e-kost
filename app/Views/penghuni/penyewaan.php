@@ -84,6 +84,7 @@
                                                     <a href="<?= site_url($url . '/show/' .  $value->id_penyewaan) ?>" class="btn btn-info"><i class="fas fa-eye"></i></a>
                                                     <a href="<?= site_url($url . '/edit/' .  $value->id_penyewaan) ?>" class="btn btn-warning"><i class="fas fa-edit"></i></a>
                                                     <form action="<?= site_url($url . '/delete/') . $value->id_penyewaan ?>" class="d-inline" method="post">
+                                                        <?= csrf_field() ?>
                                                         <button class="btn btn-danger"><i class="fas fa-trash"></i></button>
                                                     </form>
                                                 </td>

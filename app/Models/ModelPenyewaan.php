@@ -23,6 +23,16 @@ class ModelPenyewaan extends Model
         return $builder->get()->getResult();
     }
 
+    public function getDetail($id_penghuni)
+    {
+        $builder = $this->db->table($this->table);
+        $builder->select('*');
+        $builder->join('penghuni', 'penghuni.id_penghuni = penyewaan.id_penghuni', 'LEFT');
+        $builder->join('kamar', 'kamar.id_kamar = penyewaan.id_kamar', 'LEFT');
+        $builder->where('penghuni.id_penghuni', $id_penghuni);
+        return $builder->get()->getResult();
+    }
+
     public function count_all()
     {
         $builder = $this->db->table($this->table);

@@ -41,8 +41,8 @@
                                             echo "<span class='badge badge-warning'>Belum Di Bayar</span>";
                                         } else if ($transaction_status == 'failure') {
                                             echo "<span class='badge badge-danger'>Pembayaran Gagal</span>";
-                                        } else if ($transaction_status == 'expire') {
-                                            echo "<span class='badge badge-danger'>Pembayaran Gagal</span>";
+                                        } else if ($transaction_status == 'cancel') {
+                                            echo "<span class='badge badge-danger'>Pembayaran Dibatalkan</span>";
                                         }
                                         ?><br><br>
                                     </address>

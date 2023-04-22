@@ -102,7 +102,7 @@ class Penyewaan extends ResourceController
     {
         $data = [
             'url'       => $this->url,
-            'penyewaan' => $this->modelPenyewaan->get_all()
+            'penyewaan' => $this->modelPenyewaan->getDetail(session()->id_penghuni)
         ];
         echo view($this->url, $data) . $this->menu . $this->header;
     }
@@ -150,7 +150,7 @@ class Penyewaan extends ResourceController
 
             ];
 
-            return view('admin/penyewaan/cektransaksi', $data) . $this->menu . $this->header;
+            return view($this->url . '/cektransaksi', $data) . $this->menu . $this->header;
         } else {
             exit('Data tidak ditemukan');
         }
@@ -445,6 +445,13 @@ class Penyewaan extends ResourceController
      */
     public function delete($id_penyewaan = null)
     {
+        $this->midtrans();
+        $data = $this->modelPenyewaan->find($id_penyewaan);
+        \Midtrans\Transaction::cancel($data->order_id);
+        $data2 = [
+            'status_kamar' => 'Tidak Tersedia'
+        ];
+        $this->modelKamar->update($data->id_kamar, $data2);
         $this->modelPenyewaan->where('id_penyewaan', $id_penyewaan)->delete();
         return redirect()->to(site_url('penyewaan'))->with('success', 'Data Penyewaan Berhasil Dihapus');
     }
