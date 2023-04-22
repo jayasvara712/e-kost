@@ -11,7 +11,7 @@ class ModelPenyewaan extends Model
     protected $primaryKey           = 'id_penyewaan';
     protected $returnType           = 'object';
     protected $allowedFields        = [
-        'id_penghuni', 'id_kamar', 'tgl_penyewaan', 'lama_penyewaan', 'status_penyewaan'
+        'no_invoice', 'tgl_penyewaan', 'id_penghuni', 'id_kamar', 'lama_penyewaan ', 'total_harga', 'order_id', 'payment_method', 'payment_type', 'transaction_time', 'transaction_status', 'va_number', 'bank'
     ];
 
     public function get_all()
@@ -27,6 +27,15 @@ class ModelPenyewaan extends Model
     {
         $builder = $this->db->table($this->table);
         $query = $builder->countAll();
+        return $query;
+    }
+
+    public function noInvoice($tanggal)
+    {
+        $builder = $this->db->table($this->table);
+        $builder->select('max(no_invoice) as noInvoice');
+        $builder->where('tgl_penyewaan', $tanggal);
+        $query = $builder->get();
         return $query;
     }
 }

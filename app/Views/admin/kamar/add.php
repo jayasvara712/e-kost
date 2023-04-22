@@ -20,15 +20,12 @@
                     <div class="card">
                         <div class="card-body">
 
-                            <form action="<?= site_url('kamar') ?>" method="POST" autocomplete="off" enctype="multipart/form-data">
+                            <form action="<?= site_url($url) ?>" method="POST" autocomplete="off" enctype="multipart/form-data">
                                 <?= csrf_field() ?>
 
                                 <div class="form-group">
                                     <label>Nomor Kamar</label>
-                                    <input type="text" class="form-control <?= (validation_show_error('nomor_kamar')) ? 'is-invalid' : ''; ?>" name="nomor_kamar" value="<?= old('nomor_kamar') ?>">
-                                    <div class="invalid-feedback">
-                                        <?= (validation_show_error('nomor_kamar')) ? validation_show_error('nomor_kamar') : ''; ?>
-                                    </div>
+                                    <input type="text" class="form-control" name="nomor_kamar" value="<?= $no_kamar ?>" readonly>
                                 </div>
 
                                 <div class="form-group">

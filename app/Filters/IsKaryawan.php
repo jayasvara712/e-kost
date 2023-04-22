@@ -6,7 +6,7 @@ use CodeIgniter\Filters\FilterInterface;
 use CodeIgniter\HTTP\RequestInterface;
 use CodeIgniter\HTTP\ResponseInterface;
 
-class LoginFilter implements FilterInterface
+class IsKaryawan implements FilterInterface
 {
     /**
      * Do whatever processing this filter needs to do.
@@ -25,7 +25,7 @@ class LoginFilter implements FilterInterface
      */
     public function before(RequestInterface $request, $arguments = null)
     {
-        if (!session('id_user')) {
+        if (!session('id_user') && session('role') == 'karyawan') {
             return redirect()->to(site_url('login'));
         }
     }
@@ -44,6 +44,10 @@ class LoginFilter implements FilterInterface
      */
     public function after(RequestInterface $request, ResponseInterface $response, $arguments = null)
     {
-        //
+        if (session('id_user') && session('role') == 'karyawan') {
+            // return redirect()->to(site_url('/' . session('role')));
+        } else {
+            return redirect()->to('/login');
+        }
     }
 }

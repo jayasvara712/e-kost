@@ -20,7 +20,7 @@
                     <div class="card">
                         <div class="card-body">
 
-                            <form action="<?= site_url('fasilitas/update/' . $fasilitas->id_fasilitas) ?>" method="post" autocomplete="off" enctype="multipart/form-data">
+                            <form action="<?= site_url($url . '/update/' . $fasilitas->id_fasilitas) ?>" method="post" autocomplete="off" enctype="multipart/form-data">
                                 <?= csrf_field() ?>
 
                                 <div class="form-group">

@@ -29,7 +29,7 @@
 
                         <div class="card-header">
                             <h4 class="btn-group">
-                                <a href="<?= site_url("fasilitas/new") ?>" class="btn btn-success btn-lg">
+                                <a href="<?= site_url($url . "/new") ?>" class="btn btn-success btn-lg">
                                     <i class="fas fa-plus"></i> Tambah Data Fasilitas</a>
                             </h4>
                         </div>
@@ -51,8 +51,8 @@
                                                     <?= $value->judul_fasilitas ?>
                                                 </td>
                                                 <td>
-                                                    <a href="<?= site_url('fasilitas/edit/' .  $value->id_fasilitas) ?>" class="btn btn-warning"><i class="fas fa-edit"></i></a>
-                                                    <form action="<?= site_url('fasilitas/delete/') . $value->id_fasilitas ?>" class="d-inline" method="post">
+                                                    <a href="<?= site_url($url . '/edit/' .  $value->id_fasilitas) ?>" class="btn btn-warning"><i class="fas fa-edit"></i></a>
+                                                    <form action="<?= site_url($url . '/delete/') . $value->id_fasilitas ?>" class="d-inline" method="post">
                                                         <?= csrf_field() ?>
                                                         <button class="btn btn-danger"><i class="fas fa-trash"></i></button>
                                                     </form>

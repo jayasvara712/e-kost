@@ -28,7 +28,7 @@ class Auth extends BaseController
     public function login()
     {
         if (session('id_user')) {
-            return redirect()->to(site_url('dashboard'));
+            return redirect()->to(site_url('/' . session('role')));
         }
         return view('auth/login');
     }
@@ -50,19 +50,20 @@ class Auth extends BaseController
                         'isLoggedIn'    => true
                     ];
                     session()->set($params);
-                    return redirect()->to(site_url('dashboard'))->with('success', 'Selamat Datang, anda login sebagai Admin');
+                    return redirect()->to(site_url('/admin'))->with('success', 'Selamat Datang, anda login sebagai Admin');
                 } else if ($user->role == 'penghuni') {
                     $query = $this->penghuni->getWhere(['id_user' => $user->id_user]);
                     $penghuni = $query->getRow();
                     $params = [
                         'id_user'       => $user->id_user,
+                        'id_penghuni'   => $penghuni->id_penghuni,
                         'username'      => $user->username,
                         'name'          => $penghuni->nama_penghuni,
                         'role'          => $user->role,
                         'isLoggedIn'    => true
                     ];
                     session()->set($params);
-                    return redirect()->to(site_url('dashboard'))->with('success', 'Selamat Datang, anda login sebagai Penghuni');
+                    return redirect()->to(site_url('/penghuni'))->with('success', 'Selamat Datang, anda login sebagai Penghuni');
                 } else if ($user->role == 'karyawan') {
                     $query = $this->karyawan->getWhere(['id_user' => $user->id_user]);
                     $karyawan = $query->getRow();
@@ -74,7 +75,7 @@ class Auth extends BaseController
                         'isLoggedIn'    => true
                     ];
                     session()->set($params);
-                    return redirect()->to(site_url('dashboard'))->with('success', 'Selamat Datang, anda login sebagai Karyawan');
+                    return redirect()->to(site_url('/karyawan'))->with('success', 'Selamat Datang, anda login sebagai Karyawan');
                 }
             } else {
                 return redirect()->to(site_url('login'))->with('error', 'Password tidak sesuai');
@@ -141,11 +142,10 @@ class Auth extends BaseController
                 ]
             ],
             'no_telp_penghuni' => [
-                'rules'  => 'required|min_length[10]|max_length[13]',
+                'rules'  => 'required|min_length[10]',
                 'errors' => [
                     'required' => 'Nomor Telepon Penghuni Tidak Boleh Kosong!',
-                    'min_length' => 'Nomor Telepon Minimal 10 Angka!',
-                    'max_length' => 'Nomor Telepon Minimal 13 Angka!'
+                    'min_length' => 'Nomor Telepon Minimal 10 Angka!'
                 ]
             ],
             'tempat_lahir_penghuni' => [

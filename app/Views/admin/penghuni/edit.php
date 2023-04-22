@@ -20,7 +20,7 @@
                     <div class="card">
                         <div class="card-body">
 
-                            <form action="<?= site_url('penghuni/update/' . $penghuni->id_penghuni) ?>" method="POST" autocomplete="off" enctype="multipart/form-data">
+                            <form action="<?= site_url($url . '/update/' . $penghuni->id_penghuni) ?>" method="POST" autocomplete="off" enctype="multipart/form-data">
                                 <?= csrf_field() ?>
 
                                 <input type="hidden" class="form-control" name="role" value="<?= $penghuni->role ?>">

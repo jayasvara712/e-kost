@@ -31,16 +31,42 @@ $routes->set404Override();
 // route since we don't have to scan directories.
 $routes->get('/', 'Home::index');
 
+// Admin
+$routes->group('admin', ['filter' => 'isAdmin', 'namespace' => 'App\Controllers\Admin'], static function ($routes) {
+    $routes->get('/', 'Dashboard::index');
+    $routes->presenter('fasilitas');
+    $routes->presenter('kamar');
+    $routes->presenter('karyawan');
+    $routes->presenter('penghuni');
+    $routes->presenter('penyewaan');
+});
+
+//Karyawan
+$routes->group('karyawan', ['filter' => 'isKaryawan', 'namespace' => 'App\Controllers\Karyawan'], static function ($routes) {
+    $routes->get('/', 'Dashboard::index');
+    $routes->presenter('karyawan');
+    $routes->presenter('penghuni');
+    $routes->presenter('kamar');
+    $routes->presenter('penyewaan');
+});
+
+// Penghuni
+$routes->group('penghuni', ['filter' => 'isPenghuni', 'namespace' => 'App\Controllers\Penghuni'], static function ($routes) {
+    $routes->get('/', 'kamar::index');
+    $routes->presenter('penghuni');
+    $routes->presenter('penyewaan');
+});
+
 $routes->presenter('dashboard');
-$routes->presenter('fasilitas');
-$routes->presenter('kamar');
-$routes->presenter('karyawan');
-$routes->presenter('penghuni');
-$routes->presenter('penyewaan');
+$routes->post('/kamar/detailKamar', 'Admin\Kamar::detailKamar');
+$routes->post('/penyewaan/payMidtrans', 'Penghuni\Penyewaan::payMidtrans');
+$routes->post('/penyewaan/buatNoInvoice', 'Penghuni\Penyewaan::buatNoInvoice');
+$routes->post('/penyewaan/payment', 'Penghuni\Penyewaan::payment');
 
 // login
 // $routes->get('/admin', 'Auth::login');
 $routes->get('/login', 'Auth::login');
+$routes->get('/payment', 'Payment::index');
 $routes->post('/loginProcess', 'Auth::loginProcess');
 $routes->get('/register', 'Auth::register');
 $routes->post('registerProcess', 'Auth::registerProcess');

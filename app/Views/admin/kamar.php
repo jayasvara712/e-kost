@@ -29,7 +29,7 @@
 
                         <div class="card-header">
                             <h4 class="btn-group">
-                                <a href="<?= site_url("kamar/new") ?>" class="btn btn-success btn-lg">
+                                <a href="<?= site_url($url . "/new") ?>" class="btn btn-success btn-lg">
                                     <i class="fas fa-plus"></i> Tambah Data Kamar</a>
                             </h4>
                         </div>
@@ -50,23 +50,24 @@
                                         <?php foreach ($kamar as $key => $value) : ?>
                                             <tr>
                                                 <td>
-                                                    <?= $value->nomor_kamar ?>
+                                                    <?= $value['nomor_kamar'] ?>
                                                 </td>
                                                 <td>
-                                                    <?= $value->harga_kamar ?>
+                                                    <?= $value['harga_kamar'] ?>
                                                 </td>
                                                 <td>
-                                                    <?= $value->id_fasilitas ?>
+                                                    <?= $value['fasilitas_kamar'] ?>
                                                 </td>
                                                 <td>
-                                                    <?= $value->status_kamar ?>
+                                                    <?= $value['status_kamar'] ?>
                                                 </td>
                                                 <td>
-                                                    <?= $value->keterangan_kamar ?>
+                                                    <?= $value['keterangan_kamar'] ?>
                                                 </td>
                                                 <td>
-                                                    <a href="<?= site_url('kamar/edit/' .  $value->id_kamar) ?>" class="btn btn-warning"><i class="fas fa-edit"></i></a>
-                                                    <form action="<?= site_url('kamar/delete/') . $value->id_kamar ?>" class="d-inline" method="post">
+                                                    <a href="<?= site_url($url . '/edit/' .  $value['id_kamar']) ?>" class="btn btn-warning"><i class="fas fa-edit"></i></a>
+                                                    <form action="<?= site_url($url . '/delete/') . $value['id_kamar'] ?>" class="d-inline" method="post">
+                                                        <?= csrf_field() ?>
                                                         <button class="btn btn-danger"><i class="fas fa-trash"></i></button>
                                                     </form>
                                                 </td>

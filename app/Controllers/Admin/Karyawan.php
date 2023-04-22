@@ -1,23 +1,25 @@
 <?php
 
-namespace App\Controllers;
+namespace App\Controllers\Admin;
 
-use App\Models\ModelPenghuni;
+use App\Models\ModelKaryawan;
 use App\Models\ModelUser;
 use CodeIgniter\RESTful\ResourceController;
 
-class Penghuni extends ResourceController
+class Karyawan extends ResourceController
 {
-    private $menu = "<script language=\"javascript\">menu('m-penghuni');</script>";
-    private $header = "<script language=\"javascript\">menu('m-user');</script>";
 
-    protected $modelPenghuni;
+    private $menu = "<script language=\"javascript\">menu('m-karyawan');</script>";
+    private $header = "<script language=\"javascript\">menu('m-user');</script>";
+    private $url = "admin/karyawan";
+
+    protected $ModelKaryawan;
     protected $modelUser;
     protected $helpers = ['form'];
 
     function __construct()
     {
-        $this->modelPenghuni = new ModelPenghuni();
+        $this->ModelKaryawan = new ModelKaryawan();
         $this->modelUser = new ModelUser();
     }
 
@@ -28,8 +30,11 @@ class Penghuni extends ResourceController
      */
     public function index()
     {
-        $data['penghuni'] = $this->modelPenghuni->get_all();
-        echo view('admin/penghuni', $data) . $this->menu . $this->header;
+        $data = [
+            'karyawan'      => $this->ModelKaryawan->get_all(),
+            'url'           => $this->url
+        ];
+        echo view($this->url, $data) . $this->menu . $this->header;
     }
 
     /**
@@ -50,9 +55,10 @@ class Penghuni extends ResourceController
     public function new()
     {
         $data = [
-            'validation' => \Config\Services::validation()
+            'url'           => $this->url,
+            'validation'    => \Config\Services::validation()
         ];
-        echo view('admin/penghuni/add', $data) . $this->menu . $this->header;
+        echo view($this->url . '/add', $data) . $this->menu . $this->header;
     }
 
     /**
@@ -64,16 +70,16 @@ class Penghuni extends ResourceController
     {
         $post = $this->request->getPost();
         $validation = $this->validate([
-            'nik_penghuni' => [
+            'nik_karyawan' => [
                 'rules'  => 'required',
                 'errors' => [
                     'required' => 'Nomor KTP Tidak Boleh Kosong!'
                 ]
             ],
-            'nama_penghuni' => [
+            'nama_karyawan' => [
                 'rules'  => 'required',
                 'errors' => [
-                    'required' => 'Nama Penghuni Tidak Boleh Kosong!'
+                    'required' => 'Nama karyawan Tidak Boleh Kosong!'
                 ]
             ],
             'username' => [
@@ -107,43 +113,31 @@ class Penghuni extends ResourceController
 
                 ]
             ],
-            'no_telp_penghuni' => [
+            'no_telp_karyawan' => [
                 'rules'  => 'required|min_length[10]|max_length[13]',
                 'errors' => [
-                    'required' => 'Nomor Telepon Penghuni Tidak Boleh Kosong!',
+                    'required' => 'Nomor Telepon karyawan Tidak Boleh Kosong!',
                     'min_length' => 'Nomor Telepon Minimal 10 Angka!',
                     'max_length' => 'Nomor Telepon Minimal 13 Angka!'
                 ]
             ],
-            'tempat_lahir_penghuni' => [
+            'jk_karyawan' => [
                 'rules'  => 'required',
                 'errors' => [
-                    'required' => 'Tempat Lahir Penghuni Tidak Boleh Kosong!'
+                    'required' => 'Jenis Kelamin karyawan Tidak Boleh Kosong!'
                 ]
             ],
-            'tgl_lahir_penghuni' => [
+            'alamat_karyawan' => [
                 'rules'  => 'required',
                 'errors' => [
-                    'required' => 'Tanggal Lahir Penghuni Tidak Boleh Kosong!'
-                ]
-            ],
-            'jk_penghuni' => [
-                'rules'  => 'required',
-                'errors' => [
-                    'required' => 'Jenis Kelamin Penghuni Tidak Boleh Kosong!'
-                ]
-            ],
-            'alamat_penghuni' => [
-                'rules'  => 'required',
-                'errors' => [
-                    'required' => 'Alamat Penghuni Tidak Boleh Kosong!'
+                    'required' => 'Alamat karyawan Tidak Boleh Kosong!'
                 ]
             ]
         ]);
 
         if (!$validation) {
             $validation = \config\Services::validation();
-            return redirect()->to('/penghuni/new')->withInput()->with('validation', $validation);
+            return redirect()->to($this->url . '/new')->withInput()->with('validation', $validation);
         } else {
 
             $data1 = [
@@ -154,17 +148,15 @@ class Penghuni extends ResourceController
             ];
             $id_user = $this->modelUser->register($data1);
             $data2 = [
-                'nik_penghuni' => $post['nik_penghuni'],
-                'nama_penghuni' => $post['nama_penghuni'],
-                'no_telp_penghuni' => $post['no_telp_penghuni'],
-                'tempat_lahir_penghuni' => $post['tempat_lahir_penghuni'],
-                'tgl_lahir_penghuni' => $post['tgl_lahir_penghuni'],
-                'jk_penghuni' => $post['jk_penghuni'],
-                'alamat_penghuni' => $post['alamat_penghuni'],
+                'nik_karyawan' => $post['nik_karyawan'],
+                'nama_karyawan' => $post['nama_karyawan'],
+                'no_telp_karyawan' => $post['no_telp_karyawan'],
+                'jk_karyawan' => $post['jk_karyawan'],
+                'alamat_karyawan' => $post['alamat_karyawan'],
                 'id_user' => $id_user
             ];
-            $this->modelPenghuni->insert($data2);
-            return redirect()->to('/penghuni')->with('success', 'Berhasil Menambahkan Data Penghuni!');
+            $this->ModelKaryawan->insert($data2);
+            return redirect()->to($this->url)->with('success', 'Berhasil Menambahkan Data karyawan!');
         }
     }
 
@@ -173,16 +165,17 @@ class Penghuni extends ResourceController
      *
      * @return mixed
      */
-    public function edit($id_penghuni = null)
+    public function edit($id_karyawan = null)
     {
-        $penghuni = $this->modelPenghuni->get_all_where($id_penghuni);
+        $karyawan = $this->ModelKaryawan->get_all_where($id_karyawan);
         $data = [
-            'penghuni' => $penghuni,
-            'validation' => \Config\Services::validation()
+            'url'           => $this->url,
+            'karyawan'      => $karyawan,
+            'validation'    => \Config\Services::validation()
         ];
-        if (is_object($penghuni)) {
-            $data['penghuni'] = $penghuni;
-            echo view('admin/penghuni/edit', $data) . $this->menu . $this->header;
+        if (is_object($karyawan)) {
+            $data['karyawan'] = $karyawan;
+            echo view($this->url . '/edit', $data) . $this->menu . $this->header;
         } else {
             throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
         }
@@ -193,20 +186,20 @@ class Penghuni extends ResourceController
      *
      * @return mixed
      */
-    public function update($id_penghuni = null)
+    public function update($id_karyawan = null)
     {
         $post = $this->request->getPost();
         $validation = $this->validate([
-            'nik_penghuni' => [
+            'nik_karyawan' => [
                 'rules'  => 'required',
                 'errors' => [
                     'required' => 'Nomor KTP Tidak Boleh Kosong!'
                 ]
             ],
-            'nama_penghuni' => [
+            'nama_karyawan' => [
                 'rules'  => 'required',
                 'errors' => [
-                    'required' => 'Nama Penghuni Tidak Boleh Kosong!'
+                    'required' => 'Nama karyawan Tidak Boleh Kosong!'
                 ]
             ],
             'username' => [
@@ -238,43 +231,31 @@ class Penghuni extends ResourceController
 
                 ]
             ],
-            'no_telp_penghuni' => [
+            'no_telp_karyawan' => [
                 'rules'  => 'required|min_length[10]|max_length[13]',
                 'errors' => [
-                    'required' => 'Nomor Telepon Penghuni Tidak Boleh Kosong!',
+                    'required' => 'Nomor Telepon karyawan Tidak Boleh Kosong!',
                     'min_length' => 'Nomor Telepon Minimal 10 Angka!',
                     'max_length' => 'Nomor Telepon Minimal 13 Angka!'
                 ]
             ],
-            'tempat_lahir_penghuni' => [
+            'jk_karyawan' => [
                 'rules'  => 'required',
                 'errors' => [
-                    'required' => 'Tempat Lahir Penghuni Tidak Boleh Kosong!'
+                    'required' => 'Jenis Kelamin karyawan Tidak Boleh Kosong!'
                 ]
             ],
-            'tgl_lahir_penghuni' => [
+            'alamat_karyawan' => [
                 'rules'  => 'required',
                 'errors' => [
-                    'required' => 'Tanggal Lahir Penghuni Tidak Boleh Kosong!'
-                ]
-            ],
-            'jk_penghuni' => [
-                'rules'  => 'required',
-                'errors' => [
-                    'required' => 'Jenis Kelamin Penghuni Tidak Boleh Kosong!'
-                ]
-            ],
-            'alamat_penghuni' => [
-                'rules'  => 'required',
-                'errors' => [
-                    'required' => 'Alamat Penghuni Tidak Boleh Kosong!'
+                    'required' => 'Alamat karyawan Tidak Boleh Kosong!'
                 ]
             ]
         ]);
 
         if (!$validation) {
             $validation = \config\Services::validation();
-            return redirect()->to('/penghuni/edit/' . $id_penghuni)->withInput()->with('validation', $validation);
+            return redirect()->to($this->url . '/edit/' . $id_karyawan)->withInput()->with('validation', $validation);
         } else {
 
             $id_user = $post['id_user'];
@@ -286,17 +267,15 @@ class Penghuni extends ResourceController
             ];
             $this->modelUser->update($id_user, $data1);
             $data2 = [
-                'nik_penghuni' => $post['nik_penghuni'],
-                'nama_penghuni' => $post['nama_penghuni'],
-                'no_telp_penghuni' => $post['no_telp_penghuni'],
-                'tempat_lahir_penghuni' => $post['tempat_lahir_penghuni'],
-                'tgl_lahir_penghuni' => $post['tgl_lahir_penghuni'],
-                'jk_penghuni' => $post['jk_penghuni'],
-                'alamat_penghuni' => $post['alamat_penghuni'],
+                'nik_karyawan' => $post['nik_karyawan'],
+                'nama_karyawan' => $post['nama_karyawan'],
+                'no_telp_karyawan' => $post['no_telp_karyawan'],
+                'jk_karyawan' => $post['jk_karyawan'],
+                'alamat_karyawan' => $post['alamat_karyawan'],
                 'id_user' => $id_user
             ];
-            $this->modelPenghuni->update($id_penghuni, $data2);
-            return redirect()->to('/penghuni')->with('success', 'Data Penhuni Berhasil Dirubah!');
+            $this->ModelKaryawan->update($id_karyawan, $data2);
+            return redirect()->to($this->url)->with('success', 'Data Penhuni Berhasil Dirubah!');
         }
     }
 
@@ -305,11 +284,11 @@ class Penghuni extends ResourceController
      *
      * @return mixed
      */
-    public function delete($id_penghuni = null)
+    public function delete($id_karyawan = null)
     {
-        $data = $this->modelPenghuni->select('id_user')->where('id_penghuni', $id_penghuni)->first();
+        $data = $this->ModelKaryawan->select('id_user')->where('id_karyawan', $id_karyawan)->first();
         $this->modelUser->where('id_user', $data->id_user)->delete();
-        $this->modelPenghuni->where('id_penghuni', $id_penghuni)->delete();
-        return redirect()->to(site_url('penghuni'))->with('success', 'Data Penghuni Berhasil Dihapus');
+        $this->ModelKaryawan->where('id_karyawan', $id_karyawan)->delete();
+        return redirect()->to(site_url($this->url))->with('success', 'Data karyawan Berhasil Dihapus');
     }
 }

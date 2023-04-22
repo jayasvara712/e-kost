@@ -27,7 +27,7 @@
                         <?php endif ?>
                         <div class="card-header">
                             <p class="btn-group">
-                                <a href="<?= site_url("karyawan/new") ?>" class="btn btn-success btn-lg">
+                                <a href="<?= site_url($url . "/new") ?>" class="btn btn-success btn-lg">
                                     <i class="fas fa-plus"></i> Tambah Data Karyawan</a>
                             </p>
                         </div>
@@ -59,8 +59,9 @@
                                                     <?= $value->email ?>
                                                 </td>
                                                 <td>
-                                                    <a href="<?= site_url('karyawan/edit/' .  $value->id_karyawan) ?>" class="btn btn-warning"><i class="fas fa-edit"></i></a>
-                                                    <form action="<?= site_url('karyawan/delete/') . $value->id_karyawan ?>" class="d-inline" method="post">
+                                                    <a href="<?= site_url($url . '/edit/' .  $value->id_karyawan) ?>" class="btn btn-warning"><i class="fas fa-edit"></i></a>
+                                                    <form action="<?= site_url($url . '/delete/') . $value->id_karyawan ?>" class="d-inline" method="post">
+                                                        <?= csrf_field() ?>
                                                         <button class="btn btn-danger"><i class="fas fa-trash"></i></button>
                                                     </form>
                                                 </td>

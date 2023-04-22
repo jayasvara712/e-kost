@@ -11,8 +11,9 @@ class Karyawan extends Migration
         $this->db->disableForeignKeyChecks();
         $this->forge->addField([
             'id_karyawan' => [
-                'type'           => 'VARCHAR',
-                'constraint'     => 100
+                'type'           => 'int',
+                'constraint'     => 11,
+                'auto_increment' => true
             ],
             'nama_karyawan' => [
                 'type'           => 'VARCHAR',

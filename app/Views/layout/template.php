@@ -30,7 +30,6 @@
     <link rel="stylesheet" href="<?= base_url(); ?>/asset/backend.css">
 
     <!-- Start GA -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-94034622-3"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
 
@@ -94,13 +93,18 @@
 
     <!-- sweet alert -->
     <script src="<?= base_url(); ?>/stisla/node_modules/sweetalert/dist/sweetalert.min.js"></script>
-    <script src="<?= base_url(); ?>/stisla/assets/js/page/modules-sweetalert.js"></script>
 
     <!-- Template JS File -->
     <script src="<?= base_url(); ?>/stisla/assets/js/scripts.js"></script>
     <script src="<?= base_url(); ?>/stisla/assets/js/custom.js"></script>
 
     <!-- custom js -->
+    <script>
+        var csrfToken = "<?= csrf_token() ?>";
+        var csrfHash = "<?= csrf_hash() ?>";
+    </script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-94034622-3"></script>
+    <script src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="<?= getenv('midtrans_client_key') ?>"></script>
     <script src="<?= base_url(); ?>/asset/js/custom.js"></script>
 
 </body>

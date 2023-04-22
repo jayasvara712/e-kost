@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controllers;
+namespace App\Controllers\Admin;
 
 use App\Models\ModelFasilitas;
 use CodeIgniter\RESTful\ResourceController;
@@ -10,6 +10,7 @@ class Fasilitas extends ResourceController
 
     private $menu = "<script language=\"javascript\">menu('m-fasilitas');</script>";
     private $header = "<script language=\"javascript\">menu('m-master');</script>";
+    private $url = "admin/fasilitas";
     protected $modelFasilitas;
     protected $helpers = ['form'];
 
@@ -25,8 +26,11 @@ class Fasilitas extends ResourceController
      */
     public function index()
     {
-        $data['fasilitas'] = $this->modelFasilitas->findAll();
-        echo view('admin/fasilitas', $data) . $this->menu . $this->header;
+        $data = [
+            'fasilitas' => $this->modelFasilitas->findAll(),
+            'url' => $this->url
+        ];
+        echo view($this->url, $data) . $this->menu . $this->header;
     }
 
     /**
@@ -47,9 +51,10 @@ class Fasilitas extends ResourceController
     public function new()
     {
         $data = [
+            'url' => $this->url,
             'validation' => \config\Services::validation()
         ];
-        echo view('admin/fasilitas/add', $data) . $this->menu . $this->header;
+        echo view($this->url . '/add', $data) . $this->menu . $this->header;
     }
 
     /**
@@ -62,24 +67,24 @@ class Fasilitas extends ResourceController
         $post = $this->request->getPost();
         $validation = $this->validate([
             'judul_fasilitas' => [
-                'required',
+                'rules'  => 'required|is_unique[fasilitas.judul_fasilitas]',
                 'errors' => [
-                    'required' => 'Masukan Judul Fasilitas!'
+                    'required' => 'Masukan Judul Fasilitas!',
+                    'is_unique' => 'Judul Fasilitas Sudah Terdaftar!'
                 ]
-            ]
-
+            ],
         ]);
 
         if (!$validation) {
             $validation = \config\Services::validation();
-            return redirect()->to(site_url('/fasilitas/new'))->withInput()->with('validation', $validation);
+            return redirect()->to(site_url($this->url . 'new'))->withInput()->with('validation', $validation);
         } else {
 
             $data = [
                 'judul_fasilitas' => $post['judul_fasilitas']
             ];
             $this->modelFasilitas->insert($data);
-            return redirect()->to(site_url('fasilitas'))->with('success', 'Data Fasilitas Berhasil Ditambah');
+            return redirect()->to(site_url($this->url))->with('success', 'Data Fasilitas Berhasil Ditambah');
         }
     }
 
@@ -92,12 +97,13 @@ class Fasilitas extends ResourceController
     {
         $fasilitas = $this->modelFasilitas->where('id_fasilitas', $id_fasilitas)->first();
         $data = [
-            'fasilitas' => $fasilitas,
-            'validation' => \Config\Services::validation()
+            'url'           => $this->url,
+            'fasilitas'     => $fasilitas,
+            'validation'    => \Config\Services::validation()
         ];
         if (is_object($fasilitas)) {
             $data['fasilitas'] = $fasilitas;
-            echo view('admin/fasilitas/edit', $data) . $this->menu . $this->header;
+            echo view($this->url . '/edit', $data) . $this->menu . $this->header;
         } else {
             throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
         }
@@ -112,14 +118,13 @@ class Fasilitas extends ResourceController
     {
         $validation = $this->validate([
             'judul_fasilitas' => [
-                'required',
+                'rules'  => 'required',
                 'errors' => [
-                    'required' => 'Masukan Judul Fasilitas!'
+                    'required' => 'Masukan Judul Fasilitas!',
                 ]
-            ]
-
+            ],
         ]);
-        // 'Galeri/edit/' . $this->request->getPost('slug_k')
+
         if (!$validation) {
             return redirect()->to(previous_url())->withInput()->with('error', $this->validator->getErrors());
         }
@@ -128,7 +133,7 @@ class Fasilitas extends ResourceController
             'judul_fasilitas' => $this->request->getPost('judul_fasilitas')
         ];
         $this->modelFasilitas->update($id_fasilitas, $data);
-        return redirect()->to(site_url('fasilitas'))->with('success', 'Data Fasilitas Berhasil Dirubah');
+        return redirect()->to(site_url($this->url))->with('success', 'Data Fasilitas Berhasil Dirubah');
     }
 
     /**
@@ -139,6 +144,6 @@ class Fasilitas extends ResourceController
     public function delete($id_fasilitas = null)
     {
         $this->modelFasilitas->where('id_fasilitas', $id_fasilitas)->delete();
-        return redirect()->to(site_url('fasilitas'))->with('success', 'Data Fasilitas Berhasil Dihapus');
+        return redirect()->to(site_url($this->url))->with('success', 'Data Fasilitas Berhasil Dihapus');
     }
 }

@@ -8,7 +8,6 @@ class Kamar extends Migration
 {
     public function up()
     {
-        $this->db->disableForeignKeyChecks();
         $this->forge->addField([
             'id_kamar' => [
                 'type'           => 'INT',
@@ -18,10 +17,6 @@ class Kamar extends Migration
             'nomor_kamar' => [
                 'type'           => 'VARCHAR',
                 'constraint'     => 250
-            ],
-            'id_fasilitas' => [
-                'type'           => 'INT',
-                'constraint'     => 11
             ],
             'status_kamar' => [
                 'type'           => 'VARCHAR',
@@ -36,9 +31,7 @@ class Kamar extends Migration
             ]
         ]);
         $this->forge->addKey('id_kamar', true);
-        $this->forge->addForeignKey('id_fasilitas', 'fasilitas', 'id_fasilitas', 'CASCADE', 'CASCADE');
         $this->forge->createTable('kamar');
-        $this->db->enableForeignKeyChecks();
     }
 
     public function down()

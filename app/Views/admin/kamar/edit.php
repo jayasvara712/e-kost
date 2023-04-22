@@ -20,13 +20,13 @@
                     <div class="card">
                         <div class="card-body">
 
-                            <form action="<?= site_url('kamar/update/' . $kamar->id_kamar) ?>" method="post" autocomplete="off" enctype="multipart/form-data">
+                            <form action="<?= site_url($url . '/update/' . $kamar->id_kamar) ?>" method="post" autocomplete="off" enctype="multipart/form-data">
                                 <?= csrf_field() ?>
 
                                 <div class="form-group">
                                     <label>Nomor Kamar</label>
 
-                                    <input type="text" class="form-control" name="nomor_kamar" value="<?= $kamar->nomor_kamar ?>">
+                                    <input type="text" class="form-control" name="nomor_kamar" value="<?= $kamar->nomor_kamar ?>" readonly>
                                 </div>
 
                                 <div class="form-group">
@@ -42,7 +42,7 @@
                                         foreach ($fasilitas as $key1 => $fasilitas) :
                                             $i = 0;
                                             foreach ($temp_id_fasilitas as $key2 => $selected_fasilitas) :
-                                                if ($selected_fasilitas[$key2 - 1] == $fasilitas->id_fasilitas) {
+                                                if ($selected_fasilitas->id_fasilitas == $fasilitas->id_fasilitas) {
                                                     echo '<option value="' . $fasilitas->id_fasilitas . '" selected>' . $fasilitas->judul_fasilitas . '</option>';
                                                     $i = 1;
                                                     break;

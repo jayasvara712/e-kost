@@ -20,7 +20,7 @@
                     <div class="card">
                         <div class="card-body">
 
-                            <form action="<?= site_url('fasilitas') ?>" method="POST" autocomplete="off" enctype="multipart/form-data">
+                            <form action="<?= site_url($url) ?>" method="POST" autocomplete="off" enctype="multipart/form-data">
                                 <?= csrf_field() ?>
 
                                 <div class="form-group">

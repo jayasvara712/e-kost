@@ -2,13 +2,15 @@
 
 namespace Config;
 
+use App\Filters\isAdmin;
+use App\Filters\IsKaryawan;
+use App\Filters\IsPenghuni;
 use CodeIgniter\Config\BaseConfig;
 use CodeIgniter\Filters\CSRF;
 use CodeIgniter\Filters\DebugToolbar;
 use CodeIgniter\Filters\Honeypot;
 use CodeIgniter\Filters\InvalidChars;
 use CodeIgniter\Filters\SecureHeaders;
-use App\Filters\LoginFilter;
 
 class Filters extends BaseConfig
 {
@@ -22,7 +24,9 @@ class Filters extends BaseConfig
         'honeypot'      => Honeypot::class,
         'invalidchars'  => InvalidChars::class,
         'secureheaders' => SecureHeaders::class,
-        'isLoggedIn'    => LoginFilter::class,
+        'isAdmin'       => isAdmin::class,
+        'isKaryawan'    => IsKaryawan::class,
+        'isPenghuni'    => IsPenghuni::class,
     ];
 
     /**
@@ -62,11 +66,5 @@ class Filters extends BaseConfig
      * Example:
      * 'isLoggedIn' => ['before' => ['account/*', 'profiles/*']]
      */
-    public array $filters = [
-        'isLoggedIn' => [
-            'before' => [
-                'dashboard'
-            ]
-        ]
-    ];
+    public array $filters = [];
 }

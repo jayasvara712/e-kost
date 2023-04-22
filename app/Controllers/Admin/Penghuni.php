@@ -1,24 +1,24 @@
 <?php
 
-namespace App\Controllers;
+namespace App\Controllers\Admin;
 
-use App\Models\ModelKaryawan;
+use App\Models\ModelPenghuni;
 use App\Models\ModelUser;
 use CodeIgniter\RESTful\ResourceController;
 
-class Karyawan extends ResourceController
+class Penghuni extends ResourceController
 {
-
-    private $menu = "<script language=\"javascript\">menu('m-karyawan');</script>";
+    private $menu = "<script language=\"javascript\">menu('m-penghuni');</script>";
     private $header = "<script language=\"javascript\">menu('m-user');</script>";
+    private $url = "admin/penghuni";
 
-    protected $ModelKaryawan;
+    protected $modelPenghuni;
     protected $modelUser;
     protected $helpers = ['form'];
 
     function __construct()
     {
-        $this->ModelKaryawan = new ModelKaryawan();
+        $this->modelPenghuni = new ModelPenghuni();
         $this->modelUser = new ModelUser();
     }
 
@@ -29,8 +29,11 @@ class Karyawan extends ResourceController
      */
     public function index()
     {
-        $data['karyawan'] = $this->ModelKaryawan->get_all();
-        echo view('admin/karyawan', $data) . $this->menu . $this->header;
+        $data = [
+            'penghuni'      => $this->modelPenghuni->get_all(),
+            'url'           => $this->url
+        ];
+        echo view($this->url, $data) . $this->menu . $this->header;
     }
 
     /**
@@ -51,9 +54,10 @@ class Karyawan extends ResourceController
     public function new()
     {
         $data = [
-            'validation' => \Config\Services::validation()
+            'url'           => $this->url,
+            'validation'    => \Config\Services::validation()
         ];
-        echo view('admin/karyawan/add', $data) . $this->menu . $this->header;
+        echo view($this->url . '/add', $data) . $this->menu . $this->header;
     }
 
     /**
@@ -65,16 +69,16 @@ class Karyawan extends ResourceController
     {
         $post = $this->request->getPost();
         $validation = $this->validate([
-            'nik_karyawan' => [
+            'nik_penghuni' => [
                 'rules'  => 'required',
                 'errors' => [
                     'required' => 'Nomor KTP Tidak Boleh Kosong!'
                 ]
             ],
-            'nama_karyawan' => [
+            'nama_penghuni' => [
                 'rules'  => 'required',
                 'errors' => [
-                    'required' => 'Nama karyawan Tidak Boleh Kosong!'
+                    'required' => 'Nama Penghuni Tidak Boleh Kosong!'
                 ]
             ],
             'username' => [
@@ -108,31 +112,43 @@ class Karyawan extends ResourceController
 
                 ]
             ],
-            'no_telp_karyawan' => [
+            'no_telp_penghuni' => [
                 'rules'  => 'required|min_length[10]|max_length[13]',
                 'errors' => [
-                    'required' => 'Nomor Telepon karyawan Tidak Boleh Kosong!',
+                    'required' => 'Nomor Telepon Penghuni Tidak Boleh Kosong!',
                     'min_length' => 'Nomor Telepon Minimal 10 Angka!',
                     'max_length' => 'Nomor Telepon Minimal 13 Angka!'
                 ]
             ],
-            'jk_karyawan' => [
+            'tempat_lahir_penghuni' => [
                 'rules'  => 'required',
                 'errors' => [
-                    'required' => 'Jenis Kelamin karyawan Tidak Boleh Kosong!'
+                    'required' => 'Tempat Lahir Penghuni Tidak Boleh Kosong!'
                 ]
             ],
-            'alamat_karyawan' => [
+            'tgl_lahir_penghuni' => [
                 'rules'  => 'required',
                 'errors' => [
-                    'required' => 'Alamat karyawan Tidak Boleh Kosong!'
+                    'required' => 'Tanggal Lahir Penghuni Tidak Boleh Kosong!'
+                ]
+            ],
+            'jk_penghuni' => [
+                'rules'  => 'required',
+                'errors' => [
+                    'required' => 'Jenis Kelamin Penghuni Tidak Boleh Kosong!'
+                ]
+            ],
+            'alamat_penghuni' => [
+                'rules'  => 'required',
+                'errors' => [
+                    'required' => 'Alamat Penghuni Tidak Boleh Kosong!'
                 ]
             ]
         ]);
 
         if (!$validation) {
             $validation = \config\Services::validation();
-            return redirect()->to('/karyawan/new')->withInput()->with('validation', $validation);
+            return redirect()->to($this->url . '/new')->withInput()->with('validation', $validation);
         } else {
 
             $data1 = [
@@ -143,15 +159,17 @@ class Karyawan extends ResourceController
             ];
             $id_user = $this->modelUser->register($data1);
             $data2 = [
-                'nik_karyawan' => $post['nik_karyawan'],
-                'nama_karyawan' => $post['nama_karyawan'],
-                'no_telp_karyawan' => $post['no_telp_karyawan'],
-                'jk_karyawan' => $post['jk_karyawan'],
-                'alamat_karyawan' => $post['alamat_karyawan'],
+                'nik_penghuni' => $post['nik_penghuni'],
+                'nama_penghuni' => $post['nama_penghuni'],
+                'no_telp_penghuni' => $post['no_telp_penghuni'],
+                'tempat_lahir_penghuni' => $post['tempat_lahir_penghuni'],
+                'tgl_lahir_penghuni' => $post['tgl_lahir_penghuni'],
+                'jk_penghuni' => $post['jk_penghuni'],
+                'alamat_penghuni' => $post['alamat_penghuni'],
                 'id_user' => $id_user
             ];
-            $this->ModelKaryawan->insert($data2);
-            return redirect()->to('/karyawan')->with('success', 'Berhasil Menambahkan Data karyawan!');
+            $this->modelPenghuni->insert($data2);
+            return redirect()->to($this->url)->with('success', 'Berhasil Menambahkan Data Penghuni!');
         }
     }
 
@@ -160,16 +178,17 @@ class Karyawan extends ResourceController
      *
      * @return mixed
      */
-    public function edit($id_karyawan = null)
+    public function edit($id_penghuni = null)
     {
-        $karyawan = $this->ModelKaryawan->get_all_where($id_karyawan);
+        $penghuni = $this->modelPenghuni->get_all_where($id_penghuni);
         $data = [
-            'karyawan' => $karyawan,
-            'validation' => \Config\Services::validation()
+            'url'           => $this->url,
+            'penghuni'      => $penghuni,
+            'validation'    => \Config\Services::validation()
         ];
-        if (is_object($karyawan)) {
-            $data['karyawan'] = $karyawan;
-            echo view('admin/karyawan/edit', $data) . $this->menu . $this->header;
+        if (is_object($penghuni)) {
+            $data['penghuni'] = $penghuni;
+            echo view($this->url . '/edit', $data) . $this->menu . $this->header;
         } else {
             throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
         }
@@ -180,20 +199,20 @@ class Karyawan extends ResourceController
      *
      * @return mixed
      */
-    public function update($id_karyawan = null)
+    public function update($id_penghuni = null)
     {
         $post = $this->request->getPost();
         $validation = $this->validate([
-            'nik_karyawan' => [
+            'nik_penghuni' => [
                 'rules'  => 'required',
                 'errors' => [
                     'required' => 'Nomor KTP Tidak Boleh Kosong!'
                 ]
             ],
-            'nama_karyawan' => [
+            'nama_penghuni' => [
                 'rules'  => 'required',
                 'errors' => [
-                    'required' => 'Nama karyawan Tidak Boleh Kosong!'
+                    'required' => 'Nama Penghuni Tidak Boleh Kosong!'
                 ]
             ],
             'username' => [
@@ -225,31 +244,43 @@ class Karyawan extends ResourceController
 
                 ]
             ],
-            'no_telp_karyawan' => [
+            'no_telp_penghuni' => [
                 'rules'  => 'required|min_length[10]|max_length[13]',
                 'errors' => [
-                    'required' => 'Nomor Telepon karyawan Tidak Boleh Kosong!',
+                    'required' => 'Nomor Telepon Penghuni Tidak Boleh Kosong!',
                     'min_length' => 'Nomor Telepon Minimal 10 Angka!',
                     'max_length' => 'Nomor Telepon Minimal 13 Angka!'
                 ]
             ],
-            'jk_karyawan' => [
+            'tempat_lahir_penghuni' => [
                 'rules'  => 'required',
                 'errors' => [
-                    'required' => 'Jenis Kelamin karyawan Tidak Boleh Kosong!'
+                    'required' => 'Tempat Lahir Penghuni Tidak Boleh Kosong!'
                 ]
             ],
-            'alamat_karyawan' => [
+            'tgl_lahir_penghuni' => [
                 'rules'  => 'required',
                 'errors' => [
-                    'required' => 'Alamat karyawan Tidak Boleh Kosong!'
+                    'required' => 'Tanggal Lahir Penghuni Tidak Boleh Kosong!'
+                ]
+            ],
+            'jk_penghuni' => [
+                'rules'  => 'required',
+                'errors' => [
+                    'required' => 'Jenis Kelamin Penghuni Tidak Boleh Kosong!'
+                ]
+            ],
+            'alamat_penghuni' => [
+                'rules'  => 'required',
+                'errors' => [
+                    'required' => 'Alamat Penghuni Tidak Boleh Kosong!'
                 ]
             ]
         ]);
 
         if (!$validation) {
             $validation = \config\Services::validation();
-            return redirect()->to('/karyawan/edit/' . $id_karyawan)->withInput()->with('validation', $validation);
+            return redirect()->to($this->url . '/edit/' . $id_penghuni)->withInput()->with('validation', $validation);
         } else {
 
             $id_user = $post['id_user'];
@@ -261,15 +292,17 @@ class Karyawan extends ResourceController
             ];
             $this->modelUser->update($id_user, $data1);
             $data2 = [
-                'nik_karyawan' => $post['nik_karyawan'],
-                'nama_karyawan' => $post['nama_karyawan'],
-                'no_telp_karyawan' => $post['no_telp_karyawan'],
-                'jk_karyawan' => $post['jk_karyawan'],
-                'alamat_karyawan' => $post['alamat_karyawan'],
+                'nik_penghuni' => $post['nik_penghuni'],
+                'nama_penghuni' => $post['nama_penghuni'],
+                'no_telp_penghuni' => $post['no_telp_penghuni'],
+                'tempat_lahir_penghuni' => $post['tempat_lahir_penghuni'],
+                'tgl_lahir_penghuni' => $post['tgl_lahir_penghuni'],
+                'jk_penghuni' => $post['jk_penghuni'],
+                'alamat_penghuni' => $post['alamat_penghuni'],
                 'id_user' => $id_user
             ];
-            $this->ModelKaryawan->update($id_karyawan, $data2);
-            return redirect()->to('/karyawan')->with('success', 'Data Penhuni Berhasil Dirubah!');
+            $this->modelPenghuni->update($id_penghuni, $data2);
+            return redirect()->to($this->url)->with('success', 'Data Penhuni Berhasil Dirubah!');
         }
     }
 
@@ -278,11 +311,11 @@ class Karyawan extends ResourceController
      *
      * @return mixed
      */
-    public function delete($id_karyawan = null)
+    public function delete($id_penghuni = null)
     {
-        $data = $this->ModelKaryawan->select('id_user')->where('id_karyawan', $id_karyawan)->first();
+        $data = $this->modelPenghuni->select('id_user')->where('id_penghuni', $id_penghuni)->first();
         $this->modelUser->where('id_user', $data->id_user)->delete();
-        $this->ModelKaryawan->where('id_karyawan', $id_karyawan)->delete();
-        return redirect()->to(site_url('karyawan'))->with('success', 'Data karyawan Berhasil Dihapus');
+        $this->modelPenghuni->where('id_penghuni', $id_penghuni)->delete();
+        return redirect()->to(site_url($this->url))->with('success', 'Data Penghuni Berhasil Dihapus');
     }
 }
