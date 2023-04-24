@@ -8,7 +8,7 @@ function buatNoInvoice() {
 
   $.ajax({
     type: "post",
-    url: "/penyewaan/buatNoInvoice",
+    url: "/penyewaan_detail/buatNoInvoice",
     data: {
       [csrfToken]: csrfHash,
       tanggal: tanggal,
@@ -64,8 +64,6 @@ $(document).ready(function () {
       icon: "success",
     });
   } else if (failElement) {
-    console.log(failElement);
-    console.log("error bang");
     swal({
       text: failElement.innerHTML,
       icon: "error",
@@ -82,7 +80,6 @@ $(document).ready(function () {
   });
 
   $("#lama_penyewaan").change(function (e) {
-    detailKamar();
     total_harga();
   });
 
@@ -90,7 +87,7 @@ $(document).ready(function () {
     e.preventDefault();
     $.ajax({
       type: "post",
-      url: "/penyewaan/payMidtrans",
+      url: "/penyewaan_detail/payMidtrans",
       data: {
         [csrfToken]: csrfHash,
         no_invoice: $("#no_invoice").val(),
@@ -120,7 +117,7 @@ $(document).ready(function () {
 
               $.ajax({
                 type: "post",
-                url: "/penyewaan/payment",
+                url: "/penyewaan_detail/payment",
                 data: {
                   [csrfToken]: csrfHash,
                   no_invoice: response.no_invoice,
@@ -128,7 +125,7 @@ $(document).ready(function () {
                   id_penghuni: response.id_penghuni,
                   id_kamar: response.id_kamar,
                   lama_penyewaan: response.lama_penyewaan,
-                  total_harga: response.total_hagra,
+                  harga_kamar: response.harga_kamar,
                   order_id: dataObj.order_id,
                   payment_type: dataObj.payment_type,
                   transaction_time: dataObj.transaction_time,
@@ -156,7 +153,7 @@ $(document).ready(function () {
 
               $.ajax({
                 type: "post",
-                url: "/penyewaan/payment",
+                url: "/penyewaan_detail/payment",
                 data: {
                   [csrfToken]: csrfHash,
                   no_invoice: response.no_invoice,
@@ -164,7 +161,7 @@ $(document).ready(function () {
                   id_penghuni: response.id_penghuni,
                   id_kamar: response.id_kamar,
                   lama_penyewaan: response.lama_penyewaan,
-                  total_harga: response.total_harga,
+                  harga_kamar: response.harga_kamar,
                   order_id: dataObj.order_id,
                   payment_type: dataObj.payment_type,
                   transaction_time: dataObj.transaction_time,
@@ -196,7 +193,7 @@ $(document).ready(function () {
 
               $.ajax({
                 type: "post",
-                url: "/penyewaan/payment",
+                url: "/penyewaan_detail/payment",
                 data: {
                   [csrfToken]: csrfHash,
                   no_invoice: response.no_invoice,
@@ -204,7 +201,141 @@ $(document).ready(function () {
                   id_penghuni: response.id_penghuni,
                   id_kamar: response.id_kamar,
                   lama_penyewaan: response.lama_penyewaan,
-                  total_harga: response.total_hagra,
+                  harga_kamar: response.harga_kamar,
+                  order_id: dataObj.order_id,
+                  payment_type: dataObj.payment_type,
+                  transaction_time: dataObj.transaction_time,
+                  transaction_status: dataObj.transaction_status,
+                  va_number: dataObj.va_numbers[0].va_number,
+                  bank: dataObj.va_numbers[0].bank,
+                },
+                dataType: "json",
+                success: function (response) {
+                  swal({
+                    text: response.success,
+                    icon: "success",
+                  });
+                },
+              });
+            },
+          });
+        }
+      },
+      error: function () {},
+    });
+  });
+
+  $("#btnBayar").click(function (e) {
+    e.preventDefault();
+    $.ajax({
+      type: "post",
+      url: "/penyewaan_detail/payMidtrans",
+      data: {
+        [csrfToken]: csrfHash,
+        id_penyewaan: $("#id_penyewaan").val(),
+        no_invoice: $("#no_invoice").val(),
+        periode: $("#periode").val(),
+      },
+      dataType: "json",
+      success: function (response) {
+        if (response.error) {
+          swal({
+            text: response.error,
+            icon: "error",
+          });
+          console.log(response);
+        } else {
+          snap.pay(response.snapToken, {
+            // Optional
+            onSuccess: function (result) {
+              /* You may add your own js here, this is just example */
+              let dataResult = JSON.stringify(result, null, 2);
+              let dataObj = JSON.parse(dataResult);
+
+              $.ajax({
+                type: "post",
+                url: "/penyewaan_detail/payment",
+                data: {
+                  [csrfToken]: csrfHash,
+                  no_invoice: response.no_invoice,
+                  id_penyewaan: response.id_penyewaan,
+                  periode: response.periode,
+                  payment: response.payment,
+                  order_id: dataObj.order_id,
+                  payment_type: dataObj.payment_type,
+                  transaction_time: dataObj.transaction_time,
+                  transaction_status: dataObj.transaction_status,
+                  va_number: dataObj.va_numbers[0].va_number,
+                  bank: dataObj.va_numbers[0].bank,
+                },
+                dataType: "json",
+                success: function (response) {
+                  if (response.success) {
+                    window.location.replace("/penghuni");
+                    swal({
+                      text: response.success,
+                      icon: "success",
+                    });
+                  }
+                },
+              });
+            },
+            // Optional
+            onPending: function (result) {
+              /* You may add your own js here, this is just example */
+              let dataResult = JSON.stringify(result, null, 2);
+              let dataObj = JSON.parse(dataResult);
+
+              $.ajax({
+                type: "post",
+                url: "/penyewaan_detail/payment",
+                data: {
+                  [csrfToken]: csrfHash,
+                  no_invoice: response.no_invoice,
+                  id_penyewaan: response.id_penyewaan,
+                  periode: response.periode,
+                  payment: response.payment,
+                  order_id: dataObj.order_id,
+                  payment_type: dataObj.payment_type,
+                  transaction_time: dataObj.transaction_time,
+                  transaction_status: dataObj.transaction_status,
+                  va_number: dataObj.va_numbers[0].va_number,
+                  bank: dataObj.va_numbers[0].bank,
+                },
+                dataType: "json",
+                success: function (response) {
+                  if (response.success) {
+                    swal({
+                      text: response.success,
+                      icon: "success",
+                    }).then((confirm) => {
+                      if (confirm) {
+                        window.location.replace(
+                          "/penghuni/penyewaan/detail_penyewaan/" +
+                            response.id_penyewaan
+                        );
+                      }
+                    });
+                  } else if (response.data) {
+                  }
+                },
+              });
+            },
+            // Optional
+            onError: function (result) {
+              /* You may add your own js here, this is just example */
+              let dataResult = JSON.stringify(result, null, 2);
+              let dataObj = JSON.parse(dataResult);
+
+              $.ajax({
+                type: "post",
+                url: "/penyewaan_detail/payment",
+                data: {
+                  [csrfToken]: csrfHash,
+                  no_invoice: response.no_invoice,
+                  id_penyewaan: response.id_penyewaan,
+                  periode: response.periode,
+                  payment: response.payment,
                   order_id: dataObj.order_id,
                   payment_type: dataObj.payment_type,
                   transaction_time: dataObj.transaction_time,

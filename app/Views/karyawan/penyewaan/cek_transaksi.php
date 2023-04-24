@@ -7,7 +7,8 @@
         <div class="section-header">
             <h1>Invoice</h1>
             <div class="section-header-breadcrumb">
-                <div class="breadcrumb-item active"><a href="#">Data Penyewaan</a></div>
+                <div class="breadcrumb-item active"><a href="#">Penghuni</a></div>
+                <div class="breadcrumb-item">Penyewaan Kamar</div>
                 <div class="breadcrumb-item">Invoice</div>
             </div>
         </div>
@@ -41,8 +42,8 @@
                                             echo "<span class='badge badge-warning'>Belum Di Bayar</span>";
                                         } else if ($transaction_status == 'failure') {
                                             echo "<span class='badge badge-danger'>Pembayaran Gagal</span>";
-                                        } else if ($transaction_status == 'expire') {
-                                            echo "<span class='badge badge-danger'>Pembayaran Gagal</span>";
+                                        } else if ($transaction_status == 'cancel') {
+                                            echo "<span class='badge badge-danger'>Pembayaran Dibatalkan</span>";
                                         }
                                         ?><br><br>
                                     </address>
@@ -73,14 +74,14 @@
                                     <tr>
                                         <th>Nomor Kamar</th>
                                         <th class="text-center">Harga</th>
-                                        <th class="text-center">Lama Penyewaan</th>
-                                        <th class="text-right">Total</th>
+                                        <th class="text-center">Tanggal Pembayaran</th>
+                                        <th class="text-right">Pembayaran Ke</th>
                                     </tr>
                                     <tr>
                                         <td><?= $nomor_kamar ?></td>
                                         <td class="text-center">Rp.<?= $harga_kamar ?></td>
-                                        <td class="text-center"><?= $lama_penyewaan ?> Bulan</td>
-                                        <td class="text-right">Rp.<?= $total_harga ?></td>
+                                        <td class="text-center"><?= $transaction_time ?></td>
+                                        <td class="text-right"><?= $period ?></td>
                                     </tr>
                                 </table>
                             </div>
@@ -90,7 +91,7 @@
                         <div class="col-lg-12 text-right">
                             <div class="invoice-detail-item">
                                 <div class="invoice-detail-name">Total</div>
-                                <div class="invoice-detail-value invoice-detail-value-lg">Rp.<?= $total_harga ?></div>
+                                <div class="invoice-detail-value invoice-detail-value-lg">Rp.<?= $harga_kamar ?></div>
                             </div>
                         </div>
                     </div>
@@ -98,7 +99,7 @@
                 <hr>
                 <div class="text-md-right">
                     <div class="float-lg-left mb-lg-0 mb-3">
-                        <a href="<?= site_url($url) ?>" class="btn btn-danger btn-icon icon-left"><i class="fas fa-times"></i> Cancel</a>
+                        <a href="<?= site_url($url . '/detail_penyewaan/' . $id_penyewaan) ?>" class="btn btn-danger btn-icon icon-left"><i class="fas fa-times"></i> Cancel</a>
                     </div>
                     <button class="btn btn-warning btn-icon icon-left"><i class="fas fa-print"></i> Print</button>
                 </div>

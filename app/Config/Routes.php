@@ -29,39 +29,59 @@ $routes->set404Override();
 
 // We get a performance increase by specifying the default
 // route since we don't have to scan directories.
-$routes->get('/', 'Home::index');
+// $routes->get('/', 'Home::index');
 
-// Admin
-$routes->group('admin', ['filter' => 'isAdmin', 'namespace' => 'App\Controllers\Admin'], static function ($routes) {
-    $routes->get('/', 'Dashboard::index');
-    $routes->presenter('fasilitas');
-    $routes->presenter('kamar');
-    $routes->presenter('karyawan');
-    $routes->presenter('penghuni');
-    $routes->presenter('penyewaan');
-});
+$routes->group('', ['namespace' => 'App\Controllers'], static function ($routes) {
+    // Admin
+    $routes->group('admin', ['filter' => 'isAdmin', 'namespace' => 'App\Controllers\Admin'], static function ($routes) {
+        $routes->get('/', 'Dashboard::index');
+        $routes->presenter('fasilitas');
+        $routes->presenter('kamar');
+        $routes->presenter('karyawan');
+        $routes->presenter('penghuni');
+        $routes->group('penyewaan', ['filter' => 'isAdmin'], static function ($routes) {
+            $routes->get('/', 'Admin\PenyewaanController::index');
+            $routes->get('detail_penyewaan/(:num)', 'Admin\PenyewaanController::penyewaan_detail/$1');
+            $routes->get('detail_pembayaran/(:num)', 'Admin\PenyewaanController::pembayaran_detail/$1');
+            $routes->get('bayar/(:num)', 'Admin\PenyewaanController::pay/$1');
+        });
+    });
 
-//Karyawan
-$routes->group('karyawan', ['filter' => 'isKaryawan', 'namespace' => 'App\Controllers\Karyawan'], static function ($routes) {
-    $routes->get('/', 'Dashboard::index');
-    $routes->presenter('karyawan');
-    $routes->presenter('penghuni');
-    $routes->presenter('kamar');
-    $routes->presenter('penyewaan');
-});
+    //Karyawan
+    $routes->group('karyawan', ['filter' => 'isKaryawan', 'namespace' => 'App\Controllers\Karyawan'], static function ($routes) {
+        $routes->get('/', 'Dashboard::index');
+        $routes->presenter('karyawan');
+        $routes->presenter('penghuni');
+        $routes->presenter('kamar');
+        $routes->group('penyewaan', ['filter' => 'isKaryawan'], static function ($routes) {
+            $routes->get('/', 'Karyawan\PenyewaanController::index');
+            $routes->get('detail_penyewaan/(:num)', 'Karyawan\PenyewaanController::penyewaan_detail/$1');
+            $routes->get('detail_pembayaran/(:num)', 'Karyawan\PenyewaanController::pembayaran_detail/$1');
+            $routes->get('bayar/(:num)', 'Karyawan\PenyewaanController::pay/$1');
+        });
+    });
 
-// Penghuni
-$routes->group('penghuni', ['filter' => 'isPenghuni', 'namespace' => 'App\Controllers\Penghuni'], static function ($routes) {
-    $routes->get('/', 'kamar::index');
-    $routes->presenter('penghuni');
-    $routes->presenter('penyewaan');
+    // Penghuni
+    $routes->group('penghuni', ['filter' => 'isPenghuni', 'namespace' => 'App\Controllers\Penghuni'], static function ($routes) {
+        $routes->get('', 'kamar::index');
+        $routes->presenter('penghuni');
+        $routes->presenter('penyewaandetail');
+        $routes->group('penyewaan', ['filter' => 'isPenghuni'], static function ($routes) {
+            $routes->get('/', 'Penghuni\PenyewaanController::index');
+            $routes->post('/', 'Penghuni\PenyewaanController::save');
+            $routes->get('detail_penyewaan/(:num)', 'Penghuni\PenyewaanController::penyewaan_detail/$1');
+            $routes->get('detail_pembayaran/(:num)', 'Penghuni\PenyewaanController::pembayaran_detail/$1');
+            $routes->get('bayar/(:num)', 'Penghuni\PenyewaanController::pay/$1');
+        });
+    });
+
+    $routes->post('/penyewaan_detail/buatNoInvoice', 'paymentController::buatNoInvoice');
+    $routes->post('/penyewaan_detail/payMidtrans', 'paymentController::payMidtrans');
+    $routes->post('/penyewaan_detail/payment', 'paymentController::payment');
+    $routes->post('/kamar/detailKamar', 'Kamar::detailKamar');
 });
 
 $routes->presenter('dashboard');
-$routes->post('/kamar/detailKamar', 'Admin\Kamar::detailKamar');
-$routes->post('/penyewaan/payMidtrans', 'Penghuni\Penyewaan::payMidtrans');
-$routes->post('/penyewaan/buatNoInvoice', 'Penghuni\Penyewaan::buatNoInvoice');
-$routes->post('/penyewaan/payment', 'Penghuni\Penyewaan::payment');
 
 // login
 // $routes->get('/admin', 'Auth::login');

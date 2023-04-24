@@ -87,7 +87,7 @@
                             <div class="form-group row mb-4">
                                 <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Harga Kamar</label>
                                 <div class="col-sm-12 col-md-7">
-                                    <input type="text" class="form-control" name="harga_kamar" id="harga_kamar" readonly>
+                                    <input type="text" class="form-control" name="harga_kamar" id="harga_kamar" value="" readonly>
                                 </div>
                             </div>
 
@@ -113,8 +113,7 @@
                             </div>
 
                             <button class="btn btn-primary" type="button" id="prevBtn" onclick="nextPrev(-1)">Previous</button>
-                            <button class="btn btn-primary" id="tombolPay"><i class="fas fa-save"></i> Bayar</button>
-                            <button class="btn btn-primary" id="saveBtn">Publish</button>
+                            <button class="btn btn-primary" id="saveBtn">Sewa</button>
                         </div>
                     </div>
                 </div>

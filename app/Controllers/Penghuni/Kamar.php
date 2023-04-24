@@ -2,6 +2,7 @@
 
 namespace App\Controllers\Penghuni;
 
+use App\Models\ModelPenyewaanDetail;
 use App\Models\ModelFasilitas;
 use App\Models\ModelKamar;
 use App\Models\ModelKamarDetail;
@@ -17,6 +18,7 @@ class Kamar extends ResourceController
     protected $modelFasilitas;
     protected $modelKamarDetail;
     protected $modelPenyewaan;
+    protected $modelPenyewaanDetail;
     protected $helpers = ['form'];
 
     function __construct()
@@ -25,12 +27,13 @@ class Kamar extends ResourceController
         $this->modelFasilitas = new ModelFasilitas();
         $this->modelPenyewaan = new ModelPenyewaan();
         $this->modelKamarDetail = new ModelKamarDetail();
+        $this->modelPenyewaanDetail = new ModelPenyewaanDetail();
     }
 
     public function invoice()
     {
         $tanggal = date('Y-m-d');
-        $no_invoice = $this->modelPenyewaan->noInvoice($tanggal)->getRowArray();
+        $no_invoice = $this->modelPenyewaanDetail->noInvoice($tanggal)->getRowArray();
         $data = $no_invoice['noInvoice'];
 
         $lastNoUrut = substr($data, -4);
@@ -39,6 +42,24 @@ class Kamar extends ResourceController
         // membuat nomor invoice
         $noFaktur = date('dmy', strtotime($tanggal)) . sprintf('%04s', $nextNoUrut);
         return $noFaktur;
+    }
+
+    public function buatNoInvoice()
+    {
+        $tanggal = $this->request->getPost('tanggal');
+        $no_invoice = $this->modelPenyewaan->noInvoice($tanggal)->getRowArray();
+        $data = $no_invoice['noInvoice'];
+
+        $lastNoUrut = substr($data, -4);
+        // menambah nomor urut
+        $nextNoUrut = intval($lastNoUrut) + 1;
+        // membuat nomor invoice
+        $noInvoice = date('dmy', strtotime($tanggal)) . sprintf('%04s', $nextNoUrut);
+
+        $json = [
+            'noInvoice' => $noInvoice
+        ];
+        echo json_encode($json);
     }
 
     /**

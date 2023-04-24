@@ -5,24 +5,39 @@ namespace App\Controllers\Penghuni;
 use App\Models\ModelKamar;
 use App\Models\ModelPenghuni;
 use App\Models\ModelPenyewaan;
+use App\Models\ModelPenyewaanDetail;
 use CodeIgniter\RESTful\ResourceController;
 
-class Penyewaan extends ResourceController
+class PenyewaanDetail extends ResourceController
 {
     private $menu = "<script language=\"javascript\">menu('m-penyewaan');</script>";
     private $header = "<script language=\"javascript\">menu('m-page');</script>";
-    private $url = "penghuni/penyewaan";
+    private $url = "penghuni/penyewaandetail";
 
     protected $modelPenghuni;
     protected $modelPenyewaan;
+    protected $modelPenyewaanDetail;
     protected $modelKamar;
     protected $helpers = ['form'];
 
     function __construct()
     {
-        $this->modelPenyewaan = new ModelPenyewaan();
         $this->modelPenghuni = new ModelPenghuni();
         $this->modelKamar = new ModelKamar();
+        $this->modelPenyewaan = new ModelPenyewaan();
+        $this->modelPenyewaanDetail = new ModelPenyewaanDetail();
+    }
+
+    public function midtrans()
+    {
+        // Set your Merchant Server Key
+        \Midtrans\Config::$serverKey = getenv('midtrans_server_key');
+        // Set to Development/Sandbox Environment (default). Set to true for Production Environment (accept real transaction).
+        \Midtrans\Config::$isProduction = false;
+        // Set sanitization on (default)
+        \Midtrans\Config::$isSanitized = true;
+        // Set 3DS transaction for credit card to true
+        \Midtrans\Config::$is3ds = true;
     }
 
     public function sensor_bank($va_number)
@@ -49,22 +64,10 @@ class Penyewaan extends ResourceController
         return $newVa;
     }
 
-    public function midtrans()
-    {
-        // Set your Merchant Server Key
-        \Midtrans\Config::$serverKey = getenv('midtrans_server_key');
-        // Set to Development/Sandbox Environment (default). Set to true for Production Environment (accept real transaction).
-        \Midtrans\Config::$isProduction = false;
-        // Set sanitization on (default)
-        \Midtrans\Config::$isSanitized = true;
-        // Set 3DS transaction for credit card to true
-        \Midtrans\Config::$is3ds = true;
-    }
-
     public function invoice()
     {
         $tanggal = date('Y-m-d');
-        $no_invoice = $this->modelPenyewaan->noInvoice($tanggal)->getRowArray();
+        $no_invoice = $this->modelPenyewaanDetail->noInvoice($tanggal)->getRowArray();
         $data = $no_invoice['noInvoice'];
 
         $lastNoUrut = substr($data, -4);
@@ -114,34 +117,47 @@ class Penyewaan extends ResourceController
      */
     public function show($id = null)
     {
-        $cekData = $this->modelPenyewaan->find($id);
+        $cekData = $this->modelPenyewaanDetail->find($id);
 
         if ($cekData) {
             $this->midtrans();
-            $dataPenghuni = $this->modelPenghuni->find($cekData->id_penghuni);
-            $dataKamar = $this->modelKamar->find($cekData->id_kamar);
+            $dataPenyewaan = $this->modelPenyewaan->find($cekData->id_penyewaan);
+            $dataPenghuni = $this->modelPenghuni->find($dataPenyewaan->id_penghuni);
+            $dataKamar = $this->modelKamar->find($dataPenyewaan->id_kamar);
+            $periode = $this->modelPenyewaanDetail->periode($cekData->id_penyewaan)->getFieldCount();
 
             $status = \Midtrans\Transaction::status($cekData->order_id);
 
-            $this->modelPenyewaan->update($id, [
-                'transaction_status' => $status->transaction_status
-            ]);
+            $data1 = [
+                'transaction_status'    => $status->transaction_status,
+                'transaction_time'      => $status->settlement_time,
+            ];
+            $data2 = [
+                'last_transaction_status'    => $status->transaction_status,
+                'last_transaction_time'      => $status->settlement_time,
+                'last_payment'          => $status->gross_amount,
+            ];
+            $this->modelPenyewaanDetail->update($id, $data1);
+            $this->modelPenyewaan->update($cekData->id_penyewaan, $data2);
 
             $data = [
                 'url'                   => $this->url,
+                'id_penyewaan_detail'   => $id,
                 'no_invoice'            => $cekData->no_invoice,
-                'tgl_penyewaan'         => $cekData->tgl_penyewaan,
-                'lama_penyewaan'        => $cekData->lama_penyewaan,
+                'tgl_penyewaan'         => $dataPenyewaan->tgl_penyewaan,
+                'lama_penyewaan'        => $dataPenyewaan->lama_penyewaan,
                 'payment_method'        => $cekData->payment_method,
                 'transaction_status'    => $cekData->transaction_status,
                 'bank'                  => $cekData->bank,
                 'va_number'             =>  $this->sensor_bank($cekData->va_number),
-                'tgl_penyewaan'         => date('d M, Y', strtotime($cekData->tgl_penyewaan)),
-                'lama_penyewaan'        => $cekData->lama_penyewaan,
-                'total_harga'           => number_format($cekData->total_harga, 0, ',', '.'),
+                'tgl_penyewaan'         => date('d M, Y', strtotime($dataPenyewaan->tgl_penyewaan)),
+                'transaction_time'      => date('d M, Y', strtotime($cekData->transaction_time)),
+                'lama_penyewaan'        => $dataPenyewaan->lama_penyewaan,
+                'harga_kamar'           => number_format($cekData->payment, 0, ',', '.'),
 
                 'nomor_kamar'           => $dataKamar->nomor_kamar,
-                'harga_kamar'           => number_format($dataKamar->harga_kamar, 0, ',', '.'),
+                'payment'               => number_format($cekData->payment, 0, ',', '.'),
+                'period'                => $periode,
 
                 'nama_penghuni'         => $dataPenghuni->nama_penghuni,
                 'no_telp_penghuni'      => $dataPenghuni->no_telp_penghuni,
@@ -150,7 +166,7 @@ class Penyewaan extends ResourceController
 
             ];
 
-            return view($this->url . '/cektransaksi', $data) . $this->menu . $this->header;
+            return view('penghuni/penyewaan_detail/cektransaksi', $data) . $this->menu . $this->header;
         } else {
             exit('Data tidak ditemukan');
         }
@@ -163,14 +179,59 @@ class Penyewaan extends ResourceController
      */
     public function new()
     {
-        $data = [
-            'url'       => $this->url,
-            'no_invoice' => $this->invoice(),
-            'penghuni' => $this->modelPenghuni->findAll(),
-            'kamar' => $this->modelKamar->findAll(),
-            'validation' => \Config\Services::validation()
-        ];
-        echo view($this->url . '/add', $data) . $this->menu . $this->header;
+        $cekData = $this->modelPenyewaan->find($id);
+
+        if ($cekData) {
+            $this->midtrans();
+            $dataPenyewaan = $this->modelPenyewaan->find($cekData->id_penyewaan);
+            $dataPenghuni = $this->modelPenghuni->find($dataPenyewaan->id_penghuni);
+            $dataKamar = $this->modelKamar->find($dataPenyewaan->id_kamar);
+            $periode = $this->modelPenyewaanDetail->periode($cekData->id_penyewaan)->getFieldCount();
+
+            $status = \Midtrans\Transaction::status($cekData->order_id);
+
+            $data1 = [
+                'transaction_status'    => $status->transaction_status,
+                'transaction_time'      => $status->settlement_time,
+            ];
+            $data2 = [
+                'last_transaction_status'    => $status->transaction_status,
+                'last_transaction_time'      => $status->settlement_time,
+                'last_payment'          => $status->gross_amount,
+            ];
+            $this->modelPenyewaanDetail->update($id, $data1);
+            $this->modelPenyewaan->update($cekData->id_penyewaan, $data2);
+
+            $data = [
+                'url'                   => $this->url,
+                'id_penyewaan_detail'   => $id,
+                'no_invoice'            => $cekData->no_invoice,
+                'tgl_penyewaan'         => $dataPenyewaan->tgl_penyewaan,
+                'lama_penyewaan'        => $dataPenyewaan->lama_penyewaan,
+                'payment_method'        => $cekData->payment_method,
+                'transaction_status'    => $cekData->transaction_status,
+                'bank'                  => $cekData->bank,
+                'va_number'             =>  $this->sensor_bank($cekData->va_number),
+                'tgl_penyewaan'         => date('d M, Y', strtotime($dataPenyewaan->tgl_penyewaan)),
+                'transaction_time'      => date('d M, Y', strtotime($cekData->transaction_time)),
+                'lama_penyewaan'        => $dataPenyewaan->lama_penyewaan,
+                'harga_kamar'           => number_format($cekData->payment, 0, ',', '.'),
+
+                'nomor_kamar'           => $dataKamar->nomor_kamar,
+                'payment'               => number_format($cekData->payment, 0, ',', '.'),
+                'period'                => $periode,
+
+                'nama_penghuni'         => $dataPenghuni->nama_penghuni,
+                'no_telp_penghuni'      => $dataPenghuni->no_telp_penghuni,
+                'alamat_penghuni'       => $dataPenghuni->alamat_penghuni,
+
+
+            ];
+
+            return view('penghuni/penyewaan_detail/cektransaksi', $data) . $this->menu . $this->header;
+        } else {
+            exit('Data tidak ditemukan');
+        }
     }
 
     /**
@@ -244,34 +305,48 @@ class Penyewaan extends ResourceController
             $id_penghuni = $post['id_penghuni'];
             $id_kamar = $post['id_kamar'];
             $lama_penyewaan  = $post['lama_penyewaan'];
-            $total_harga = $post['total_harga'];
+            $harga_kamar = $post['harga_kamar'];
             $order_id = $post['order_id'];
             $payment_type = $post['payment_type'];
             $transaction_time = $post['transaction_time'];
             $transaction_status = $post['transaction_status'];
             $va_number = $post['va_number'];
             $bank = $post['bank'];
+            $periode = 1;
+            $last_payment = 0;
 
             $data1 = [
-                'no_invoice' => $no_invoice,
                 'tgl_penyewaan' => $tgl_penyewaan,
                 'id_penghuni' => $id_penghuni,
                 'id_kamar' => $id_kamar,
                 'lama_penyewaan ' => $lama_penyewaan,
-                'total_harga' => $total_harga,
-                'order_id' => $order_id,
+                'last_payment' => $last_payment,
+                'payment_period' => $periode,
                 'payment_method' => 'M',
+                'last_transaction_time' => $transaction_time,
+                'last_transaction_status' => $transaction_status,
+            ];
+            $id_penyewaan = $this->modelPenyewaan->simpan($data1);
+
+            $data2 = [
+                'status_kamar' => 'Tidak Tersedia',
+            ];
+
+            $this->modelKamar->update($id_kamar, $data2);
+
+            $data3 = [
+                'id_penyewaan' => $id_penyewaan,
+                'no_invoice' => $no_invoice,
+                'payment' => $harga_kamar,
+                'order_id' => $order_id,
                 'payment_type' => $payment_type,
+                'payment_method' => 'M',
                 'transaction_time' => $transaction_time,
                 'transaction_status' => $transaction_status,
                 'va_number' => $va_number,
                 'bank' => $bank,
             ];
-            $data2 = [
-                'status_kamar' => 'Tidak Tersedia'
-            ];
-            $this->modelPenyewaan->insert($data1);
-            $this->modelKamar->update($id_kamar, $data2);
+            $this->modelPenyewaanDetail->insert($data3);
 
             $json = [
                 'success' => 'Transaksi Berhasil, silahkan lakukan pembayaran!'
@@ -292,7 +367,6 @@ class Penyewaan extends ResourceController
             $nomor_kamar = $post['nomor_kamar'];
             $lama_penyewaan = $post['lama_penyewaan'];
             $harga_kamar = $post['harga_kamar'];
-            $total_hagra = $post['total_harga'];
             $cekdata = $this->modelKamar->where('id_kamar', $id_kamar)->where('status_kamar', 'Tersedia')->first();
 
             if ($cekdata) {
@@ -309,14 +383,19 @@ class Penyewaan extends ResourceController
                 // Set 3DS transaction for credit card to true
                 \Midtrans\Config::$is3ds = true;
 
+                $transaction_details = array(
+                    'order_id'    => rand(),
+                    'gross_amount'  => $harga_kamar
+                );
+
                 // Populate items
                 $items = array(
                     array(
                         'id'       => $id_kamar,
                         'price'    => $harga_kamar,
-                        'quantity' => $lama_penyewaan,
+                        'quantity' => 2,
                         'name'     => 'Kamar No: ' . $nomor_kamar
-                    )
+                    ),
                 );
 
                 // Populate customer's info
@@ -326,11 +405,8 @@ class Penyewaan extends ResourceController
                 );
 
                 $params = array(
-                    'transaction_details' => array(
-                        'order_id' => rand(),
-                        'gross_amount' => $total_hagra,
-                    ),
-                    'item_details'        => $items,
+                    'transaction_details' => $transaction_details,
+                    // 'item_details'        => $items,
                     'customer_details'    => $customer_details
                 );
 
@@ -340,7 +416,7 @@ class Penyewaan extends ResourceController
                     'id_penghuni' => $id_penghuni,
                     'id_kamar' => $id_kamar,
                     'lama_penyewaan' => $lama_penyewaan,
-                    'total_harga' => $total_hagra,
+                    'harga_kamar' => $harga_kamar,
                     'snapToken' => \Midtrans\Snap::getSnapToken($params)
                 ];
             } else {

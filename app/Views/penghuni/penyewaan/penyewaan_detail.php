@@ -5,10 +5,11 @@
 <div class="main-content">
     <section class="section">
         <div class="section-header">
-            <h1>List Data Kamar</h1>
+            <h1>Pembayaran Kamar No.<?= $no_kamar ?></h1>
             <div class="section-header-breadcrumb">
-                <div class="breadcrumb-item active"><a href="#">Data Master</a></div>
+                <div class="breadcrumb-item active"><a href="#">Penghuni</a></div>
                 <div class="breadcrumb-item">Penyewaan</div>
+                <div class="breadcrumb-item">Kamar No.<?= $no_kamar ?></div>
             </div>
         </div>
 
@@ -25,18 +26,27 @@
                                 </div>
                             </div>
                         <?php endif ?>
-                        <div class="card-header">
-                        </div>
+                        <?php if ($payment_method == 'M') {
+                            if ($status < $lama_penyewaan) {
+                        ?>
+                                <div class="card-header">
+                                    <p class="btn-group">
+                                        <a href="<?= site_url($url . "/bayar/" . $id_penyewaan) ?>" class="btn btn-primary btn-lg">
+                                            <i class="fas fa-plus"></i> Bayar</a>
+                                    </p>
+                                </div>
+                        <?php }
+                        } ?>
                         <div class="card-body">
                             <div class="table-responsive">
                                 <table class="table table-striped" id="table-2">
                                     <thead>
                                         <tr>
                                             <th>No</th>
-                                            <th>No Kamar</th>
-                                            <th>Tanggal Sewa</th>
+                                            <th>No Invoice</th>
                                             <th>Pembayaran</th>
-                                            <th>Pembayaran Terakhir</th>
+                                            <th>Tipe Pembayaran</th>
+                                            <th>Tanggal Pembayaran</th>
                                             <th>Status</th>
                                             <th>Action</th>
                                         </tr>
@@ -48,42 +58,38 @@
                                                     <?= $key + 1 ?>
                                                 </td>
                                                 <td>
-                                                    <?= $value->nomor_kamar ?>
+                                                    <?= $value->no_invoice ?>
                                                 </td>
                                                 <td>
-                                                    <?= $value->tgl_penyewaan ?>
+                                                    <?= $value->payment ?>
                                                 </td>
                                                 <td>
-                                                    <?= $value->payment_period . ' / ' . $value->lama_penyewaan ?> Bulan
+                                                    <?= $value->bank ?>
                                                 </td>
                                                 <td>
-                                                    <?= $value->last_transaction_time ?>
+                                                    <?= $value->transaction_time ?>
                                                 </td>
                                                 <td>
                                                     <?php if ($value->payment_method == 'M') {
-                                                        if ($value->last_transaction_status == 'pending') {
-                                                            echo "<span class='badge badge-warning'><i class='fas fa-clock'></i> Menunggu Pembayaran</span>";
-                                                        } else if ($value->last_transaction_status == 'settlement') {
-                                                            echo "<span class='badge badge-success'><i class='fas fa-check'></i> Sudah Terbayar</span>";
+                                                        if ($value->transaction_status == 'pending') {
+                                                            echo "<span class='badge badge-warning'><i class='fas fa-clock'></i></span>";
+                                                        } else if ($value->transaction_status == 'settlement') {
+                                                            echo "<span class='badge badge-success'><i class='fas fa-check'></i></span>";
                                                         } else {
-                                                            echo "<span class='badge badge-danger'><i class='fas fa-times'></i> Pemesanan Dibatalkkan</span>";
+                                                            echo "<span class='badge badge-danger'><i class='fas fa-times'></i></span>";
                                                         }
                                                     } else {
                                                         "<span class='badge badge-success'><i class='fas fa-check'></i></span>";
                                                     } ?>
                                                 </td>
                                                 <td>
-                                                    <a href="<?= site_url($url . '/detail_penyewaan/' .  $value->id_penyewaan) ?>" class="btn btn-info"><i class="fas fa-eye"></i></a>
-                                                    <?php if ($value->payment_method == 'M') {
-                                                        if ($status[$key] < $value->lama_penyewaan) {
-                                                    ?>
-                                                            <a href="<?= site_url($url . "/bayar/" . $value->id_penyewaan) ?>" class="btn btn-primary"><i class="fas fa-credit-card"></i></a>
-                                                            <form action="<?= site_url($url . '/delete/') . $value->id_penyewaan ?>" class="d-inline" method="post">
-                                                                <?= csrf_field() ?>
-                                                                <button class="btn btn-danger"><i class="fas fa-trash"></i></button>
-                                                            </form>
-                                                    <?php }
-                                                    } ?>
+                                                    <a href="<?= site_url($url . '/detail_pembayaran/' .  $value->id_penyewaan_detail) ?>" class="btn btn-info"><i class="fas fa-eye"></i></a>
+                                                    <?php if (!$value->transaction_status == 'settlement') { ?>
+                                                        <form action="<?= site_url($url . '/delete/') . $value->id_penyewaan_detail ?>" class="d-inline" method="post">
+                                                            <?= csrf_field() ?>
+                                                            <button class="btn btn-danger"><i class="fas fa-trash"></i></button>
+                                                        </form>
+                                                    <?php } ?>
                                                 </td>
                                             </tr>
                                         <?php endforeach ?>

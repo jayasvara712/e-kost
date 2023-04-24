@@ -11,10 +11,10 @@ class ModelPenyewaan extends Model
     protected $primaryKey           = 'id_penyewaan';
     protected $returnType           = 'object';
     protected $allowedFields        = [
-        'no_invoice', 'tgl_penyewaan', 'id_penghuni', 'id_kamar', 'lama_penyewaan ', 'total_harga', 'order_id', 'payment_method', 'payment_type', 'transaction_time', 'transaction_status', 'va_number', 'bank'
+        'no_invoice', 'tgl_penyewaan', 'id_penghuni', 'id_kamar', 'lama_penyewaan ', 'last_payment', 'payment_period', 'payment_method', 'last_transaction_time', 'last_transaction_status'
     ];
 
-    public function get_all()
+    public function getAll()
     {
         $builder = $this->db->table($this->table);
         $builder->select('*');
@@ -33,6 +33,27 @@ class ModelPenyewaan extends Model
         return $builder->get()->getResult();
     }
 
+    public function getDetailPenyewaaan($id)
+    {
+        $builder = $this->db->table($this->table);
+        $builder->select('*');
+        $builder->join('penghuni', 'penghuni.id_penghuni = penyewaan.id_penghuni', 'LEFT');
+        $builder->join('kamar', 'kamar.id_kamar = penyewaan.id_kamar', 'LEFT');
+        $builder->where('penyewaaan.id_penyewaaan', $id);
+        return $builder->get()->getResult();
+    }
+
+    public function getAllDetail($id)
+    {
+        $builder = $this->db->table($this->table);
+        $builder->select('*');
+        $builder->join('penyewaan_detail', 'penyewaan_detail.id_penyewaan = penyewaan.id_penyewaan', 'LEFT');
+        $builder->join('penghuni', 'penghuni.id_penghuni = penyewaan.id_penghuni', 'LEFT');
+        $builder->join('kamar', 'kamar.id_kamar = penyewaan.id_kamar', 'LEFT');
+        $builder->where('penyewaan.id_penyewaan', $id);
+        return $builder->get()->getResult();
+    }
+
     public function count_all()
     {
         $builder = $this->db->table($this->table);
@@ -40,12 +61,12 @@ class ModelPenyewaan extends Model
         return $query;
     }
 
-    public function noInvoice($tanggal)
+    public function simpan($data)
     {
         $builder = $this->db->table($this->table);
-        $builder->select('max(no_invoice) as noInvoice');
-        $builder->where('tgl_penyewaan', $tanggal);
-        $query = $builder->get();
-        return $query;
+        $builder->insert($data);
+        $insert_id = $this->db->insertID();
+
+        return  $insert_id;
     }
 }
