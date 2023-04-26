@@ -28,4 +28,15 @@ class ModelUser extends Model
 
         return  $insert_id;
     }
+
+    public function dataUser($id, $role)
+    {
+        $builder = $this->db->table($this->table);
+        $builder->select('*');
+        if ($role != 'admin') {
+            $builder->join($role, $role . '.id_user' . ' = user.id_user', 'LEFT');
+        }
+        $builder->where('user.id_user', $id);
+        return $builder->get();
+    }
 }

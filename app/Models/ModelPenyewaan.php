@@ -23,6 +23,19 @@ class ModelPenyewaan extends Model
         return $builder->get()->getResult();
     }
 
+    public function getByAll($bulan, $status)
+    {
+        $builder = $this->db->table($this->table);
+        $builder->select('*');
+        $builder->join('penghuni', 'penghuni.id_penghuni = penyewaan.id_penghuni', 'LEFT');
+        $builder->join('kamar', 'kamar.id_kamar = penyewaan.id_kamar', 'LEFT');
+        if ($status != '') {
+            $builder->where('last_transaction_status', $status);
+        }
+        $builder->where("DATE_FORMAT(tgl_penyewaan,'%Y-%m')", $bulan);
+        return $builder->get()->getResult();
+    }
+
     public function getDetail($id_penghuni)
     {
         $builder = $this->db->table($this->table);

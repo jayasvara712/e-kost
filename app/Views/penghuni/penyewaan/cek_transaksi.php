@@ -73,15 +73,13 @@
                                 <table class="table table-striped table-hover table-md">
                                     <tr>
                                         <th>Nomor Kamar</th>
-                                        <th class="text-center">Harga</th>
                                         <th class="text-center">Tanggal Pembayaran</th>
-                                        <th class="text-right">Pembayaran Ke</th>
+                                        <th class="text-center">Harga</th>
                                     </tr>
                                     <tr>
                                         <td><?= $nomor_kamar ?></td>
-                                        <td class="text-center">Rp.<?= $harga_kamar ?></td>
                                         <td class="text-center"><?= $transaction_time ?></td>
-                                        <td class="text-right"><?= $period ?></td>
+                                        <td class="text-center">Rp.<?= $harga_kamar ?></td>
                                     </tr>
                                 </table>
                             </div>
@@ -101,7 +99,10 @@
                     <div class="float-lg-left mb-lg-0 mb-3">
                         <a href="<?= site_url($url . '/detail_penyewaan/' . $id_penyewaan) ?>" class="btn btn-danger btn-icon icon-left"><i class="fas fa-times"></i> Cancel</a>
                     </div>
-                    <button class="btn btn-warning btn-icon icon-left"><i class="fas fa-print"></i> Print</button>
+                    <form action="/admin/laporan/cetak_pembayaran_detail/">
+                        <input type="hidden" name="id_penyewaan_detail" value="<?= $id_penyewaan_detail ?>">
+                        <button class="btn btn-warning btn-icon icon-left"><i class="fas fa-print"></i> Print</button>
+                    </form>
                 </div>
             </div>
         </div>

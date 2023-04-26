@@ -15,10 +15,7 @@
                 <div class="d-sm-none d-lg-inline-block"><?= session('name') ?></div>
             </a>
             <div class="dropdown-menu dropdown-menu-right">
-                <a href="#" class="dropdown-item has-icon">
-                    <i class="far fa-user"></i> Profile
-                </a>
-                <a href="#" class="dropdown-item has-icon">
+                <a href="<?= site_url(session()->role . '/setting') ?>" class="dropdown-item has-icon">
                     <i class="fas fa-cog"></i> Settings
                 </a>
                 <div class="dropdown-divider"></div>
@@ -114,9 +111,9 @@
                 <li class="nav-item" id="m-penyewaan">
                     <a href="<?= site_url("/penghuni/penyewaan") ?>" class="nav-link"><i class="fas fa-house-user"></i><span>Penyewaan Kamar</span></a>
                 </li>
-                <li class="nav-item" id="m-laporan">
+                <!-- <li class="nav-item" id="m-laporan">
                     <a href="<?= site_url("/penghuni/laporan") ?>" class="nav-link"><i class="fas fa-file"></i><span>Data Laporan</span></a>
-                </li>
+                </li> -->
             <?php
             }
             ?>

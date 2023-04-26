@@ -79,6 +79,20 @@ $routes->group('', ['namespace' => 'App\Controllers'], static function ($routes)
     $routes->post('/penyewaan_detail/payMidtrans', 'paymentController::payMidtrans');
     $routes->post('/penyewaan_detail/payment', 'paymentController::payment');
     $routes->post('/kamar/detailKamar', 'Kamar::detailKamar');
+
+    // laporan
+    $routes->get('(:any)/laporan', 'LaporanController::index');
+    $routes->get('(:any)/laporan/cetak_karyawan', 'LaporanController::cetak_karyawan');
+    $routes->get('(:any)/laporan/cetak_penghuni', 'LaporanController::cetak_penghuni');
+    $routes->get('(:any)/laporan/cetak_kamar', 'LaporanController::cetak_kamar');
+    $routes->get('(:any)/laporan/cetak_penyewaan', 'LaporanController::cetak_penyewaan');
+    $routes->get('(:any)/laporan/cetak_pembayaran', 'LaporanController::cetak_pembayaran');
+    $routes->get('(:any)/laporan/cetak_pembayaran_detail', 'LaporanController::cetak_pembayaran_detail');
+
+    // Auth
+    $routes->get('(:any)/setting', 'Auth::setting');
+    $routes->post('(:any)/update/(:any)', 'Auth::update/$1');
+    $routes->get('/logout', 'Auth::logout');
 });
 
 $routes->presenter('dashboard');
@@ -92,7 +106,6 @@ $routes->get('/register', 'Auth::register');
 $routes->post('registerProcess', 'Auth::registerProcess');
 $routes->post('/resetProses', 'Auth::resetProses');
 $routes->post('/resetpwProses', 'Auth::resetpwProses');
-$routes->get('/logout', 'Auth::logout');
 
 
 /*

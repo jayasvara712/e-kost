@@ -144,6 +144,9 @@ class Fasilitas extends ResourceController
     public function delete($id_fasilitas = null)
     {
         $this->modelFasilitas->where('id_fasilitas', $id_fasilitas)->delete();
-        return redirect()->to(site_url($this->url))->with('success', 'Data Fasilitas Berhasil Dihapus');
+        $json = [
+            'success' => 'Data fasilitas berhasil dihapus!'
+        ];
+        echo json_encode($json);
     }
 }

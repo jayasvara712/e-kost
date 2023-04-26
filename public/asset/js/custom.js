@@ -55,6 +55,57 @@ function total_harga() {
   $("#total_harga").val(total);
 }
 
+function deleteData(btnID, idData, urlDelete, title) {
+  $("#btndelete" + btnID).click(function (e) {
+    //var deleteid = $("#_delte_jenis_id").val();
+
+    swal({
+      title: "Apakah anda yakin?",
+      text:
+        "Data " +
+        title +
+        " dan data yang berelasi akan terhapus sehingga tidak dapat dipulihkan kembali!",
+      icon: "warning",
+      buttons: true,
+      dangerMode: true,
+    }).then((willDelete) => {
+      if (willDelete) {
+        //parameter ajax
+        var CSRF_TOKEN = $('meta[name="csrf-token"]').attr("content");
+        var data = {
+          [csrfToken]: csrfHash,
+        };
+
+        //ajax call (ex. '/admin/jenis/ + id')
+        $.ajax({
+          type: "POST",
+          url: urlDelete + "/delete/" + idData,
+          data: data,
+          dataType: "json",
+          success: function (response) {
+            if (response.success) {
+              swal({
+                text: response.success,
+                icon: "success",
+              }).then((confirm) => {
+                if (confirm) {
+                  window.location.replace(urlDelete);
+                }
+              });
+            } else if (response.data) {
+            }
+          },
+          error: function (err, e) {
+            for (var x in err) {
+              console.log(x + " <=> error index of <=> " + err[x]);
+            }
+          },
+        });
+      }
+    });
+  });
+}
+
 $(document).ready(function () {
   var successElement = document.getElementById("success");
   var failElement = document.getElementById("error");
@@ -136,11 +187,15 @@ $(document).ready(function () {
                 dataType: "json",
                 success: function (response) {
                   if (response.success) {
-                    window.location.replace("/penghuni");
                     swal({
                       text: response.success,
                       icon: "success",
+                    }).then((confirm) => {
+                      if (confirm) {
+                        window.location.replace("penghuni");
+                      }
                     });
+                  } else if (response.data) {
                   }
                 },
               });
@@ -211,10 +266,17 @@ $(document).ready(function () {
                 },
                 dataType: "json",
                 success: function (response) {
-                  swal({
-                    text: response.success,
-                    icon: "success",
-                  });
+                  if (response.success) {
+                    swal({
+                      text: response.success,
+                      icon: "success",
+                    }).then((confirm) => {
+                      if (confirm) {
+                        window.location.replace("penghuni");
+                      }
+                    });
+                  } else if (response.data) {
+                  }
                 },
               });
             },
@@ -271,11 +333,18 @@ $(document).ready(function () {
                 dataType: "json",
                 success: function (response) {
                   if (response.success) {
-                    window.location.replace("/penghuni");
                     swal({
                       text: response.success,
                       icon: "success",
+                    }).then((confirm) => {
+                      if (confirm) {
+                        window.location.replace(
+                          "/penghuni/penyewaan/detail_penyewaan/" +
+                            response.id_penyewaan
+                        );
+                      }
                     });
+                  } else if (response.data) {
                   }
                 },
               });
@@ -345,10 +414,20 @@ $(document).ready(function () {
                 },
                 dataType: "json",
                 success: function (response) {
-                  swal({
-                    text: response.success,
-                    icon: "success",
-                  });
+                  if (response.success) {
+                    swal({
+                      text: response.success,
+                      icon: "success",
+                    }).then((confirm) => {
+                      if (confirm) {
+                        window.location.replace(
+                          "/penghuni/penyewaan/detail_penyewaan/" +
+                            response.id_penyewaan
+                        );
+                      }
+                    });
+                  } else if (response.data) {
+                  }
                 },
               });
             },

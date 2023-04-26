@@ -74,16 +74,6 @@
                                                 </td>
                                                 <td>
                                                     <a href="<?= site_url($url . '/detail_penyewaan/' .  $value->id_penyewaan) ?>" class="btn btn-info"><i class="fas fa-eye"></i></a>
-                                                    <?php if ($value->payment_method == 'M') {
-                                                        if ($status[$key] < $value->lama_penyewaan) {
-                                                    ?>
-                                                            <a href="<?= site_url($url . "/bayar/" . $value->id_penyewaan) ?>" class="btn btn-primary"><i class="fas fa-credit-card"></i></a>
-                                                            <form action="<?= site_url($url . '/delete/') . $value->id_penyewaan ?>" class="d-inline" method="post">
-                                                                <?= csrf_field() ?>
-                                                                <button class="btn btn-danger"><i class="fas fa-trash"></i></button>
-                                                            </form>
-                                                    <?php }
-                                                    } ?>
                                                 </td>
                                             </tr>
                                         <?php endforeach ?>

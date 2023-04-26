@@ -25,6 +25,18 @@ class ModelPenyewaanDetail extends Model
         return $builder->get()->getResult();
     }
 
+    public function getByAll($bulan)
+    {
+        $builder = $this->db->table($this->table);
+        $builder->select('*');
+        $builder->join('penyewaan', 'penyewaan.id_penyewaan = penyewaan_detail.id_penyewaan', 'LEFT');
+        $builder->join('penghuni', 'penghuni.id_penghuni = penyewaan.id_penghuni', 'LEFT');
+        $builder->join('kamar', 'kamar.id_kamar = penyewaan.id_kamar', 'LEFT');
+        $builder->where("DATE_FORMAT(transaction_time,'%Y-%m')", $bulan);
+        $builder->orderBy('kamar.nomor_kamar', 'ASC');
+        return $builder->get()->getResult();
+    }
+
     public function count_all()
     {
         $builder = $this->db->table($this->table);
@@ -60,5 +72,29 @@ class ModelPenyewaanDetail extends Model
         $builder->orWhere('id_penyewaan', $id);
         $builder->where('transaction_status', 'pending');
         return $builder->get();
+    }
+
+    public function sensor_bank($va_number)
+    {
+        $va_number = $va_number;
+        $jmlSensor = 10;
+        $afterVal = 0;
+        $x = '';
+
+        // untuk mengambil 4 digit angka di tengah nomor hp yang akan disensor
+        $sensor = substr($va_number, $afterVal, $jmlSensor);
+
+        //untuk memecah bagian / kelompok angka pertama dan terakhir
+        $va_number2 = explode($sensor, $va_number);
+
+        for ($i = 1; $i <= $jmlSensor; $i++) {
+            $x .= 'X';
+        }
+
+        // untuk menggabungkan angka pertama dan terakhir dengan angka tengah yang sudah di sensor
+        $newVa = $va_number2[0] . $x . $va_number2[1];
+
+        // menampilkan hasil data yang disensor
+        return $newVa;
     }
 }

@@ -18,6 +18,13 @@
             <div class="row">
                 <div class="col-12">
                     <div class="card">
+
+                        <?php if (validation_show_error('judul_fasilitas')) : ?>
+                            <div id="error" style="visibility: hidden">
+                                Silahkan cek kembali !
+                            </div>
+                        <?php endif ?>
+
                         <div class="card-body">
 
                             <form action="<?= site_url($url . '/update/' . $fasilitas->id_fasilitas) ?>" method="post" autocomplete="off" enctype="multipart/form-data">

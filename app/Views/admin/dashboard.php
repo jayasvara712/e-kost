@@ -19,11 +19,8 @@
                         <div class="card-body">
 
                             <?php if (session()->getFlashdata('success')) : ?>
-                                <div class="alert alert-success alert-dismissible show fade">
-                                    <div class="alert-body">
-                                        <button class="close" data-dismiss="alert">x</button>
-                                        <?= session()->getFlashdata('success') ?>
-                                    </div>
+                                <div id="success" style="visibility: hidden">
+                                    <?= session()->getFlashdata('success') ?>
                                 </div>
                             <?php endif ?>
 

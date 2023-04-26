@@ -207,38 +207,143 @@ class Auth extends BaseController
         }
     }
 
-    // public function resetpwProses()
-    // {
-    //     $builder = $this->db->table('user');
-    //     $post = $this->request->getPost();
-    //     $query = $this->db->table('user')->getWhere(['email' => $post['email']]);
-    //     $user = $query->getRow();
-
-    //     if ($user) {
-    //         if ($post['password'] == $post['password2']) {
-    //             $data =
-    //                 [
-    //                     'password' => password_hash($post['password'], PASSWORD_BCRYPT),
-    //                 ];
-
-    //             $builder->where('email', $post['email']);
-    //             $builder->update($data);
-    //             return redirect()->to(site_url('login'))->with('success', 'Berhasil Mengganti Password !');
-    //         } else {
-    //             $data2 =
-    //                 [
-    //                     'email' => $post['email'],
-    //                 ];
-    //             $tes['asd'] = $data2;
-    //             echo view('auth/resetpw', $tes);
-    //             return redirect()->with('error', 'Password tidak sama');
-    //         }
-    //     }
-    // }
-
     public function logout()
     {
         session()->destroy();
         return redirect()->to(site_url('login'));
+    }
+
+    public function setting()
+    {
+        $role = session()->role;
+        $id = session()->id_user;
+        $user = $this->user->dataUser($id, $role)->getFirstRow();
+        $data = [
+            'user' => $user,
+            'no_telp'   => 'no_telp_' . $role,
+            'alamat'   => 'alamat_' . $role,
+            'validation' => \Config\Services::validation()
+        ];
+        if (is_object($user)) {
+            $data['user'] = $user;
+            echo view('auth/setting', $data);
+        } else {
+            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
+        }
+    }
+
+    public function update($id)
+    {
+        $post = $this->request->getPost();
+        if (session()->role == 'admin') {
+            $validation = $this->validate([
+                'email' => [
+                    'rules'  => 'required',
+                    'errors' => [
+                        'required' => 'Email Tidak Boleh Kosong!'
+                    ]
+                ],
+                'password_lama' => [
+                    'rules'  => 'required',
+                    'errors' => [
+                        'required' => 'Password Tidak Boleh Kosong!',
+
+                    ]
+                ],
+                'password' => [
+                    'rules'  => 'required|min_length[8]',
+                    'errors' => [
+                        'required' => 'Password Tidak Boleh Kosong!',
+                        'min_length' => 'Password Minimal 8 Huruf',
+
+                    ]
+                ],
+                'password_conf' => [
+                    'rules'  => 'required|min_length[8]|matches[password]',
+                    'errors' => [
+                        'required' => 'Password Tidak Boleh Kosong!',
+                        'min_length' => 'Password minimal 8 Huruf',
+                        'matches'   => 'Password Tidak Sama',
+
+                    ]
+                ],
+            ]);
+        } else {
+            $validation = $this->validate([
+                'email' => [
+                    'rules'  => 'required',
+                    'errors' => [
+                        'required' => 'Email Tidak Boleh Kosong!'
+                    ]
+                ],
+                'password_lama' => [
+                    'rules'  => 'required',
+                    'errors' => [
+                        'required' => 'Password Tidak Boleh Kosong!',
+
+                    ]
+                ],
+                'password' => [
+                    'rules'  => 'required|min_length[8]',
+                    'errors' => [
+                        'required' => 'Password Tidak Boleh Kosong!',
+                        'min_length' => 'Password Minimal 8 Huruf',
+
+                    ]
+                ],
+                'password_conf' => [
+                    'rules'  => 'required|min_length[8]|matches[password]',
+                    'errors' => [
+                        'required' => 'Password Tidak Boleh Kosong!',
+                        'min_length' => 'Password minimal 8 Huruf',
+                        'matches'   => 'Password Tidak Sama',
+
+                    ]
+                ],
+                'no_telp' => [
+                    'rules'  => 'required|min_length[10]',
+                    'errors' => [
+                        'required' => 'Nomor Telepon Penghuni Tidak Boleh Kosong!',
+                        'min_length' => 'Nomor Telepon Minimal 10 Angka!'
+                    ]
+                ],
+                'alamat' => [
+                    'rules'  => 'required',
+                    'errors' => [
+                        'required' => 'Alamat Penghuni Tidak Boleh Kosong!'
+                    ]
+                ],
+            ]);
+        }
+
+        if (!$validation) {
+            $validation = \config\Services::validation();
+            return redirect()->to(session()->role . '/setting')->withInput()->with('validation', $validation);
+        } else {
+
+            $id_user = session()->id_user;
+            $role = session()->role;
+            $id = 'id_' . $role;
+
+            $user = $this->user->dataUser($id_user, $role)->getFirstRow();
+
+            if (password_verify($post['password_lama'], $user->password)) {
+                $data1 = [
+                    'password' => password_hash($post['password'], PASSWORD_BCRYPT),
+                ];
+                $this->user->update($id_user, $data1);
+
+                if ($role != 'admin') {
+                    $data2 = [
+                        'no_telp_' . $role => $post['no_telp'],
+                        'alamat_' . $role => $post['alamat'],
+                    ];
+                    $this->$role->update($user->$id, $data2);
+                }
+                return redirect()->to(site_url($role))->with('success', 'Data User Berhasil Dirubah');
+            } else {
+                return redirect()->to(session()->role . '/setting')->withInput()->with('error', 'Password lama salah');
+            }
+        }
     }
 }
