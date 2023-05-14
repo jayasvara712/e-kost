@@ -64,7 +64,6 @@
             <th>Nomor Kamar</th>
             <th>Tanggal Penyewaan</th>
             <th>Nama Penghuni</th>
-            <th>Periode</th>
             <th>Harga Kamar</th>
             <th>Status</th>
         </tr>
@@ -74,9 +73,8 @@
                     <td><?= $value->nomor_kamar ?></td>
                     <td><?= date('d M, Y', strtotime($value->tgl_penyewaan)) ?></td>
                     <td><?= $value->nama_penghuni ?></td>
-                    <td><?= $value->payment_period . '/' . $value->lama_penyewaan ?></td>
                     <td>Rp. <?= number_format($value->harga_kamar, 0, ',', '.') ?></td>
-                    <td><?= $value->last_transaction_status == 'settlement' ? 'Lunas' : ''  ?><?= $value->last_transaction_status == 'pending' ? 'Belum Lunas' : ''  ?></td>
+                    <td><?= $value->last_transaction_status == 'settlement' ? 'Lunas' : ''  ?><?= $value->last_transaction_status == 'pending' ? 'Belum Lunas' : ''  ?><?= $value->last_transaction_status == 'cancel' ? 'Dibatalkan' : ''  ?><?= $value->last_transaction_status == 'expire' ? 'Gagal' : ''  ?></td>
                 </tr>
             <?php endforeach ?>
 

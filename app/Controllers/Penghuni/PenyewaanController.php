@@ -103,9 +103,10 @@ class PenyewaanController extends BaseController
             array_push($status_count, $this->modelPenyewaanDetail->cek_status($value->id_penyewaan)->getFirstRow()->x);
         }
         $data = [
-            'status'    => $status_count,
-            'url'       => $this->url,
-            'penyewaan' => $dataPenyewaan
+            'alert'             => 'Ingin membatalkan pemesanan ?',
+            'status'            => $status_count,
+            'url'               => $this->url,
+            'penyewaan'         => $dataPenyewaan
         ];
         echo view($this->url, $data) . $this->menu . $this->header;
     }
@@ -161,6 +162,9 @@ class PenyewaanController extends BaseController
                 'status_kamar' => 'Tidak Tersedia'
             ];
             $this->modelKamar->update($id_kamar, $data2);
+            session()->remove('pembayaran');
+            session()->set(['pembayaran'       => 'yes']);
+
             return redirect()->to(site_url($this->url . '/bayar/' . $id_penyewaan))->with('success', 'Data Penyewaan Berhasil Ditambah');
         }
     }
@@ -168,19 +172,49 @@ class PenyewaanController extends BaseController
     public function penyewaan_detail($id = null)
     {
         $cekData = $this->modelPenyewaan->getAllDetail($id);
+        // $status = $this->modelPenyewaan->status;
         $id_penyewaan = $cekData[0]->id_penyewaan;
-        $status_count = $this->modelPenyewaanDetail->cek_status($id_penyewaan)->getFirstRow();
+        $periode = $this->modelPenyewaanDetail->cek_status($id_penyewaan)->getFirstRow();
 
+        // dd($cekData);
         if ($cekData) {
 
+            $this->midtrans();
+            foreach ($cekData as $value) {
+                $status = \Midtrans\Transaction::status($value->order_id);
+                if ($status->transaction_status == 'settlement') {
+                    $data1 = [
+                        'transaction_status'    => $status->transaction_status,
+                        'transaction_time'      => $status->settlement_time,
+                    ];
+                    $data2 = [
+                        'last_transaction_status'    => $status->transaction_status,
+                        'last_transaction_time'      => $status->settlement_time,
+                        'last_payment'          => $status->gross_amount,
+                    ];
+                } else {
+                    $data1 = [
+                        'transaction_status'    => $status->transaction_status,
+                        'transaction_time'      => $status->transaction_time,
+                    ];
+                    $data2 = [
+                        'last_transaction_status'    => $status->transaction_status,
+                        'last_transaction_time'      => $status->transaction_time,
+                        'last_payment'          => $status->gross_amount,
+                    ];
+                }
+                $this->modelPenyewaanDetail->update($value->id_penyewaan_detail, $data1);
+                $this->modelPenyewaan->update($id, $data2);
+            }
             $data = [
                 'url'               => $this->url,
-                'status'            => (int)$status_count->x,
+                'periode'            => (int)$periode->x,
                 'lama_penyewaan'   => $cekData[0]->lama_penyewaan,
                 'no_kamar'          => $cekData[0]->nomor_kamar,
                 'payment_method'    => $cekData[0]->payment_method,
                 'id_penyewaan'      => $id_penyewaan,
                 'penyewaan'         => $cekData,
+                'status'            => $status,
             ];
 
             return view($this->url . '/penyewaan_detail', $data) . $this->menu . $this->header;
@@ -272,6 +306,8 @@ class PenyewaanController extends BaseController
             $data = [
                 'url'                   => $this->url,
                 'id_penyewaan'          => $id,
+                'id_kamar'              => $dataPenyewaan->id_kamar,
+                'alert'                 => 'Akan membatalakan penyewaan kamar ini ?',
                 'no_invoice'            => $this->invoice(),
                 'tgl_penyewaan'         => $dataPenyewaan->tgl_penyewaan,
                 'lama_penyewaan'        => $dataPenyewaan->lama_penyewaan,
@@ -297,5 +333,57 @@ class PenyewaanController extends BaseController
         } else {
             exit('Data tidak ditemukan');
         }
+    }
+
+    public function cancel($id)
+    {
+        session()->remove('pembayaran');
+        session()->set(['pembayaran'       => 'none']);
+
+        $this->midtrans();
+        $data = $this->modelPenyewaan->getAllDetail($id);
+        $order_id = $this->modelPenyewaanDetail->getOrder($id);
+        if ($data[0]->last_transaction_status != 'cancel') {
+            \Midtrans\Transaction::cancel($order_id->order_id);
+            $status = \Midtrans\Transaction::status($order_id->order_id);
+            $data1 = [
+                'status_kamar' => 'Tersedia'
+            ];
+            $data2 = [
+                'last_transaction_time' => $status->transaction_time,
+                'last_transaction_status' => $status->transaction_status
+            ];
+            $data3 = [
+                'transaction_time' => $status->transaction_time,
+                'transaction_status' => $status->transaction_status
+            ];
+            $this->modelPenyewaan->update($id, $data2);
+            $this->modelPenyewaanDetail->update($order_id->id_penyewaan_detail, $data3);
+            $this->modelKamar->update($data[0]->id_kamar, $data1);
+
+            $json = [
+                'success' => 'Transaksi berhasil dibatalkan!'
+            ];
+            echo json_encode($json);
+        } else {
+            return redirect()->to(site_url('penghuni/penyewaan'));
+        }
+    }
+
+    public function delete($id_kamar = null)
+    {
+        $data1 = [
+            'status_kamar' => 'Tersedia'
+        ];
+        $this->modelKamar->update($id_kamar, $data1);
+        $this->modelPenyewaan->where('id_kamar', $id_kamar)->delete();
+        $params = [
+            'pembayaran'       => false
+        ];
+        session()->set($params);
+        $json = [
+            'success' => 'Transaksi berhasil dibatalkan!'
+        ];
+        echo json_encode($json);
     }
 }

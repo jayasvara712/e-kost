@@ -26,17 +26,17 @@
                                 </div>
                             </div>
                         <?php endif ?>
-                        <?php if ($payment_method == 'M') {
-                            if ($status < $lama_penyewaan) {
+                        <?php if ($payment_method == 'M' && $periode < $lama_penyewaan && $status == 'settlement') {
                         ?>
-                                <div class="card-header">
-                                    <p class="btn-group">
-                                        <a href="<?= site_url($url . "/bayar/" . $id_penyewaan) ?>" class="btn btn-primary btn-lg">
-                                            <i class="fas fa-plus"></i> Bayar</a>
-                                    </p>
-                                </div>
-                        <?php }
-                        } ?>
+                            <div class="card-header">
+                                <p class="btn-group">
+                                    <a href="<?= site_url($url . "/bayar/" . $id_penyewaan) ?>" class="btn btn-primary btn-lg">
+                                        <i class="fas fa-plus"></i> Bayar</a>
+                                </p>
+                            </div>
+                        <?php
+                        }
+                        ?>
                         <div class="card-body">
                             <div class="table-responsive">
                                 <table class="table table-striped" id="table-2">
@@ -83,6 +83,8 @@
                                                     } ?>
                                                 </td>
                                                 <td>
+                                                    <?php if ($value->last_transaction_status != 'cancel') { ?>
+                                                    <?php } ?>
                                                     <a href="<?= site_url($url . '/detail_pembayaran/' .  $value->id_penyewaan_detail) ?>" class="btn btn-info"><i class="fas fa-eye"></i></a>
                                                     <?php if (!$value->transaction_status == 'settlement') { ?>
                                                         <form action="<?= site_url($url . '/delete/') . $value->id_penyewaan_detail ?>" class="d-inline" method="post">

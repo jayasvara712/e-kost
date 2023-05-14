@@ -77,11 +77,15 @@
                                                     <?php if ($value->payment_method == 'M') {
                                                         if ($status[$key] < $value->lama_penyewaan) {
                                                     ?>
-                                                            <a href="<?= site_url($url . "/bayar/" . $value->id_penyewaan) ?>" class="btn btn-primary"><i class="fas fa-credit-card"></i></a>
-                                                            <form action="<?= site_url($url . '/delete/') . $value->id_penyewaan ?>" class="d-inline" method="post">
-                                                                <?= csrf_field() ?>
-                                                                <button class="btn btn-danger"><i class="fas fa-trash"></i></button>
-                                                            </form>
+                                                            <?php if ($value->last_transaction_status != 'cancel') { ?>
+                                                                <?php if ($value->last_transaction_status == 'settlement') { ?>
+                                                                    <a href="<?= site_url($url . "/bayar/" . $value->id_penyewaan) ?>" class="btn btn-primary"><i class="fas fa-credit-card"></i></a>
+                                                                <?php } ?>
+                                                                <?php if ($value->payment_period <= 1) { ?>
+                                                                    <button class="btn btn-danger" id="btndelete<?= $key ?>" type="button" onclick="action(<?= $key ?>,<?= $value->id_penyewaan ?>,'<?= '/' . $url . '/'  ?>','cancel','<?= $alert ?>')"><i class="fas fa-times"></i></button>
+                                                                <?php } ?>
+                                                            <?php } ?>
+
                                                     <?php }
                                                     } ?>
                                                 </td>

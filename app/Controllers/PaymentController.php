@@ -65,6 +65,8 @@ class PaymentController extends BaseController
 
     public function payMidtrans()
     {
+        session()->remove('pembayaran');
+        session()->set(['pembayaran'       => 'none']);
 
         if ($this->request->isAJAX()) {
             $post = $this->request->getPost();

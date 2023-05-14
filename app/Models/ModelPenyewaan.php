@@ -74,6 +74,13 @@ class ModelPenyewaan extends Model
         return $query;
     }
 
+    public function status()
+    {
+        $builder = $this->db->table($this->table);
+        $query = $builder->orderBy('transaction_status', 'DESC');
+        return $query;
+    }
+
     public function simpan($data)
     {
         $builder = $this->db->table($this->table);

@@ -93,7 +93,7 @@
 
                                 <div class="form-group col-6">
                                     <label>Tanggal Lahir</label>
-                                    <input type="text" class="form-control datepicker <?= (validation_show_error('tgl_lahir_penghuni')) ? 'is-invalid' : ''; ?>" name="tgl_lahir_penghuni" value="<?= old('tgl_lahir_penghuni') ?>">
+                                    <input type="date" class="form-control <?= (validation_show_error('tgl_lahir_penghuni')) ? 'is-invalid' : ''; ?>" name="tgl_lahir_penghuni" value="<?= date('Y-m-d') ?>">
                                     <div class="invalid-feedback">
                                         <?= (validation_show_error('tgl_lahir_penghuni')) ? validation_show_error('tgl_lahir_penghuni') : ''; ?>
                                     </div>

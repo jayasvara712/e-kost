@@ -13,15 +13,12 @@
         </div>
 
         <div class="section-body">
-
             <?php if (session()->getFlashdata('success')) : ?>
-                <div class="alert alert-success alert-dismissible show fade">
-                    <div class="alert-body">
-                        <button class="close" data-dismiss="alert">x</button>
-                        <?= session()->getFlashdata('success') ?>
-                    </div>
+                <div id="success" style="visibility: hidden">
+                    <?= session()->getFlashdata('success') ?>
                 </div>
             <?php endif ?>
+
             <form action="<?= site_url('penghuni/penyewaan') ?>" method="POST" autocomplete="off" enctype="multipart/form-data" id="sectionForm">
                 <?= csrf_field() ?>
 
@@ -43,7 +40,7 @@
                                             <a data-collapse="#kamar<?= $value['id_kamar'] ?>" class="btn btn-icon btn-info" href="#"><i class="fas fa-minus"></i></a>
                                         </div>
                                     </div>
-                                    <div class="collapse show" id="kamar<?= $value['id_kamar'] ?>">
+                                    <div class="collapse <?= $value['status_kamar'] == 'Tersedia' ? 'show' : '' ?>" id="kamar<?= $value['id_kamar'] ?>">
                                         <div class="card-body">
                                             <h5>Fasilitas Kamar : </h5>
                                             <p><?= $value['fasilitas_kamar'] ?></p>

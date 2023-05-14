@@ -37,7 +37,7 @@
 
                                 <div class="form-group">
                                     <label>Fasilitas Kamar</label>
-                                    <select class="form-control select2" multiple="multiple" name="id_fasilitas[]">
+                                    <select class="form-control selectric" multiple="multiple" name="id_fasilitas[]">
                                         <?php
                                         foreach ($fasilitas as $key1 => $fasilitas) :
                                             $i = 0;

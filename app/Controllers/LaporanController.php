@@ -142,7 +142,6 @@ class LaporanController extends BaseController
         } else {
             $penyewaan = $this->modelPenyewaan->getByAll($bulanInput, $optionInput);
         }
-
         // title dari pdf
         $data = [
             'title'     => 'Data Penyewaan Bulan ' . date('M, Y', strtotime($bulanInput)),

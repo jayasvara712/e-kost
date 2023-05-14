@@ -43,7 +43,7 @@
     <!-- /END GA -->
 </head>
 
-<body>
+<body class="<?= session('role') == 'penghuni' ? 'sidebar-mini' : '' ?>">
 
     <div id="app">
         <div class="main-wrapper">

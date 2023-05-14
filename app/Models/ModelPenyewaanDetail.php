@@ -37,6 +37,16 @@ class ModelPenyewaanDetail extends Model
         return $builder->get()->getResult();
     }
 
+    public function getOrder($id)
+    {
+        $builder = $this->db->table($this->table);
+        $builder->select('order_id, id_penyewaan_detail');
+        $builder->limit(1);
+        $builder->where('id_penyewaan', $id);
+        $builder->orderBy('id_penyewaan_detail', 'DESC');
+        return $builder->get()->getFirstRow();
+    }
+
     public function count_all()
     {
         $builder = $this->db->table($this->table);

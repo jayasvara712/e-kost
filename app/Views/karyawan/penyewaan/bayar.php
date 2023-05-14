@@ -100,16 +100,9 @@
                     </div>
                     <hr>
                     <div class="text-md-right">
-                        <?php
-                        if (session('pembayaran') == 'yes') { ?>
-                            <div class="float-lg-left mb-lg-0 mb-3">
-                                <button class="btn btn-danger" id="btndelete1" type="button" onclick="deleteData(1,<?= $id_kamar ?>,'<?= '/' . $url ?>','<?= $alert ?>')"><i class="fas fa-times"></i> Cancel</button>
-                            </div>
-                        <?php } else { ?>
-                            <div class="float-lg-left mb-lg-0 mb-3">
-                                <a href="<?= site_url($url . '/detail_penyewaan/' . $id_penyewaan) ?>" class="btn btn-danger btn-icon icon-left"><i class="fas fa-times"></i> Cancel</a>
-                            </div>
-                        <?php } ?>
+                        <!-- <div class="float-lg-left mb-lg-0 mb-3">
+                            <a href="<?= site_url($url) ?>" class="btn btn-danger btn-icon icon-left"><i class="fas fa-times"></i> Cancel</a>
+                        </div> -->
                         <button class="btn btn-primary btn-icon icon-left" id="btnBayar"><i class="fas fa-credit-card"></i> Proses Pembayaran</button>
                     </div>
                 </div>

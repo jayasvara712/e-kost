@@ -113,11 +113,10 @@ class Penghuni extends ResourceController
                 ]
             ],
             'no_telp_penghuni' => [
-                'rules'  => 'required|min_length[10]|max_length[13]',
+                'rules'  => 'required|min_length[10]',
                 'errors' => [
                     'required' => 'Nomor Telepon Penghuni Tidak Boleh Kosong!',
                     'min_length' => 'Nomor Telepon Minimal 10 Angka!',
-                    'max_length' => 'Nomor Telepon Minimal 13 Angka!'
                 ]
             ],
             'tempat_lahir_penghuni' => [

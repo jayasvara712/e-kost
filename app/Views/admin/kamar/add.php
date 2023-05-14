@@ -25,12 +25,15 @@
 
                                 <div class="form-group">
                                     <label>Nomor Kamar</label>
-                                    <input type="text" class="form-control" name="nomor_kamar" value="<?= $no_kamar ?>" readonly>
+                                    <input type="text" class="form-control <?= (validation_show_error('nomor_kamar')) ? 'is-invalid' : ''; ?>" name=" nomor_kamar" value="<?= old('nomor_kamar') ?>" placeholder="0x">
+                                    <div class="invalid-feedback">
+                                        <?= (validation_show_error('nomor_kamar')) ? validation_show_error('nomor_kamar') : ''; ?>
+                                    </div>
                                 </div>
 
                                 <div class="form-group">
                                     <label>Harga Kamar</label>
-                                    <input type="text" class="form-control currency <?= (validation_show_error('harga_kamar')) ? 'is-invalid' : ''; ?>" name=" harga_kamar" value="<?= old('harga_kamar') ?>">
+                                    <input type="text" class="form-control currency <?= (validation_show_error('harga_kamar')) ? 'is-invalid' : ''; ?>" name=" harga_kamar" value="<?= old('harga_kamar') ?>" placeholder="1.000.000">
                                     <div class="invalid-feedback">
                                         <?= (validation_show_error('harga_kamar')) ? validation_show_error('harga_kamar') : ''; ?>
                                     </div>
@@ -38,11 +41,15 @@
 
                                 <div class="form-group">
                                     <label>Fasilitas Kamar</label>
-                                    <select class="form-control select2" multiple="multiple" name="id_fasilitas[]">
+                                    <select class="form-control selectric <?= (validation_show_error('id_fasilitas')) ? 'is-invalid' : ''; ?>" multiple="multiple" name="id_fasilitas[]">
+                                        <option value="">Silahkan pilih fasilitas kamar</option>
                                         <?php foreach ($fasilitas as $key => $value) : ?>
                                             <option value="<?= $value->id_fasilitas ?>"><?= $value->judul_fasilitas ?></option>
                                         <?php endforeach ?>
                                     </select>
+                                    <div class="invalid-feedback">
+                                        <?= (validation_show_error('id_fasilitas')) ? validation_show_error('id_fasilitas') : ''; ?>
+                                    </div>
                                 </div>
 
                                 <div class="form-group">

@@ -72,6 +72,8 @@ $routes->group('', ['namespace' => 'App\Controllers'], static function ($routes)
             $routes->get('detail_penyewaan/(:num)', 'Penghuni\PenyewaanController::penyewaan_detail/$1');
             $routes->get('detail_pembayaran/(:num)', 'Penghuni\PenyewaanController::pembayaran_detail/$1');
             $routes->get('bayar/(:num)', 'Penghuni\PenyewaanController::pay/$1');
+            $routes->post('cancel/(:num)', 'Penghuni\PenyewaanController::cancel/$1');
+            $routes->post('delete/(:num)', 'Penghuni\PenyewaanController::delete/$1');
         });
     });
 
@@ -92,7 +94,7 @@ $routes->group('', ['namespace' => 'App\Controllers'], static function ($routes)
     // Auth
     $routes->get('(:any)/setting', 'Auth::setting');
     $routes->post('(:any)/update/(:any)', 'Auth::update/$1');
-    $routes->get('/logout', 'Auth::logout');
+    $routes->post('/logout', 'Auth::logout');
 });
 
 $routes->presenter('dashboard');
@@ -104,8 +106,11 @@ $routes->get('/payment', 'Payment::index');
 $routes->post('/loginProcess', 'Auth::loginProcess');
 $routes->get('/register', 'Auth::register');
 $routes->post('registerProcess', 'Auth::registerProcess');
-$routes->post('/resetProses', 'Auth::resetProses');
-$routes->post('/resetpwProses', 'Auth::resetpwProses');
+$routes->get('/forgot_password', 'Auth::resetPass');
+$routes->post('/sendLink', 'Auth::sendLink');
+$routes->get('/reset/(:any)', 'Auth::resetPw/$1');
+$routes->post('/reset/(:any)', 'Auth::resetProcess/$1');
+
 
 
 /*

@@ -71,7 +71,7 @@ class Kamar extends ResourceController
     {
         $data = [
             'no_invoice' => $this->invoice(),
-            'kamar'     => $this->modelKamar->getAll(),
+            'kamar'     => $this->modelKamar->getAllAvailable(),
             'url'       => $this->url
         ];
         echo view($this->url, $data) . $this->menu . $this->header;

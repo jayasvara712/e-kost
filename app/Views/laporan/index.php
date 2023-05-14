@@ -87,6 +87,7 @@
                                                 <option value="pending">Belum Lunas</option>
                                                 <option value="cancel">Dibatalkan</option>
                                             </select>
+
                                         </div>
 
                                         <div class="form-group">

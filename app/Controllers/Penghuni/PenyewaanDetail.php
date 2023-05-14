@@ -357,7 +357,6 @@ class PenyewaanDetail extends ResourceController
 
     public function payMidtrans()
     {
-
         if ($this->request->isAJAX()) {
             $post = $this->request->getPost();
             $no_invoice = $post['no_invoice'];
@@ -404,7 +403,7 @@ class PenyewaanDetail extends ResourceController
                     'phone'            => $no_telp_penghuni,
                 );
 
-                $params = array(
+                $datas = array(
                     'transaction_details' => $transaction_details,
                     // 'item_details'        => $items,
                     'customer_details'    => $customer_details
@@ -417,7 +416,7 @@ class PenyewaanDetail extends ResourceController
                     'id_kamar' => $id_kamar,
                     'lama_penyewaan' => $lama_penyewaan,
                     'harga_kamar' => $harga_kamar,
-                    'snapToken' => \Midtrans\Snap::getSnapToken($params)
+                    'snapToken' => \Midtrans\Snap::getSnapToken($datas)
                 ];
             } else {
                 $json = [
@@ -519,16 +518,20 @@ class PenyewaanDetail extends ResourceController
      *
      * @return mixed
      */
-    public function delete($id_penyewaan = null)
+    public function delete($id = null)
     {
         $this->midtrans();
-        $data = $this->modelPenyewaan->find($id_penyewaan);
-        \Midtrans\Transaction::cancel($data->order_id);
+        $data = $this->modelPenyewaan->find($id);
+        $cancel = \Midtrans\Transaction::cancel($data->order_id);
+        dd($cancel);
+        $data1 = [
+            'status_kamar' => 'Tersedia'
+        ];
         $data2 = [
             'status_kamar' => 'Tidak Tersedia'
         ];
-        $this->modelKamar->update($data->id_kamar, $data2);
-        $this->modelPenyewaan->where('id_penyewaan', $id_penyewaan)->delete();
+        $this->modelKamar->update($data->id_kamar, $data1);
+        $this->modelPenyewaan->update($id,$data2)
         return redirect()->to(site_url('penyewaan'))->with('success', 'Data Penyewaan Berhasil Dihapus');
     }
 }

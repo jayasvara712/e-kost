@@ -10,6 +10,18 @@
                 </div>
 
                 <div class="card card-primary">
+
+                    <?php if (session()->getFlashdata('success')) : ?>
+                        <div id="success" style="visibility: hidden">
+                            <?= session()->getFlashdata('success') ?>
+                        </div>
+                    <?php endif ?>
+                    <?php if (session()->getFlashdata('error')) : ?>
+                        <div id="error" style="visibility: hidden">
+                            <?= session()->getFlashdata('error') ?>
+                        </div>
+                    <?php endif ?>
+
                     <div class="card-header">
                         <h4>Login</h4>
                     </div>
@@ -28,11 +40,11 @@
                             <div class="form-group">
                                 <div class="d-block">
                                     <label for="password" class="control-label">Password</label>
-                                    <!-- <div class="float-right">
-                                        <a href="auth-forgot-password.html" class="text-small">
+                                    <div class="float-right">
+                                        <a href="/forgot_password" class="text-small">
                                             Forgot Password?
                                         </a>
-                                    </div> -->
+                                    </div>
                                 </div>
                                 <input id="password" type="password" class="form-control" name="password" tabindex="2" required>
                                 <div class="invalid-feedback">

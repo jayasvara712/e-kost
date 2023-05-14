@@ -4,7 +4,6 @@
     <form class="form-inline mr-auto">
         <ul class="navbar-nav mr-3">
             <li><a href="#" data-toggle="sidebar" class="nav-link nav-link-lg"><i class="fas fa-bars"></i></a></li>
-            <!-- <li><a href="#" data-toggle="search" class="nav-link nav-link-lg d-sm-none"><i class="fas fa-search"></i></a></li> -->
         </ul>
 
     </form>
@@ -19,9 +18,15 @@
                     <i class="fas fa-cog"></i> Settings
                 </a>
                 <div class="dropdown-divider"></div>
-                <a href="<?= site_url('/logout') ?>" class="dropdown-item has-icon text-danger">
+                <form action="/logout" method="post" id="logout">
+                    <?= csrf_field() ?>
+                    <a href="#" class="dropdown-item has-icon text-danger" onclick="logout()">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </a>
+                </form>
+                <!-- <a href="<?= site_url('/logout') ?>" class="dropdown-item has-icon text-danger">
                     <i class="fas fa-sign-out-alt"></i> Logout
-                </a>
+                </a> -->
             </div>
         </li>
     </ul>
@@ -29,12 +34,12 @@
 </nav>
 
 <div class="main-sidebar">
-    <aside id="sidebar-wrapper">
+    <aside id="hide-sidebar-mini">
         <div class="sidebar-brand">
             <a href="<?= base_url() ?>"><?= getenv('judul_web'); ?></a>
         </div>
         <div class="sidebar-brand sidebar-brand-sm">
-            <a href="#"><?= getenv('judul_web'); ?></a>
+            <a href="/" .<?= session('role') ?>><?= getenv('judul_web'); ?></a>
         </div>
         <ul class="sidebar-menu">
             <li class="menu-header">Dashboard</li>
@@ -106,10 +111,10 @@
 
             ?>
                 <li class="nav-item" id="m-kamar">
-                    <a href="<?= site_url("/penghuni") ?>" class="nav-link"><i class="fas fa-door-open"></i><span>Home</span></a>
+                    <a href="<?= site_url("/penghuni") ?>" class="nav-link <?= session('pembayaran') == 'yes' ? 'disabled' : '' ?>"><i class="fas fa-door-open"></i><span>Home</span></a>
                 </li>
                 <li class="nav-item" id="m-penyewaan">
-                    <a href="<?= site_url("/penghuni/penyewaan") ?>" class="nav-link"><i class="fas fa-house-user"></i><span>Penyewaan Kamar</span></a>
+                    <a href="<?= site_url("/penghuni/penyewaan") ?>" class="nav-link <?= session('pembayaran') == 'yes' ? 'disabled' : '' ?>"><i class="fas fa-house-user"></i><span>Penyewaan Kamar</span></a>
                 </li>
                 <!-- <li class="nav-item" id="m-laporan">
                     <a href="<?= site_url("/penghuni/laporan") ?>" class="nav-link"><i class="fas fa-file"></i><span>Data Laporan</span></a>
