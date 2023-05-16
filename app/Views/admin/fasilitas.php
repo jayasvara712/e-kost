@@ -49,7 +49,7 @@
                                                 </td>
                                                 <td>
                                                     <a href="<?= site_url($url . '/edit/' .  $value->id_fasilitas) ?>" class="btn btn-warning"><i class="fas fa-edit"></i></a>
-                                                    <button class="btn btn-danger" id="btndelete<?= $key ?>" type="button" onclick="deleteData(<?= $key ?>,<?= $value->id_fasilitas ?>,'<?= '/' . $url ?>','Fasilitas')"><i class="fas fa-trash"></i></button>
+                                                    <button class="btn btn-danger" id="btndelete<?= $key ?>" type="button" onclick="deleteData(<?= $key ?>,<?= $value->id_fasilitas ?>,'<?= '/' . $url ?>','<?= $alert ?>')"><i class="fas fa-trash"></i></button>
                                                 </td>
                                             </tr>
                                         <?php endforeach ?>

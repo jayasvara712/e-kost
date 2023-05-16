@@ -26,7 +26,7 @@
                                 </div>
                             </div>
                         <?php endif ?>
-                        <?php if ($payment_method == 'M' && $periode < $lama_penyewaan && $status == 'settlement') {
+                        <?php if ($payment_method == 'M' && $periode < $lama_penyewaan && $status == 'settlement' || $status == 'expire') {
                         ?>
                             <div class="card-header">
                                 <p class="btn-group">

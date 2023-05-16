@@ -65,6 +65,8 @@
                                                             echo "<span class='badge badge-warning'><i class='fas fa-clock'></i> Menunggu Pembayaran</span>";
                                                         } else if ($value->last_transaction_status == 'settlement') {
                                                             echo "<span class='badge badge-success'><i class='fas fa-check'></i> Sudah Terbayar</span>";
+                                                        } else if ($value->last_transaction_status == 'expire') {
+                                                            echo "<span class='badge badge-danger'><i class='fas fa-times'></i> Pembayaran Kadaluarsa</span>";
                                                         } else {
                                                             echo "<span class='badge badge-danger'><i class='fas fa-times'></i> Pemesanan Dibatalkkan</span>";
                                                         }
@@ -74,16 +76,24 @@
                                                 </td>
                                                 <td>
                                                     <a href="<?= site_url($url . '/detail_penyewaan/' .  $value->id_penyewaan) ?>" class="btn btn-info"><i class="fas fa-eye"></i></a>
+
                                                     <?php if ($value->payment_method == 'M') {
                                                         if ($status[$key] < $value->lama_penyewaan) {
                                                     ?>
-                                                            <a href="<?= site_url($url . "/bayar/" . $value->id_penyewaan) ?>" class="btn btn-primary"><i class="fas fa-credit-card"></i></a>
-                                                            <form action="<?= site_url($url . '/delete/') . $value->id_penyewaan ?>" class="d-inline" method="post">
-                                                                <?= csrf_field() ?>
-                                                                <button class="btn btn-danger"><i class="fas fa-trash"></i></button>
-                                                            </form>
+                                                            <?php if ($value->last_transaction_status != 'cancel') { ?>
+                                                                <?php if ($value->last_transaction_status == 'settlement') { ?>
+                                                                    <a href="<?= site_url($url . "/bayar/" . $value->id_penyewaan) ?>" class="btn btn-primary"><i class="fas fa-credit-card"></i></a>
+                                                                <?php } ?>
+                                                                <?php if ($value->payment_period <= 1) { ?>
+                                                                    <button class="btn btn-danger" id="btn<?= $key ?>" type="button" onclick="action(<?= $key ?>,<?= $value->id_penyewaan ?>,'<?= '/' . $url . '/'  ?>','cancel','<?= $alert ?>')"><i class="fas fa-times"></i></button>
+                                                                <?php } ?>
+                                                            <?php } ?>
+
                                                     <?php }
                                                     } ?>
+                                                    <?php if ($value->payment_period == $value->lama_penyewaan && $value->status_kamar == 'Tidak Tersedia') { ?>
+                                                        <button class="btn btn-success" id="btn<?= $key ?>" type="button" onclick="action(<?= $key ?>,<?= $value->id_penyewaan ?>,'<?= '/' . $url . '/'  ?>','lunas','<?= $alert ?>')"><i class="fas fa-check"></i></button>
+                                                    <?php } ?>
                                                 </td>
                                             </tr>
                                         <?php endforeach ?>

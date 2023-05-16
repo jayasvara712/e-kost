@@ -103,6 +103,7 @@ class PenyewaanController extends BaseController
             array_push($status_count, $this->modelPenyewaanDetail->cek_status($value->id_penyewaan)->getFirstRow()->x);
         }
         $data = [
+            'alert'             => 'Ingin melakukan update data penyewaan ?',
             'status'    => $status_count,
             'url'       => $this->url,
             'penyewaan' => $dataPenyewaan
@@ -241,6 +242,60 @@ class PenyewaanController extends BaseController
             return view($this->url . '/bayar', $data) . $this->menu . $this->header;
         } else {
             exit('Data tidak ditemukan');
+        }
+    }
+
+    public function cancel($id)
+    {
+
+        $this->midtrans();
+        $data = $this->modelPenyewaan->getAllDetail($id);
+        $order_id = $this->modelPenyewaanDetail->getOrder($id);
+        if ($data[0]->last_transaction_status != 'cancel') {
+            \Midtrans\Transaction::cancel($order_id->order_id);
+            $status = \Midtrans\Transaction::status($order_id->order_id);
+            $data1 = [
+                'status_kamar' => 'Tersedia'
+            ];
+            $data2 = [
+                'last_transaction_time' => $status->transaction_time,
+                'last_transaction_status' => $status->transaction_status
+            ];
+            $data3 = [
+                'transaction_time' => $status->transaction_time,
+                'transaction_status' => $status->transaction_status
+            ];
+            $this->modelPenyewaan->update($id, $data2);
+            $this->modelPenyewaanDetail->update($order_id->id_penyewaan_detail, $data3);
+            $this->modelKamar->update($data[0]->id_kamar, $data1);
+
+            $json = [
+                'success' => 'Transaksi berhasil dibatalkan!'
+            ];
+            echo json_encode($json);
+        } else {
+            return redirect()->to(site_url('penghuni/penyewaan'));
+        }
+    }
+
+    public function lunas($id)
+    {
+        $cekData = $this->modelPenyewaan->getAllDetail($id);
+        if ($cekData) {
+            $data = [
+                'status_kamar' => 'Tersedia'
+            ];
+            $this->modelKamar->update($cekData[0]->id_kamar, $data);
+
+            $json = [
+                'success' => 'Penyewaan sudah lunas, kamar bisa dipesan kembali!'
+            ];
+            echo json_encode($json);
+        } else {
+            $json = [
+                'error' => 'Update penyewaan gagal!'
+            ];
+            echo json_encode($json);
         }
     }
 }

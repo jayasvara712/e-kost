@@ -31,6 +31,7 @@ class Karyawan extends ResourceController
     public function index()
     {
         $data = [
+            'alert'             => 'Ingin menghapus data karyawan ? data yang terhubung dengan karyawan akan terhapus dan tidak bisa di kembalikan.',
             'karyawan'      => $this->ModelKaryawan->get_all(),
             'url'           => $this->url
         ];
@@ -289,6 +290,9 @@ class Karyawan extends ResourceController
         $data = $this->ModelKaryawan->select('id_user')->where('id_karyawan', $id_karyawan)->first();
         $this->modelUser->where('id_user', $data->id_user)->delete();
         $this->ModelKaryawan->where('id_karyawan', $id_karyawan)->delete();
-        return redirect()->to(site_url($this->url))->with('success', 'Data karyawan Berhasil Dihapus');
+        $json = [
+            'success' => 'Data karyawan berhasil dihapus!'
+        ];
+        echo json_encode($json);
     }
 }

@@ -30,6 +30,7 @@ class Penghuni extends ResourceController
     public function index()
     {
         $data = [
+            'alert'             => 'Ingin menghapus data penghuni ? data yang terhubung dengan fasilitas akan terhapus dan tidak bisa di kembalikan.',
             'penghuni'      => $this->modelPenghuni->get_all(),
             'url'           => $this->url
         ];
@@ -316,6 +317,9 @@ class Penghuni extends ResourceController
         $data = $this->modelPenghuni->select('id_user')->where('id_penghuni', $id_penghuni)->first();
         $this->modelUser->where('id_user', $data->id_user)->delete();
         $this->modelPenghuni->where('id_penghuni', $id_penghuni)->delete();
-        return redirect()->to(site_url($this->url))->with('success', 'Data Penghuni Berhasil Dihapus');
+        $json = [
+            'success' => 'Data penghuni berhasil dihapus!'
+        ];
+        echo json_encode($json);
     }
 }

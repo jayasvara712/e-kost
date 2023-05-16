@@ -27,6 +27,7 @@ class Fasilitas extends ResourceController
     public function index()
     {
         $data = [
+            'alert'             => 'Ingin menghapus data fasilitas ? data yang terhubung dengan fasilitas akan terhapus dan tidak bisa di kembalikan.',
             'fasilitas' => $this->modelFasilitas->findAll(),
             'url' => $this->url
         ];

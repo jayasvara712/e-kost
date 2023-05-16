@@ -46,7 +46,14 @@
                                         </a>
                                     </div>
                                 </div>
-                                <input id="password" type="password" class="form-control" name="password" tabindex="2" required>
+                                <div class="input-group">
+                                    <input id="password1" type="password" class="form-control" name="password" tabindex="2" required>
+                                    <div class="input-group-prepend">
+                                        <div class="input-group-text" onclick="showPass()">
+                                            <i class="fas fa-eye" id="pweye1"></i>
+                                        </div>
+                                    </div>
+                                </div>
                                 <div class="invalid-feedback">
                                     Password tidak boleh kosong !
                                 </div>

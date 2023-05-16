@@ -65,6 +65,8 @@
                                                             echo "<span class='badge badge-warning'><i class='fas fa-clock'></i> Menunggu Pembayaran</span>";
                                                         } else if ($value->last_transaction_status == 'settlement') {
                                                             echo "<span class='badge badge-success'><i class='fas fa-check'></i> Sudah Terbayar</span>";
+                                                        } else if ($value->last_transaction_status == 'expire') {
+                                                            echo "<span class='badge badge-danger'><i class='fas fa-times'></i> Pembayaran Kadaluarsa</span>";
                                                         } else {
                                                             echo "<span class='badge badge-danger'><i class='fas fa-times'></i> Pemesanan Dibatalkkan</span>";
                                                         }

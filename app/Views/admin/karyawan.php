@@ -60,10 +60,7 @@
                                                 </td>
                                                 <td>
                                                     <a href="<?= site_url($url . '/edit/' .  $value->id_karyawan) ?>" class="btn btn-warning"><i class="fas fa-edit"></i></a>
-                                                    <form action="<?= site_url($url . '/delete/') . $value->id_karyawan ?>" class="d-inline" method="post">
-                                                        <?= csrf_field() ?>
-                                                        <button class="btn btn-danger"><i class="fas fa-trash"></i></button>
-                                                    </form>
+                                                    <button class="btn btn-danger" id="btndelete<?= $key ?>" type="button" onclick="deleteData(<?= $key ?>,<?= $value->id_karyawan ?>,'<?= '/' . $url ?>','<?= $alert ?>')"><i class="fas fa-trash"></i></button>
                                                 </td>
                                             </tr>
                                         <?php endforeach ?>

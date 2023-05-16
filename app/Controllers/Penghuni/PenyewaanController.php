@@ -214,7 +214,7 @@ class PenyewaanController extends BaseController
                 'payment_method'    => $cekData[0]->payment_method,
                 'id_penyewaan'      => $id_penyewaan,
                 'penyewaan'         => $cekData,
-                'status'            => $status,
+                'status'            => $cekData[0]->last_transaction_status,
             ];
 
             return view($this->url . '/penyewaan_detail', $data) . $this->menu . $this->header;

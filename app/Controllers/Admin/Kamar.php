@@ -32,6 +32,7 @@ class Kamar extends ResourceController
     public function index()
     {
         $data = [
+            'alert'             => 'Ingin menghapus data kamar ? data yang terhubung dengan kamar akan terhapus dan tidak bisa di kembalikan.',
             'kamar'     => $this->modelKamar->getAll(),
             'url'       => $this->url
         ];

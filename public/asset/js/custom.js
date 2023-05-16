@@ -103,8 +103,8 @@ function deleteData(btnID, idData, urlDelete, text) {
   });
 }
 
-function action(btnID, idData, urlDelete, action, text) {
-  $("#btndelete" + btnID).click(function (e) {
+function action(btnID, idData, url, action, text) {
+  $("#btn" + btnID).click(function (e) {
     //var deleteid = $("#_delte_jenis_id").val();
 
     swal({
@@ -124,7 +124,7 @@ function action(btnID, idData, urlDelete, action, text) {
         //ajax call (ex. '/admin/jenis/ + id')
         $.ajax({
           type: "POST",
-          url: urlDelete + action + "/" + idData,
+          url: url + action + "/" + idData,
           data: data,
           dataType: "json",
           success: function (response) {
@@ -134,7 +134,7 @@ function action(btnID, idData, urlDelete, action, text) {
                 icon: "success",
               }).then((confirm) => {
                 if (confirm) {
-                  window.location.replace(urlDelete);
+                  window.location.replace(url);
                 }
               });
             } else if (response.data) {
@@ -163,6 +163,34 @@ function logout() {
       document.getElementById("logout").submit();
     }
   });
+}
+
+function showPass() {
+  var input1 = document.getElementById("password1");
+  var icons = document.getElementById("pweye1");
+  if (input1.type === "password") {
+    input1.type = "text";
+    icons.classList.remove("fa-eye");
+    icons.classList.add("fa-eye-slash");
+  } else {
+    input1.type = "password";
+    icons.classList.remove("fa-eye-slash");
+    icons.classList.add("fa-eye");
+  }
+}
+
+function showPassConfrm() {
+  var input2 = document.getElementById("password2");
+  var icons = document.getElementById("pweye2");
+  if (input2.type === "password") {
+    input2.type = "text";
+    icons.classList.remove("fa-eye");
+    icons.classList.add("fa-eye-slash");
+  } else {
+    input2.type = "password";
+    icons.classList.remove("fa-eye-slash");
+    icons.classList.add("fa-eye");
+  }
 }
 
 $(document).ready(function () {
