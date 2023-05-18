@@ -58,6 +58,7 @@ $routes->group('', ['namespace' => 'App\Controllers'], static function ($routes)
             $routes->get('detail_penyewaan/(:num)', 'Karyawan\PenyewaanController::penyewaan_detail/$1');
             $routes->get('detail_pembayaran/(:num)', 'Karyawan\PenyewaanController::pembayaran_detail/$1');
             $routes->get('bayar/(:num)', 'Karyawan\PenyewaanController::pay/$1');
+            $routes->post('bayar/(:num)', 'Karyawan\PenyewaanController::pay/$1');
             $routes->post('cancel/(:num)', 'Karyawan\PenyewaanController::cancel/$1');
             $routes->post('lunas/(:num)', 'Karyawan\PenyewaanController::lunas/$1');
         });
@@ -74,6 +75,7 @@ $routes->group('', ['namespace' => 'App\Controllers'], static function ($routes)
             $routes->get('detail_penyewaan/(:num)', 'Penghuni\PenyewaanController::penyewaan_detail/$1');
             $routes->get('detail_pembayaran/(:num)', 'Penghuni\PenyewaanController::pembayaran_detail/$1');
             $routes->get('bayar/(:num)', 'Penghuni\PenyewaanController::pay/$1');
+            $routes->post('bayar/(:num)', 'Penghuni\PenyewaanController::pay/$1');
             $routes->post('cancel/(:num)', 'Penghuni\PenyewaanController::cancel/$1');
             $routes->post('delete/(:num)', 'Penghuni\PenyewaanController::delete/$1');
         });
