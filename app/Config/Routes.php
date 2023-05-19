@@ -99,6 +99,9 @@ $routes->group('', ['namespace' => 'App\Controllers'], static function ($routes)
     $routes->get('(:any)/setting', 'Auth::setting');
     $routes->post('(:any)/update/(:any)', 'Auth::update/$1');
     $routes->post('/logout', 'Auth::logout');
+
+    // index
+    $routes->get('/', 'Auth::login');
 });
 
 $routes->presenter('dashboard');

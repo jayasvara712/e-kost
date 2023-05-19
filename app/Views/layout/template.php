@@ -8,7 +8,7 @@
 
     <!-- General CSS Files -->
     <link rel="stylesheet" href="<?= base_url(); ?>/stisla/node_modules/bootstrap/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="<?= base_url(); ?>/stisla/node_modules/font-awesome/css/all.min.css">
+    <link rel="stylesheet" href="<?= base_url(); ?>/stisla/node_modules/@fortawesome/fontawesome-free/css/all.min.css">
 
     <!-- CSS Libraries -->
     <link rel="stylesheet" href="<?= base_url(); ?>/stisla/node_modules/bootstrap-social/bootstrap-social.css">
