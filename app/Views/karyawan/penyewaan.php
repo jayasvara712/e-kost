@@ -77,20 +77,6 @@
                                                 <td>
                                                     <a href="<?= site_url($url . '/detail_penyewaan/' .  $value->id_penyewaan) ?>" class="btn btn-info"><i class="fas fa-eye"></i></a>
 
-                                                    <?php if ($value->payment_method == 'M') {
-                                                        if ($status[$key] < $value->lama_penyewaan) {
-                                                    ?>
-                                                            <?php if ($value->last_transaction_status != 'cancel') { ?>
-                                                                <?php if ($value->last_transaction_status == 'settlement') { ?>
-                                                                    <a href="<?= site_url($url . "/bayar/" . $value->id_penyewaan) ?>" class="btn btn-primary"><i class="fas fa-credit-card"></i></a>
-                                                                <?php } ?>
-                                                                <?php if ($value->payment_period <= 1) { ?>
-                                                                    <button class="btn btn-danger" id="btn<?= $key ?>" type="button" onclick="action(<?= $key ?>,<?= $value->id_penyewaan ?>,'<?= '/' . $url . '/'  ?>','cancel','<?= $alert ?>')"><i class="fas fa-times"></i></button>
-                                                                <?php } ?>
-                                                            <?php } ?>
-
-                                                    <?php }
-                                                    } ?>
                                                     <?php if ($value->payment_period == $value->lama_penyewaan && $value->status_kamar == 'Tidak Tersedia' && $value->last_transaction_status == 'settlement' && date('Y-m-d', strtotime('+' . $value->lama_penyewaan . ' month', strtotime($value->tgl_penyewaan))) == date('Y-m-d')) { ?>
                                                         <button class="btn btn-success" id="btn<?= $key ?>" type="button" onclick="action(<?= $key ?>,<?= $value->id_penyewaan ?>,'<?= '/' . $url . '/'  ?>','lunas','<?= $alert ?>')"><i class="fas fa-check"></i></button>
                                                     <?php } ?>

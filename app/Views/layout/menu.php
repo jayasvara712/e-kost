@@ -36,10 +36,10 @@
 <div class="main-sidebar">
     <aside id="hide-sidebar-mini">
         <div class="sidebar-brand">
-            <a href="<?= base_url() ?>"><?= getenv('judul_web'); ?></a>
+            <a href="<?= base_url() ?>">E-Kost</a>
         </div>
         <div class="sidebar-brand sidebar-brand-sm">
-            <a href="/" .<?= session('role') ?>><?= getenv('judul_web'); ?></a>
+            <a href="/" .<?= session('role') ?>>E-Kost</a>
         </div>
         <ul class="sidebar-menu">
             <li class="menu-header">Dashboard</li>
