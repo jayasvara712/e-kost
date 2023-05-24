@@ -24,20 +24,6 @@ class Kamar extends ResourceController
         $this->modelKamarDetail = new ModelKamarDetail();
     }
 
-    public function no_kamar()
-    {
-
-        $dataKamar = $this->modelKamar->noKamar()->getRowArray();
-        $data = $dataKamar['no_kamar'];
-
-        $lastNoUrut = substr($data, -4);
-        // menambah nomor urut
-        $nextNoUrut = intval($lastNoUrut) + 1;
-        // membuat nomor invoice
-        $noKamar = sprintf('%02s', $nextNoUrut);
-        return $noKamar;
-    }
-
     /**
      * Return an array of resource objects, themselves in array format
      *
@@ -46,7 +32,7 @@ class Kamar extends ResourceController
     public function index()
     {
         $data = [
-            'alert'             => 'Ingin menghapus data kamar ? data yang terhubung dengan kamar akan terhapus dan tidak bisa di kembalikan.',
+            'alert'     => 'Ingin menghapus data kamar ? data yang terhubung dengan kamar akan terhapus dan tidak bisa di kembalikan.',
             'kamar'     => $this->modelKamar->getAll(),
             'url'       => $this->url
         ];
@@ -72,7 +58,6 @@ class Kamar extends ResourceController
     {
         $data = [
             'url'           => $this->url,
-            'no_kamar'      => $this->no_kamar(),
             'validation'    => \Config\Services::validation(),
             'fasilitas'     => $this->modelFasilitas->findAll()
         ];
@@ -89,25 +74,26 @@ class Kamar extends ResourceController
         $post = $this->request->getPost();
         $validation = $this->validate([
             'nomor_kamar' => [
-                'required',
+                'rules'  => 'required|is_unique[kamar.nomor_kamar]',
                 'errors' => [
-                    'required' => 'Masukan Nomor Kamar!'
+                    'required' => 'Masukan Nomor Kamar!',
+                    'is_unique' => 'Nomor Kamar Sudah Terdaftar!'
                 ]
             ],
             'harga_kamar' => [
-                'required',
+                'rules'  => 'required',
                 'errors' => [
                     'required' => 'Masukan Harga Kamar!'
                 ]
             ],
             'id_fasilitas' => [
-                'required',
+                'rules'  => 'required',
                 'errors' => [
                     'required' => 'Pilih Fasilitas Kamar!'
                 ]
             ],
             'status_kamar' => [
-                'required',
+                'rules'  => 'required',
                 'errors' => [
                     'required' => 'Pilih Status Kamar!'
                 ]
@@ -116,7 +102,7 @@ class Kamar extends ResourceController
         ]);
 
         if (!$validation) {
-            return redirect()->to(site_url('/kamar/new'))->withInput()->with('error', '$this->validator->getErrors()');
+            return redirect()->to(site_url($this->url . '/new'))->withInput()->with('error', '$this->validator->getErrors()');
         } else {
             $id_fasilitas = $post['id_fasilitas'];
             $harga_kamar = str_replace(',', '', $post['harga_kamar']);

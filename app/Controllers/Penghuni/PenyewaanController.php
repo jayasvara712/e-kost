@@ -10,8 +10,8 @@ use App\Controllers\BaseController;
 
 class PenyewaanController extends BaseController
 {
-    private $menu = "<script language=\"javascript\">menu('m-penyewaan');</script>";
-    private $header = "<script language=\"javascript\">menu('m-page');</script>";
+    private $menu1 = "<script language=\"javascript\">menu('m-kamar');</script>";
+    private $menu2 = "<script language=\"javascript\">menu('m-penyewaan');</script>";
     private $url = "penghuni/penyewaan";
 
     protected $modelPenghuni;
@@ -37,30 +37,6 @@ class PenyewaanController extends BaseController
         \Midtrans\Config::$isSanitized = true;
         // Set 3DS transaction for credit card to true
         \Midtrans\Config::$is3ds = true;
-    }
-
-    public function sensor_bank($va_number)
-    {
-        $va_number = $va_number;
-        $jmlSensor = 10;
-        $afterVal = 0;
-        $x = '';
-
-        // untuk mengambil 4 digit angka di tengah nomor hp yang akan disensor
-        $sensor = substr($va_number, $afterVal, $jmlSensor);
-
-        //untuk memecah bagian / kelompok angka pertama dan terakhir
-        $va_number2 = explode($sensor, $va_number);
-
-        for ($i = 1; $i <= $jmlSensor; $i++) {
-            $x .= 'X';
-        }
-
-        // untuk menggabungkan angka pertama dan terakhir dengan angka tengah yang sudah di sensor
-        $newVa = $va_number2[0] . $x . $va_number2[1];
-
-        // menampilkan hasil data yang disensor
-        return $newVa;
     }
 
     public function invoice()
@@ -97,18 +73,12 @@ class PenyewaanController extends BaseController
 
     public function index()
     {
-        $status_count = [];
-        $dataPenyewaan = $this->modelPenyewaan->getDetail(session()->id_penghuni);
-        foreach ($dataPenyewaan as $key => $value) {
-            array_push($status_count, $this->modelPenyewaanDetail->cek_status($value->id_penyewaan)->getFirstRow()->x);
-        }
         $data = [
-            'alert'             => 'Ingin membatalkan pemesanan ?',
-            'status'            => $status_count,
-            'url'               => $this->url,
-            'penyewaan'         => $dataPenyewaan
+            'no_invoice' => $this->invoice(),
+            'kamar'     => $this->modelKamar->getAllAvailable(),
+            'url'       => $this->url
         ];
-        echo view($this->url, $data) . $this->menu . $this->header;
+        echo view('penghuni/index', $data) . $this->menu1;
     }
 
     public function save()
@@ -169,6 +139,22 @@ class PenyewaanController extends BaseController
         }
     }
 
+    public function penyewaan()
+    {
+        $status_count = [];
+        $dataPenyewaan = $this->modelPenyewaan->getDetail(session()->id_penghuni);
+        foreach ($dataPenyewaan as $key => $value) {
+            array_push($status_count, $this->modelPenyewaanDetail->cek_status($value->id_penyewaan)->getFirstRow()->x);
+        }
+        $data = [
+            'alert'             => 'Ingin membatalkan pemesanan ?',
+            'status'            => $status_count,
+            'url'               => $this->url,
+            'penyewaan'         => $dataPenyewaan
+        ];
+        echo view($this->url . '/index', $data) . $this->menu2;
+    }
+
     public function penyewaan_detail($id = null)
     {
         $cekData = $this->modelPenyewaan->getAllDetail($id);
@@ -217,9 +203,9 @@ class PenyewaanController extends BaseController
                 'status'            => $cekData[0]->last_transaction_status,
             ];
 
-            return view($this->url . '/penyewaan_detail', $data) . $this->menu . $this->header;
+            return view($this->url . '/penyewaan_detail', $data) . $this->menu2;
         } else {
-            return view($this->url) . $this->menu . $this->header;
+            return view($this->url) . $this->menu2;
         }
     }
 
@@ -270,7 +256,7 @@ class PenyewaanController extends BaseController
                 'payment_method'        => $cekData->payment_method,
                 'transaction_status'    => $cekData->transaction_status,
                 'bank'                  => $cekData->bank,
-                'va_number'             =>  $this->sensor_bank($cekData->va_number),
+                'va_number'             => $cekData->va_number,
                 'tgl_penyewaan'         => date('d M, Y', strtotime($dataPenyewaan->tgl_penyewaan)),
                 'transaction_time'      => date('d M, Y', strtotime($cekData->transaction_time)),
                 'lama_penyewaan'        => $dataPenyewaan->lama_penyewaan,
@@ -287,7 +273,7 @@ class PenyewaanController extends BaseController
 
             ];
 
-            return view($this->url . '/cek_transaksi', $data) . $this->menu . $this->header;
+            return view($this->url . '/cek_transaksi', $data) . $this->menu2;
         } else {
             exit('Data tidak ditemukan');
         }
@@ -329,7 +315,7 @@ class PenyewaanController extends BaseController
 
             ];
 
-            return view($this->url . '/bayar', $data) . $this->menu . $this->header;
+            return view($this->url . '/bayar', $data) . $this->menu1;
         } else {
             exit('Data tidak ditemukan');
         }

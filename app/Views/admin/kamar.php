@@ -8,7 +8,7 @@
             <h1>List Data Kamar</h1>
             <div class="section-header-breadcrumb">
                 <div class="breadcrumb-item active"><a href="#">Data Master</a></div>
-                <div class="breadcrumb-item">Kamar</div>
+                <div class="breadcrumb-item">Data Kamar</div>
             </div>
         </div>
 
@@ -19,11 +19,8 @@
                     <div class="card">
 
                         <?php if (session()->getFlashdata('success')) : ?>
-                            <div class="alert alert-success alert-dismissible show fade">
-                                <div class="alert-body">
-                                    <button class="close" data-dismiss="alert">x</button>
-                                    <?= session()->getFlashdata('success') ?>
-                                </div>
+                            <div id="success" style="visibility: hidden">
+                                <?= session()->getFlashdata('success') ?>
                             </div>
                         <?php endif ?>
 

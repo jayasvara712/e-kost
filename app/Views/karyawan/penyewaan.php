@@ -5,10 +5,10 @@
 <div class="main-content">
     <section class="section">
         <div class="section-header">
-            <h1>List Data Kamar</h1>
+            <h1>List Data Penyewaan Kos</h1>
             <div class="section-header-breadcrumb">
-                <div class="breadcrumb-item active"><a href="#">Data Master</a></div>
-                <div class="breadcrumb-item">Penyewaan</div>
+                <div class="breadcrumb-item active"><a href="#">Karyawan</a></div>
+                <div class="breadcrumb-item">Data Penyewaan Kos</div>
             </div>
         </div>
 
@@ -91,7 +91,7 @@
 
                                                     <?php }
                                                     } ?>
-                                                    <?php if ($value->payment_period == $value->lama_penyewaan && $value->status_kamar == 'Tidak Tersedia') { ?>
+                                                    <?php if ($value->payment_period == $value->lama_penyewaan && $value->status_kamar == 'Tidak Tersedia' && $value->last_transaction_status == 'settlement' && date('Y-m-d', strtotime('+' . $value->lama_penyewaan . ' month', strtotime($value->tgl_penyewaan))) == date('Y-m-d')) { ?>
                                                         <button class="btn btn-success" id="btn<?= $key ?>" type="button" onclick="action(<?= $key ?>,<?= $value->id_penyewaan ?>,'<?= '/' . $url . '/'  ?>','lunas','<?= $alert ?>')"><i class="fas fa-check"></i></button>
                                                     <?php } ?>
                                                 </td>

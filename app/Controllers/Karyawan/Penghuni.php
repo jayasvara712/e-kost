@@ -30,7 +30,6 @@ class Penghuni extends ResourceController
     public function index()
     {
         $data = [
-            'alert'             => 'Ingin menghapus data penghuni ? data yang terhubung dengan fasilitas akan terhapus dan tidak bisa di kembalikan.',
             'penghuni'      => $this->modelPenghuni->get_all(),
             'url'           => $this->url
         ];
@@ -54,11 +53,7 @@ class Penghuni extends ResourceController
      */
     public function new()
     {
-        $data = [
-            'url'           => $this->url,
-            'validation'    => \Config\Services::validation()
-        ];
-        echo view($this->url . '/add', $data) . $this->menu . $this->header;
+        //
     }
 
     /**
@@ -68,110 +63,6 @@ class Penghuni extends ResourceController
      */
     public function create()
     {
-        $post = $this->request->getPost();
-        $validation = $this->validate([
-            'nik_penghuni' => [
-                'rules'  => 'required',
-                'errors' => [
-                    'required' => 'Nomor KTP Tidak Boleh Kosong!'
-                ]
-            ],
-            'nama_penghuni' => [
-                'rules'  => 'required',
-                'errors' => [
-                    'required' => 'Nama Penghuni Tidak Boleh Kosong!'
-                ]
-            ],
-            'username' => [
-                'rules'  => 'required|is_unique[user.username]',
-                'errors' => [
-                    'required' => 'Username Tidak Boleh Kosong!',
-                    'is_unique' => 'Username Sudah Terdaftar!'
-                ]
-            ],
-            'email' => [
-                'rules'  => 'required|is_unique[user.email]',
-                'errors' => [
-                    'required' => 'Email Tidak Boleh Kosong!',
-                    'is_unique' => 'Email Sudah Terdaftar!'
-                ]
-            ],
-            'password' => [
-                'rules'  => 'required|min_length[8]',
-                'errors' => [
-                    'required' => 'Password Tidak Boleh Kosong!',
-                    'min_length' => 'Password Minimal 8 Huruf',
-
-                ]
-            ],
-            'password_conf' => [
-                'rules'  => 'required|min_length[8]|matches[password]',
-                'errors' => [
-                    'required' => 'Password Tidak Boleh Kosong!',
-                    'min_length' => 'Password minimal 8 Huruf',
-                    'matches'   => 'Password Tidak Sama',
-
-                ]
-            ],
-            'no_telp_penghuni' => [
-                'rules'  => 'required|min_length[10]|max_length[13]',
-                'errors' => [
-                    'required' => 'Nomor Telepon Penghuni Tidak Boleh Kosong!',
-                    'min_length' => 'Nomor Telepon Minimal 10 Angka!',
-                    'max_length' => 'Nomor Telepon Minimal 13 Angka!'
-                ]
-            ],
-            'tempat_lahir_penghuni' => [
-                'rules'  => 'required',
-                'errors' => [
-                    'required' => 'Tempat Lahir Penghuni Tidak Boleh Kosong!'
-                ]
-            ],
-            'tgl_lahir_penghuni' => [
-                'rules'  => 'required',
-                'errors' => [
-                    'required' => 'Tanggal Lahir Penghuni Tidak Boleh Kosong!'
-                ]
-            ],
-            'jk_penghuni' => [
-                'rules'  => 'required',
-                'errors' => [
-                    'required' => 'Jenis Kelamin Penghuni Tidak Boleh Kosong!'
-                ]
-            ],
-            'alamat_penghuni' => [
-                'rules'  => 'required',
-                'errors' => [
-                    'required' => 'Alamat Penghuni Tidak Boleh Kosong!'
-                ]
-            ]
-        ]);
-
-        if (!$validation) {
-            $validation = \config\Services::validation();
-            return redirect()->to($this->url . '/new')->withInput()->with('validation', $validation);
-        } else {
-
-            $data1 = [
-                'username' => $post['username'],
-                'email' => $post['email'],
-                'password' => password_hash($post['password'], PASSWORD_BCRYPT),
-                'role' => $post['role'],
-            ];
-            $id_user = $this->modelUser->register($data1);
-            $data2 = [
-                'nik_penghuni' => $post['nik_penghuni'],
-                'nama_penghuni' => $post['nama_penghuni'],
-                'no_telp_penghuni' => $post['no_telp_penghuni'],
-                'tempat_lahir_penghuni' => $post['tempat_lahir_penghuni'],
-                'tgl_lahir_penghuni' => $post['tgl_lahir_penghuni'],
-                'jk_penghuni' => $post['jk_penghuni'],
-                'alamat_penghuni' => $post['alamat_penghuni'],
-                'id_user' => $id_user
-            ];
-            $this->modelPenghuni->insert($data2);
-            return redirect()->to($this->url)->with('success', 'Berhasil Menambahkan Data Penghuni!');
-        }
     }
 
     /**
@@ -216,35 +107,6 @@ class Penghuni extends ResourceController
                     'required' => 'Nama Penghuni Tidak Boleh Kosong!'
                 ]
             ],
-            'username' => [
-                'rules'  => 'required',
-                'errors' => [
-                    'required' => 'Username Tidak Boleh Kosong!',
-                ]
-            ],
-            'email' => [
-                'rules'  => 'required',
-                'errors' => [
-                    'required' => 'Email Tidak Boleh Kosong!',
-                ]
-            ],
-            'password' => [
-                'rules'  => 'required|min_length[8]',
-                'errors' => [
-                    'required' => 'Password Tidak Boleh Kosong!',
-                    'min_length' => 'Password Minimal 8 Huruf',
-
-                ]
-            ],
-            'password_conf' => [
-                'rules'  => 'required|min_length[8]|matches[password]',
-                'errors' => [
-                    'required' => 'Password Tidak Boleh Kosong!',
-                    'min_length' => 'Password minimal 8 Huruf',
-                    'matches'   => 'Password Tidak Sama',
-
-                ]
-            ],
             'no_telp_penghuni' => [
                 'rules'  => 'required|min_length[10]|max_length[13]',
                 'errors' => [
@@ -283,16 +145,7 @@ class Penghuni extends ResourceController
             $validation = \config\Services::validation();
             return redirect()->to($this->url . '/edit/' . $id_penghuni)->withInput()->with('validation', $validation);
         } else {
-
-            $id_user = $post['id_user'];
-            $data1 = [
-                'username' => $post['username'],
-                'email' => $post['email'],
-                'password' => password_hash($post['password'], PASSWORD_BCRYPT),
-                'role' => $post['role'],
-            ];
-            $this->modelUser->update($id_user, $data1);
-            $data2 = [
+            $data = [
                 'nik_penghuni' => $post['nik_penghuni'],
                 'nama_penghuni' => $post['nama_penghuni'],
                 'no_telp_penghuni' => $post['no_telp_penghuni'],
@@ -300,10 +153,9 @@ class Penghuni extends ResourceController
                 'tgl_lahir_penghuni' => $post['tgl_lahir_penghuni'],
                 'jk_penghuni' => $post['jk_penghuni'],
                 'alamat_penghuni' => $post['alamat_penghuni'],
-                'id_user' => $id_user
             ];
-            $this->modelPenghuni->update($id_penghuni, $data2);
-            return redirect()->to($this->url)->with('success', 'Data Penhuni Berhasil Dirubah!');
+            $this->modelPenghuni->update($id_penghuni, $data);
+            return redirect()->to(site_url($this->url))->with('success', 'Data Penghuni Berhasil Dirubah!');
         }
     }
 
@@ -314,12 +166,5 @@ class Penghuni extends ResourceController
      */
     public function delete($id_penghuni = null)
     {
-        $data = $this->modelPenghuni->select('id_user')->where('id_penghuni', $id_penghuni)->first();
-        $this->modelUser->where('id_user', $data->id_user)->delete();
-        $this->modelPenghuni->where('id_penghuni', $id_penghuni)->delete();
-        $json = [
-            'success' => 'Data penghuni berhasil dihapus!'
-        ];
-        echo json_encode($json);
     }
 }

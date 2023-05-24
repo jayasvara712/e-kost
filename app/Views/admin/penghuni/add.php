@@ -7,9 +7,9 @@
         <div class="section-header">
             <h1>Tambah Data Penghuni</h1>
             <div class="section-header-breadcrumb">
-                <div class="breadcrumb-item active"><a href="#">Data Master</a></div>
-                <div class="breadcrumb-item">Penghuni</div>
-                <div class="breadcrumb-item">Tambah Data Penghuni</div>
+                <div class="breadcrumb-item active"><a href="#">Data User</a></div>
+                <div class="breadcrumb-item">Data Penghuni</div>
+                <div class="breadcrumb-item">Tambah</div>
             </div>
         </div>
 

@@ -7,7 +7,7 @@
         <div class="section-header">
             <h1>List Kamar</h1>
             <div class="section-header-breadcrumb">
-                <div class="breadcrumb-item active"><a href="#">Karyawan</a></div>
+                <div class="breadcrumb-item active"><a href="#">Penghuni</a></div>
                 <div class="breadcrumb-item">Kamar</div>
             </div>
         </div>
@@ -92,6 +92,7 @@
                                 <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Lama Penyewaan</label>
                                 <div class="col-sm-12 col-md-7">
                                     <select name="lama_penyewaan" class="form-control" id="lama_penyewaan">
+                                        <option value=""> Pilih Lama Penyewaan</option>
                                         <?php for ($i = 1; $i <= 12; $i++) { ?>
                                             <option value="<?= $i ?>" <?= ($i == old('lama_penyewaan')) ? 'selected' : '' ?>><?= $i ?> Bulan</option>
                                         <?php } ?>

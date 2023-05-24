@@ -8,7 +8,7 @@
             <h1>List Data Kamar</h1>
             <div class="section-header-breadcrumb">
                 <div class="breadcrumb-item active"><a href="#">Karyawan</a></div>
-                <div class="breadcrumb-item">Kamar</div>
+                <div class="breadcrumb-item">Data Kamar</div>
             </div>
         </div>
 

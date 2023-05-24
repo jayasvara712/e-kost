@@ -8,8 +8,8 @@
             <h1>Edit Data Kamar</h1>
             <div class="section-header-breadcrumb">
                 <div class="breadcrumb-item active"><a href="#">Karyawan</a></div>
-                <div class="breadcrumb-item">Kamar</div>
-                <div class="breadcrumb-item">Edit Data Kamar</div>
+                <div class="breadcrumb-item">Data Kamar</div>
+                <div class="breadcrumb-item">Edit</div>
             </div>
         </div>
 
@@ -37,7 +37,7 @@
 
                                 <div class="form-group">
                                     <label>Fasilitas Kamar</label>
-                                    <select class="form-control select2" multiple="multiple" name="id_fasilitas[]">
+                                    <select class="form-control selectric" multiple="multiple" name="id_fasilitas[]">
                                         <?php
                                         foreach ($fasilitas as $key1 => $fasilitas) :
                                             $i = 0;
@@ -71,7 +71,7 @@
                                 </div>
 
                                 <div class="form-group">
-                                    <button type=" submit" class="btn btn-success"><i class="fas fa-save"></i> Save</button>
+                                    <button type=" submit" class="btn btn-success"><i class="fas fa-save"></i> Simpan</button>
                                     <button type="reset" class="btn btn-danger"><i class="fas fa-undo"></i> Reset</button>
 
                                 </div>

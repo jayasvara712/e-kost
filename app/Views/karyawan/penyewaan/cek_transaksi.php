@@ -7,8 +7,8 @@
         <div class="section-header">
             <h1>Invoice</h1>
             <div class="section-header-breadcrumb">
-                <div class="breadcrumb-item active"><a href="#">Penghuni</a></div>
-                <div class="breadcrumb-item">Penyewaan Kamar</div>
+                <div class="breadcrumb-item active"><a href="#">Karyawan</a></div>
+                <div class="breadcrumb-item">Data Penyewaan Kos</div>
                 <div class="breadcrumb-item">Invoice</div>
             </div>
         </div>

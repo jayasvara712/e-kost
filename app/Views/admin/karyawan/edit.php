@@ -5,11 +5,11 @@
 <div class="main-content">
     <section class="section">
         <div class="section-header">
-            <h1>Tambah Data karyawan</h1>
+            <h1>Edit Data karyawan</h1>
             <div class="section-header-breadcrumb">
-                <div class="breadcrumb-item active"><a href="#">Data Master</a></div>
-                <div class="breadcrumb-item">karyawan</div>
-                <div class="breadcrumb-item">Tambah Data karyawan</div>
+                <div class="breadcrumb-item active"><a href="#">Data User</a></div>
+                <div class="breadcrumb-item">Data karyawan</div>
+                <div class="breadcrumb-item">Edit</div>
             </div>
         </div>
 
@@ -122,6 +122,7 @@
 
                                 <div class="form-group">
                                     <button class="btn btn-success"><i class="fas fa-save"></i> Simpan</button>
+                                    <button type="reset" class="btn btn-danger"><i class="fas fa-undo"></i> Reset</button>
                                 </div>
                         </div>
 

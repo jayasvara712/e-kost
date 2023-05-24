@@ -7,8 +7,8 @@
         <div class="section-header">
             <h1>Pembayaran Kamar No.<?= $no_kamar ?></h1>
             <div class="section-header-breadcrumb">
-                <div class="breadcrumb-item active"><a href="#">Penghuni</a></div>
-                <div class="breadcrumb-item">Penyewaan</div>
+                <div class="breadcrumb-item active"><a href="#">Karyawan</a></div>
+                <div class="breadcrumb-item">Data Penyewaan Kos</div>
                 <div class="breadcrumb-item">Kamar No.<?= $no_kamar ?></div>
             </div>
         </div>

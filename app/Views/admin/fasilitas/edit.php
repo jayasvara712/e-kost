@@ -8,8 +8,8 @@
             <h1>Edit Data Fasilitas</h1>
             <div class="section-header-breadcrumb">
                 <div class="breadcrumb-item active"><a href="#">Data Master</a></div>
-                <div class="breadcrumb-item">Fasilitas</div>
-                <div class="breadcrumb-item">Edit Data Fasilitas</div>
+                <div class="breadcrumb-item">Data Fasilitas</div>
+                <div class="breadcrumb-item">Edit</div>
             </div>
         </div>
 

@@ -39,45 +39,38 @@ $routes->group('', ['namespace' => 'App\Controllers'], static function ($routes)
         $routes->presenter('kamar');
         $routes->presenter('karyawan');
         $routes->presenter('penghuni');
-        $routes->group('penyewaan', ['filter' => 'isAdmin'], static function ($routes) {
-            $routes->get('/', 'Admin\PenyewaanController::index');
-            $routes->get('detail_penyewaan/(:num)', 'Admin\PenyewaanController::penyewaan_detail/$1');
-            $routes->get('detail_pembayaran/(:num)', 'Admin\PenyewaanController::pembayaran_detail/$1');
-            $routes->get('bayar/(:num)', 'Admin\PenyewaanController::pay/$1');
+        $routes->group('penyewaan', ['filter' => 'isAdmin', 'namespace' => 'App\Controllers\Admin'], static function ($routes) {
+            $routes->get('/', 'PenyewaanController::index');
+            $routes->get('detail_penyewaan/(:num)', 'PenyewaanController::penyewaan_detail/$1');
+            $routes->get('detail_pembayaran/(:num)', 'PenyewaanController::pembayaran_detail/$1');
         });
     });
 
     //Karyawan
     $routes->group('karyawan', ['filter' => 'isKaryawan', 'namespace' => 'App\Controllers\Karyawan'], static function ($routes) {
         $routes->get('/', 'Dashboard::index');
-        $routes->presenter('karyawan');
         $routes->presenter('penghuni');
         $routes->presenter('kamar');
-        $routes->group('penyewaan', ['filter' => 'isKaryawan'], static function ($routes) {
-            $routes->get('/', 'Karyawan\PenyewaanController::index');
-            $routes->get('detail_penyewaan/(:num)', 'Karyawan\PenyewaanController::penyewaan_detail/$1');
-            $routes->get('detail_pembayaran/(:num)', 'Karyawan\PenyewaanController::pembayaran_detail/$1');
-            $routes->get('bayar/(:num)', 'Karyawan\PenyewaanController::pay/$1');
-            $routes->post('bayar/(:num)', 'Karyawan\PenyewaanController::pay/$1');
-            $routes->post('cancel/(:num)', 'Karyawan\PenyewaanController::cancel/$1');
-            $routes->post('lunas/(:num)', 'Karyawan\PenyewaanController::lunas/$1');
+        $routes->group('penyewaan', ['filter' => 'isKaryawan', 'namespace' => 'App\Controllers\Karyawan'], static function ($routes) {
+            $routes->get('/', 'PenyewaanController::index');
+            $routes->get('detail_penyewaan/(:num)', 'PenyewaanController::penyewaan_detail/$1');
+            $routes->get('detail_pembayaran/(:num)', 'PenyewaanController::pembayaran_detail/$1');
+            $routes->post('lunas/(:num)', 'PenyewaanController::lunas/$1');
         });
     });
 
     // Penghuni
     $routes->group('penghuni', ['filter' => 'isPenghuni', 'namespace' => 'App\Controllers\Penghuni'], static function ($routes) {
-        $routes->get('', 'kamar::index');
-        $routes->presenter('penghuni');
-        $routes->presenter('penyewaandetail');
-        $routes->group('penyewaan', ['filter' => 'isPenghuni'], static function ($routes) {
-            $routes->get('/', 'Penghuni\PenyewaanController::index');
-            $routes->post('/', 'Penghuni\PenyewaanController::save');
-            $routes->get('detail_penyewaan/(:num)', 'Penghuni\PenyewaanController::penyewaan_detail/$1');
-            $routes->get('detail_pembayaran/(:num)', 'Penghuni\PenyewaanController::pembayaran_detail/$1');
-            $routes->get('bayar/(:num)', 'Penghuni\PenyewaanController::pay/$1');
-            $routes->post('bayar/(:num)', 'Penghuni\PenyewaanController::pay/$1');
-            $routes->post('cancel/(:num)', 'Penghuni\PenyewaanController::cancel/$1');
-            $routes->post('delete/(:num)', 'Penghuni\PenyewaanController::delete/$1');
+        $routes->get('', 'PenyewaanController::index');
+        $routes->group('penyewaan', ['filter' => 'isPenghuni', 'namespace' => 'App\Controllers\Penghuni'], static function ($routes) {
+            $routes->get('/', 'PenyewaanController::penyewaan');
+            $routes->post('/', 'PenyewaanController::save');
+            $routes->get('detail_penyewaan/(:num)', 'PenyewaanController::penyewaan_detail/$1');
+            $routes->get('detail_pembayaran/(:num)', 'PenyewaanController::pembayaran_detail/$1');
+            $routes->get('bayar/(:num)', 'PenyewaanController::pay/$1');
+            $routes->post('bayar/(:num)', 'PenyewaanController::pay/$1');
+            $routes->post('cancel/(:num)', 'PenyewaanController::cancel/$1');
+            $routes->post('delete/(:num)', 'PenyewaanController::delete/$1');
         });
     });
 

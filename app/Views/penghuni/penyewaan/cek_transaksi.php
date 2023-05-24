@@ -97,7 +97,7 @@
                 <hr>
                 <div class="text-md-right">
                     <div class="float-lg-left mb-lg-0 mb-3">
-                        <a href="<?= site_url($url . '/detail_penyewaan/' . $id_penyewaan) ?>" class="btn btn-danger btn-icon icon-left"><i class="fas fa-times"></i> Cancel</a>
+                        <a href="<?= site_url($url) ?>" class="btn btn-danger btn-icon icon-left"><i class="fas fa-times"></i> Cancel</a>
                     </div>
                     <form action="/admin/laporan/cetak_pembayaran_detail/">
                         <input type="hidden" name="id_penyewaan_detail" value="<?= $id_penyewaan_detail ?>">

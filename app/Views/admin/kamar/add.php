@@ -8,8 +8,8 @@
             <h1>Tambah Data Kamar</h1>
             <div class="section-header-breadcrumb">
                 <div class="breadcrumb-item active"><a href="#">Data Master</a></div>
-                <div class="breadcrumb-item">Kamar</div>
-                <div class="breadcrumb-item">Tambah Data Kamar</div>
+                <div class="breadcrumb-item">Data Kamar</div>
+                <div class="breadcrumb-item">Tambah</div>
             </div>
         </div>
 

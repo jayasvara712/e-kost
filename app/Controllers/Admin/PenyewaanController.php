@@ -39,30 +39,6 @@ class PenyewaanController extends BaseController
         \Midtrans\Config::$is3ds = true;
     }
 
-    public function sensor_bank($va_number)
-    {
-        $va_number = $va_number;
-        $jmlSensor = 10;
-        $afterVal = 0;
-        $x = '';
-
-        // untuk mengambil 4 digit angka di tengah nomor hp yang akan disensor
-        $sensor = substr($va_number, $afterVal, $jmlSensor);
-
-        //untuk memecah bagian / kelompok angka pertama dan terakhir
-        $va_number2 = explode($sensor, $va_number);
-
-        for ($i = 1; $i <= $jmlSensor; $i++) {
-            $x .= 'X';
-        }
-
-        // untuk menggabungkan angka pertama dan terakhir dengan angka tengah yang sudah di sensor
-        $newVa = $va_number2[0] . $x . $va_number2[1];
-
-        // menampilkan hasil data yang disensor
-        return $newVa;
-    }
-
     public function invoice()
     {
         $tanggal = date('Y-m-d');
@@ -181,13 +157,13 @@ class PenyewaanController extends BaseController
                 'payment_method'        => $cekData->payment_method,
                 'transaction_status'    => $cekData->transaction_status,
                 'bank'                  => $cekData->bank,
-                'va_number'             =>  $this->sensor_bank($cekData->va_number),
+                'va_number'             => $cekData->va_number,
                 'tgl_penyewaan'         => date('d M, Y', strtotime($dataPenyewaan->tgl_penyewaan)),
                 'transaction_time'      => date('d M, Y', strtotime($cekData->transaction_time)),
                 'lama_penyewaan'        => $dataPenyewaan->lama_penyewaan,
                 'harga_kamar'           => number_format($cekData->payment, 0, ',', '.'),
 
-                'nomor_kamar'           => $dataKamar->nomor_kamar,
+                'no_kamar'           => $dataKamar->nomor_kamar,
                 'payment'               => number_format($cekData->payment, 0, ',', '.'),
                 'period'                => $periode,
 
@@ -199,46 +175,6 @@ class PenyewaanController extends BaseController
             ];
 
             return view($this->url . '/cek_transaksi', $data) . $this->menu . $this->header;
-        } else {
-            exit('Data tidak ditemukan');
-        }
-    }
-
-    public function pay($id)
-    {
-        $cekData = $this->modelPenyewaan->find($id);
-
-        if ($cekData) {
-            $dataPenyewaan = $this->modelPenyewaan->find($cekData->id_penyewaan);
-            $dataPenghuni = $this->modelPenghuni->find($dataPenyewaan->id_penghuni);
-            $dataKamar = $this->modelKamar->find($dataPenyewaan->id_kamar);
-            $periode = $this->modelPenyewaanDetail->periode($cekData->id_penyewaan)->getFirstRow();
-
-            $data = [
-                'url'                   => $this->url,
-                'id_penyewaan'          => $id,
-                'no_invoice'            => $this->invoice(),
-                'tgl_penyewaan'         => $dataPenyewaan->tgl_penyewaan,
-                'lama_penyewaan'        => $dataPenyewaan->lama_penyewaan,
-                'transaction_status'    => 'pending',
-                'bank'                  => '',
-                'va_number'             => '',
-                'tgl_penyewaan'         => date('d M, Y', strtotime($dataPenyewaan->tgl_penyewaan)),
-                'transaction_time'      => date('d M, Y'),
-                'lama_penyewaan'        => $dataPenyewaan->lama_penyewaan,
-                'harga_kamar'           => number_format($dataKamar->harga_kamar, 0, ',', '.'),
-
-                'nomor_kamar'           => $dataKamar->nomor_kamar,
-                'period'                => $periode->x + 1,
-
-                'nama_penghuni'         => $dataPenghuni->nama_penghuni,
-                'no_telp_penghuni'      => $dataPenghuni->no_telp_penghuni,
-                'alamat_penghuni'       => $dataPenghuni->alamat_penghuni,
-
-
-            ];
-
-            return view($this->url . '/bayar', $data) . $this->menu . $this->header;
         } else {
             exit('Data tidak ditemukan');
         }

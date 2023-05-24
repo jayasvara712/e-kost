@@ -8,7 +8,7 @@
             <h1>List Data Penghuni</h1>
             <div class="section-header-breadcrumb">
                 <div class="breadcrumb-item active"><a href="#">Karyawan</a></div>
-                <div class="breadcrumb-item">Penghuni</div>
+                <div class="breadcrumb-item">Data Penghuni</div>
             </div>
         </div>
 
@@ -17,19 +17,15 @@
             <div class="row">
                 <div class="col-12">
                     <div class="card">
+
                         <?php if (session()->getFlashdata('success')) : ?>
-                            <div class="alert alert-success alert-dismissible show fade">
-                                <div class="alert-body">
-                                    <button class="close" data-dismiss="alert">x</button>
-                                    <?= session()->getFlashdata('success') ?>
-                                </div>
+                            <div id="success" style="visibility: hidden">
+                                <?= session()->getFlashdata('success') ?>
                             </div>
                         <?php endif ?>
+
                         <div class="card-header">
-                            <p class="btn-group">
-                                <a href="<?= site_url($url . "/new") ?>" class="btn btn-success btn-lg">
-                                    <i class="fas fa-plus"></i> Tambah Data Penghuni</a>
-                            </p>
+
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
@@ -60,7 +56,6 @@
                                                 </td>
                                                 <td>
                                                     <a href="<?= site_url($url . '/edit/' .  $value->id_penghuni) ?>" class="btn btn-warning"><i class="fas fa-edit"></i></a>
-                                                    <button class="btn btn-danger" id="btndelete<?= $key ?>" type="button" onclick="deleteData(<?= $key ?>,<?= $value->id_penghuni ?>,'<?= '/' . $url ?>','<?= $alert ?>')"><i class="fas fa-trash"></i></button>
                                                 </td>
                                             </tr>
                                         <?php endforeach ?>

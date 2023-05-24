@@ -5,10 +5,10 @@
 <div class="main-content">
     <section class="section">
         <div class="section-header">
-            <h1>List Data Kamar</h1>
+            <h1>List Penyewaan Kamar</h1>
             <div class="section-header-breadcrumb">
-                <div class="breadcrumb-item active"><a href="#">Data Master</a></div>
-                <div class="breadcrumb-item">Penyewaan</div>
+                <div class="breadcrumb-item active"><a href="#">Penghuni</a></div>
+                <div class="breadcrumb-item">Penyewaan Kamar</div>
             </div>
         </div>
 
@@ -80,10 +80,10 @@
                                                         if ($status[$key] <= $value->lama_penyewaan) {
                                                     ?>
                                                             <?php if ($value->last_transaction_status != 'cancel') { ?>
-                                                                <?php if ($value->last_transaction_status == 'settlement') { ?>
+                                                                <?php if ($value->last_transaction_status == 'settlement' && $value->payment_period < $value->lama_penyewaan) { ?>
                                                                     <a href="<?= site_url($url . "/bayar/" . $value->id_penyewaan) ?>" class="btn btn-primary"><i class="fas fa-credit-card"></i></a>
                                                                 <?php } ?>
-                                                                <?php if ($value->payment_period <= 1) { ?>
+                                                                <?php if ($value->payment_period <= 1 && $value->last_transaction_status != 'settlement') { ?>
                                                                     <button class="btn btn-danger" id="btn<?= $key ?>" type="button" onclick="action(<?= $key ?>,<?= $value->id_penyewaan ?>,'<?= '/' . $url . '/'  ?>','cancel','<?= $alert ?>')"><i class="fas fa-times"></i></button>
                                                                 <?php } ?>
                                                             <?php } ?>
