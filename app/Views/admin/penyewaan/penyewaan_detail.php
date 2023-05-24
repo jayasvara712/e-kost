@@ -74,12 +74,6 @@
                                                 </td>
                                                 <td>
                                                     <a href="<?= site_url($url . '/detail_pembayaran/' .  $value->id_penyewaan_detail) ?>" class="btn btn-info"><i class="fas fa-eye"></i></a>
-                                                    <?php if (!$value->transaction_status == 'settlement') { ?>
-                                                        <form action="<?= site_url($url . '/delete/') . $value->id_penyewaan_detail ?>" class="d-inline" method="post">
-                                                            <?= csrf_field() ?>
-                                                            <button class="btn btn-danger"><i class="fas fa-trash"></i></button>
-                                                        </form>
-                                                    <?php } ?>
                                                 </td>
                                             </tr>
                                         <?php endforeach ?>
