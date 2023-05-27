@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 18, 2023 at 04:01 PM
+-- Generation Time: May 27, 2023 at 04:33 AM
 -- Server version: 10.4.27-MariaDB
 -- PHP Version: 8.1.12
 
@@ -61,15 +61,6 @@ CREATE TABLE `kamar` (
   `harga_kamar` int(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
---
--- Dumping data for table `kamar`
---
-
-INSERT INTO `kamar` (`id_kamar`, `nomor_kamar`, `status_kamar`, `keterangan_kamar`, `harga_kamar`) VALUES
-(29, '01', 'Tersedia', '-', 150000),
-(30, '02', 'Tersedia', '-', 1500000),
-(33, '03', 'Tersedia', '-', 200000);
-
 -- --------------------------------------------------------
 
 --
@@ -81,19 +72,6 @@ CREATE TABLE `kamar_detail` (
   `id_kamar` int(11) NOT NULL,
   `id_fasilitas` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
-
---
--- Dumping data for table `kamar_detail`
---
-
-INSERT INTO `kamar_detail` (`id_kamar_detail`, `id_kamar`, `id_fasilitas`) VALUES
-(90, 29, 1),
-(91, 29, 7),
-(92, 29, 5),
-(93, 30, 1),
-(94, 30, 5),
-(98, 33, 5),
-(99, 33, 3);
 
 -- --------------------------------------------------------
 
@@ -166,14 +144,6 @@ CREATE TABLE `penghuni` (
   `id_user` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
---
--- Dumping data for table `penghuni`
---
-
-INSERT INTO `penghuni` (`id_penghuni`, `nama_penghuni`, `tgl_lahir_penghuni`, `tempat_lahir_penghuni`, `nik_penghuni`, `jk_penghuni`, `no_telp_penghuni`, `alamat_penghuni`, `id_user`) VALUES
-(13, 'jaya', '2023-05-14', 'Bogor', '12312312312312312', 'Laki-laki', '12345678910', 'Bogor', 17),
-(14, 'I Komang Mertadana Swastika Yasa', '2000-03-19', 'Denpasar', '510305190300001', 'Laki-laki', '0896 3583 160', 'Jalan By Pass Ngurah Rai No 17 Nusa Dua', 18);
-
 -- --------------------------------------------------------
 
 --
@@ -192,16 +162,6 @@ CREATE TABLE `penyewaan` (
   `last_transaction_time` datetime NOT NULL,
   `last_transaction_status` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
-
---
--- Dumping data for table `penyewaan`
---
-
-INSERT INTO `penyewaan` (`id_penyewaan`, `tgl_penyewaan`, `id_penghuni`, `id_kamar`, `lama_penyewaan`, `last_payment`, `payment_period`, `payment_method`, `last_transaction_time`, `last_transaction_status`) VALUES
-(28, '2023-05-14', 13, 33, 2, 200000, 1, 'M', '2023-05-14 19:01:43', 'cancel'),
-(29, '2023-05-14', 13, 33, 3, 200000, 3, 'M', '2023-05-16 19:18:20', 'settlement'),
-(71, '2023-05-17', 14, 33, 1, 200000, 1, 'M', '2023-05-16 23:49:08', 'pending'),
-(72, '2023-05-17', 14, 30, 1, 1500000, 1, 'M', '2023-05-16 23:50:10', 'pending');
 
 -- --------------------------------------------------------
 
@@ -223,19 +183,6 @@ CREATE TABLE `penyewaan_detail` (
   `bank` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
---
--- Dumping data for table `penyewaan_detail`
---
-
-INSERT INTO `penyewaan_detail` (`id_penyewaan_detail`, `id_penyewaan`, `no_invoice`, `payment`, `order_id`, `payment_type`, `payment_method`, `transaction_time`, `transaction_status`, `va_number`, `bank`) VALUES
-(24, 28, '1405230003', 200000, '953769059', 'bank_transfer', 'M', '2023-05-14 19:01:43', 'cancel', '9886469096673568', 'bni'),
-(26, 29, '1405230005', 200000, '397639604', 'bank_transfer', 'M', '2023-05-14 19:33:47', 'settlement', '9886469015996420', 'bni'),
-(27, 29, '1405230006', 200000, '1128133055', 'bank_transfer', 'M', '2023-05-14 19:37:19', 'expire', '9886469075836145', 'bni'),
-(42, 29, '1605230001', 200000, '1098970045', 'bank_transfer', 'M', '2023-05-16 19:17:49', 'settlement', '9886469059060737', 'bni'),
-(43, 29, '1605230001', 200000, '835368554', 'bank_transfer', 'M', '2023-05-16 19:18:20', 'settlement', '9886469038252116', 'bni'),
-(45, 71, '1705230002', 200000, '839241434', 'bank_transfer', 'M', '2023-05-16 23:49:08', 'pending', '64690421317', 'bca'),
-(46, 72, '1705230003', 1500000, '2141193238', 'bank_transfer', 'M', '2023-05-16 23:50:10', 'pending', '64690082703', 'bca');
-
 -- --------------------------------------------------------
 
 --
@@ -256,11 +203,7 @@ CREATE TABLE `user` (
 
 INSERT INTO `user` (`id_user`, `username`, `email`, `password`, `role`) VALUES
 (4, 'admin', 'admin@gmail.com', '$2y$10$8Fg0MpL2Xa5obYh3b7WGie6WTOuRdgkX9xMv2aAxc5p2McED5T0Z6', 'admin'),
-(11, 'ujang', 'ujang@gmail.com', '$2y$10$NMTnpPqzdpN62N51BEJ6V.dRJyyWE5/GjHVuIUNUZ0OeHOuKZ834y', 'karyawan'),
-(17, 'littlejay', 'jayasvara712@gmail.com', '$2y$10$M.voyKNrX94mTEmCDDa45.2lr2/AGehbu0cfPkX.UAgph7Bmy/WV2', 'penghuni'),
-(18, 'mangana19', 'mertadana572@gmail.com', '$2y$10$2wbRWJMlG996JDdmf5V3bukX91gqvWVTxm/ZS1mIXqEwb1qQqK1pa', 'penghuni'),
-(19, 'koko1', 'sndjkabasjkdb@gmail.com', '$2y$10$UCjdxYFa9A7hNzlEZTvaGuXADSEL3vWfYnWBSp/w36rjlbO5uNmMq', 'penghuni'),
-(20, 'koko12', 'kokoko@gmail.com', '$2y$10$twS3C1xtv5zSggQxHvr1Wu5B5aLtpntYOm2ONMiBbH1LccnFQNmHe', 'penghuni');
+(11, 'ujang', 'ujang@gmail.com', '$2y$10$NMTnpPqzdpN62N51BEJ6V.dRJyyWE5/GjHVuIUNUZ0OeHOuKZ834y', 'karyawan');
 
 --
 -- Indexes for dumped tables
@@ -340,19 +283,19 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT for table `fasilitas`
 --
 ALTER TABLE `fasilitas`
-  MODIFY `id_fasilitas` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `id_fasilitas` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT for table `kamar`
 --
 ALTER TABLE `kamar`
-  MODIFY `id_kamar` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
+  MODIFY `id_kamar` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
 
 --
 -- AUTO_INCREMENT for table `kamar_detail`
 --
 ALTER TABLE `kamar_detail`
-  MODIFY `id_kamar_detail` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=100;
+  MODIFY `id_kamar_detail` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=112;
 
 --
 -- AUTO_INCREMENT for table `karyawan`
@@ -370,25 +313,25 @@ ALTER TABLE `migrations`
 -- AUTO_INCREMENT for table `penghuni`
 --
 ALTER TABLE `penghuni`
-  MODIFY `id_penghuni` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `id_penghuni` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 
 --
 -- AUTO_INCREMENT for table `penyewaan`
 --
 ALTER TABLE `penyewaan`
-  MODIFY `id_penyewaan` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=74;
+  MODIFY `id_penyewaan` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=90;
 
 --
 -- AUTO_INCREMENT for table `penyewaan_detail`
 --
 ALTER TABLE `penyewaan_detail`
-  MODIFY `id_penyewaan_detail` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=47;
+  MODIFY `id_penyewaan_detail` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=56;
 
 --
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `id_user` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
+  MODIFY `id_user` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
 -- Constraints for dumped tables
