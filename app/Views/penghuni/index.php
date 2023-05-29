@@ -46,7 +46,7 @@
                                             <p><?= $value['fasilitas_kamar'] ?></p>
                                             <h5>Keterangan : </h5>
                                             <p><?= $value['keterangan_kamar'] ?></p>
-                                            <h5>Staus : </h5>
+                                            <h5>Status : </h5>
                                             <p><?= $value['status_kamar'] ?></p>
                                             <h5>Harga Perbulan : </h5>
                                             <b><?= $value['harga_kamar'] ?></b>
