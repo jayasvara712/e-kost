@@ -371,7 +371,7 @@ class Auth extends BaseController
                 <br>
                 You have requested your EKost password account to be reset. Please click the following link to change your password:
                 <br>
-                <a href='http://172.28.24.24:8081/reset/" . $user->id_user . "' style='background-color: #4CAF50; border: none; color: white; padding: 15px 32px; text-align: center; text-decoration: none;display: inline-block; font-size: 16px;'>Change my password</a>
+                <a href='" . base_url() . "reset/" . $user->id_user . "' style='background-color: #4CAF50; border: none; color: white; padding: 15px 32px; text-align: center; text-decoration: none;display: inline-block; font-size: 16px;'>Change my password</a>
                 <br>
                 If you did not request this, please ignore this email and report to us via this link
                 <br>
