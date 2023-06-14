@@ -102,9 +102,10 @@ class Auth extends BaseController
         $post = $this->request->getPost();
         $validation = $this->validate([
             'nik_penghuni' => [
-                'rules'  => 'required',
+                'rules'  => 'required|is_unique[penghuni.nik_penghuni]',
                 'errors' => [
-                    'required' => 'Nomor KTP Tidak Boleh Kosong!'
+                    'required' => 'Nomor KTP Tidak Boleh Kosong!',
+                    'is_unique' => 'NIK Sudah Terdaftar!'
                 ]
             ],
             'nama_penghuni' => [
@@ -145,10 +146,11 @@ class Auth extends BaseController
                 ]
             ],
             'no_telp_penghuni' => [
-                'rules'  => 'required|min_length[10]',
+                'rules'  => 'required|min_length[10]|is_unique[penghuni.no_telp_penghuni]',
                 'errors' => [
                     'required' => 'Nomor Telepon Penghuni Tidak Boleh Kosong!',
-                    'min_length' => 'Nomor Telepon Minimal 10 Angka!'
+                    'min_length' => 'Nomor Telepon Minimal 10 Angka!',
+                    'is_unique' => 'No Telepon Sudah Terdaftar!'
                 ]
             ],
             'tempat_lahir_penghuni' => [

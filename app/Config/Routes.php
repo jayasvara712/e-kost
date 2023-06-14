@@ -94,7 +94,7 @@ $routes->group('', ['namespace' => 'App\Controllers'], static function ($routes)
     $routes->post('/logout', 'Auth::logout');
 
     // index
-    $routes->get('/', 'Auth::login');
+    $routes->get('/', 'Home::index');
 });
 
 $routes->presenter('dashboard');

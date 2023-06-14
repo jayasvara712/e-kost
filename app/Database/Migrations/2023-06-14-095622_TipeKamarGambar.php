@@ -4,45 +4,38 @@ namespace App\Database\Migrations;
 
 use CodeIgniter\Database\Migration;
 
-class Kamar extends Migration
+class TipeKamarGambar extends Migration
 {
     public function up()
     {
         $this->db->disableForeignKeyChecks();
         $this->forge->addField([
-            'id_kamar' => [
+            'id_tipe_kamar_gambar' => [
                 'type'           => 'INT',
                 'constraint'     => 11,
                 'auto_increment' => true
             ],
             'id_tipe_kamar' => [
                 'type'           => 'INT',
-                'constraint'     => 11,
+                'constraint'     => 11
             ],
-            'nomor_kamar' => [
+            'judul' => [
                 'type'           => 'VARCHAR',
                 'constraint'     => 250
             ],
-            'status_kamar' => [
+            'image' => [
                 'type'           => 'VARCHAR',
-                'constraint'     => 100
+                'constraint'     => 250
             ],
-            'keterangan_kamar' => [
-                'type'           => 'TEXT'
-            ],
-            'harga_kamar' => [
-                'type'           => 'INT',
-                'constraint'     => 100
-            ]
         ]);
-        $this->forge->addKey('id_kamar', true);
+        $this->forge->addKey('id_tipe_kamar_gambar', true);
         $this->forge->addForeignKey('id_tipe_kamar', 'tipe_kamar', 'id_tipe_kamar', 'CASCADE', 'CASCADE');
-        $this->forge->createTable('kamar');
+        $this->forge->createTable('tipe_kamar_gambar');
         $this->db->enableForeignKeyChecks();
     }
 
     public function down()
     {
-        $this->forge->dropTable('kamar');
+        $this->forge->dropTable('tipe_kamar_gambar');
     }
 }
