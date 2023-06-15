@@ -2,9 +2,8 @@
 
 namespace App\Controllers\Karyawan;
 
-use App\Models\ModelFasilitas;
 use App\Models\ModelKamar;
-use App\Models\ModelKamarDetail;
+use App\Models\ModelTipeKamar;
 use CodeIgniter\RESTful\ResourceController;
 
 class Kamar extends ResourceController
@@ -13,15 +12,13 @@ class Kamar extends ResourceController
     private $header = "<script language=\"javascript\">menu('m-master');</script>";
     private $url = "karyawan/kamar";
     protected $modelKamar;
-    protected $modelFasilitas;
-    protected $modelKamarDetail;
+    protected $modelTipeKamar;
     protected $helpers = ['form'];
 
     function __construct()
     {
         $this->modelKamar = new ModelKamar();
-        $this->modelFasilitas = new ModelFasilitas();
-        $this->modelKamarDetail = new ModelKamarDetail();
+        $this->modelTipeKamar = new ModelTipeKamar();
     }
 
     /**
@@ -33,7 +30,7 @@ class Kamar extends ResourceController
     {
         $data = [
             'alert'     => 'Ingin menghapus data kamar ? data yang terhubung dengan kamar akan terhapus dan tidak bisa di kembalikan.',
-            'kamar'     => $this->modelKamar->getAll(),
+            'dataKamar' => $this->modelKamar->getAll(),
             'url'       => $this->url
         ];
         echo view($this->url, $data) . $this->menu . $this->header;
@@ -59,7 +56,7 @@ class Kamar extends ResourceController
         $data = [
             'url'           => $this->url,
             'validation'    => \Config\Services::validation(),
-            'fasilitas'     => $this->modelFasilitas->findAll()
+            'tipe_kamar'     => $this->modelTipeKamar->findAll()
         ];
         echo view($this->url . '/add', $data) . $this->menu . $this->header;
     }
@@ -86,10 +83,10 @@ class Kamar extends ResourceController
                     'required' => 'Masukan Harga Kamar!'
                 ]
             ],
-            'id_fasilitas' => [
+            'id_tipe_kamar' => [
                 'rules'  => 'required',
                 'errors' => [
-                    'required' => 'Pilih Fasilitas Kamar!'
+                    'required' => 'Pilih Tipe Kamar!'
                 ]
             ],
             'status_kamar' => [
@@ -104,26 +101,16 @@ class Kamar extends ResourceController
         if (!$validation) {
             return redirect()->to(site_url($this->url . '/new'))->withInput()->with('error', '$this->validator->getErrors()');
         } else {
-            $id_fasilitas = $post['id_fasilitas'];
             $harga_kamar = str_replace(',', '', $post['harga_kamar']);
 
             $data1 = [
+                'id_tipe_kamar' => $post['id_tipe_kamar'],
                 'nomor_kamar' => $post['nomor_kamar'],
                 'harga_kamar' => $harga_kamar,
                 'status_kamar' => $post['status_kamar'],
                 'keterangan_kamar' => $post['keterangan_kamar']
             ];
-            $id_kamar = $this->modelKamar->simpan($data1);
-
-            $data2 = [];
-            foreach ($id_fasilitas as $key => $value) {
-                array_push($data2, [
-                    'id_kamar' => $id_kamar,
-                    'id_fasilitas' => $value,
-                ]);
-            }
-
-            $this->modelKamarDetail->insertBatch($data2);
+            $this->modelKamar->insert($data1);
             return redirect()->to(site_url($this->url))->with('success', 'Data Kamar Berhasil Ditambah');
         }
     }
@@ -136,12 +123,12 @@ class Kamar extends ResourceController
     public function edit($id_kamar = null)
     {
         $kamar = $this->modelKamar->where('id_kamar', $id_kamar)->first();
-        $id_fasilitas = $this->modelKamarDetail->where('id_kamar', $id_kamar)->findAll();
+        $id_tipe_kamar = $this->modelTipeKamar->where('id_tipe_kamar', $kamar->id_tipe_kamar)->findAll();
         $data = [
             'url' => $this->url,
             'kamar' => $kamar,
-            'fasilitas' => $this->modelFasilitas->findAll(),
-            'temp_id_fasilitas' => $id_fasilitas,
+            'tipe_kamar' => $this->modelTipeKamar->findAll(),
+            'temp_tipe_kamar' => $id_tipe_kamar,
             'validation' => \Config\Services::validation()
         ];
         if (is_object($kamar)) {
@@ -173,10 +160,10 @@ class Kamar extends ResourceController
                     'required' => 'Masukan Harga Kamar!'
                 ]
             ],
-            'id_fasilitas' => [
+            'id_tipe_kamar' => [
                 'required',
                 'errors' => [
-                    'required' => 'Pilih Fasilitas Kamar!'
+                    'required' => 'Pilih Tipe Kamar!'
                 ]
             ],
             'status_kamar' => [
@@ -191,26 +178,16 @@ class Kamar extends ResourceController
         if (!$validation) {
             return redirect()->to(previous_url())->withInput()->with('error', $this->validator->getErrors());
         } else {
-            $id_fasilitas = $post['id_fasilitas'];
             $harga_kamar = str_replace(',', '', $post['harga_kamar']);
 
             $data1 = [
+                'id_tipe_kamar' => $post['id_tipe_kamar'],
                 'nomor_kamar' => $post['nomor_kamar'],
                 'harga_kamar' => $harga_kamar,
                 'status_kamar' => $post['status_kamar'],
                 'keterangan_kamar' => $post['keterangan_kamar']
             ];
             $this->modelKamar->update($id_kamar, $data1);
-
-            $data2 = [];
-            foreach ($id_fasilitas as $key => $value) {
-                array_push($data2, [
-                    'id_kamar' => $id_kamar,
-                    'id_fasilitas' => $value,
-                ]);
-            }
-            $this->modelKamarDetail->where('id_kamar', $id_kamar)->delete();
-            $this->modelKamarDetail->insertBatch($data2);
             return redirect()->to(site_url($this->url))->with('success', 'Data Kamar Berhasil Dirubah');
         }
     }
@@ -222,8 +199,8 @@ class Kamar extends ResourceController
      */
     public function delete($id_kamar = null)
     {
-        $this->modelKamarDetail->where('id_kamar', $id_kamar)->delete();
         $this->modelKamar->where('id_kamar', $id_kamar)->delete();
+        $this->modelKamarDetail->where('id_kamar', $id_kamar)->delete();
         $json = [
             'success' => 'Data kamar berhasil dihapus!'
         ];

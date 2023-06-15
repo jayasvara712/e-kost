@@ -36,20 +36,20 @@
                                 </div>
 
                                 <div class="form-group">
-                                    <label>Fasilitas Kamar</label>
-                                    <select class="form-control selectric" multiple="multiple" name="id_fasilitas[]">
+                                    <label>Tipe Kamar</label>
+                                    <select class="form-control selectric" name="id_tipe_kamar">
                                         <?php
-                                        foreach ($fasilitas as $key1 => $fasilitas) :
+                                        foreach ($tipe_kamar as $key1 => $tipe_kamar) :
                                             $i = 0;
-                                            foreach ($temp_id_fasilitas as $key2 => $selected_fasilitas) :
-                                                if ($selected_fasilitas->id_fasilitas == $fasilitas->id_fasilitas) {
-                                                    echo '<option value="' . $fasilitas->id_fasilitas . '" selected>' . $fasilitas->judul_fasilitas . '</option>';
+                                            foreach ($temp_tipe_kamar as $key2 => $selected_tipe_kamar) :
+                                                if ($selected_tipe_kamar->id_tipe_kamar == $tipe_kamar->id_tipe_kamar) {
+                                                    echo '<option value="' . $tipe_kamar->id_tipe_kamar . '" selected>' . $tipe_kamar->judul_tipe_kamar . '</option>';
                                                     $i = 1;
                                                     break;
                                                 }
                                             endforeach;
                                             if ($i == 0) {
-                                                echo '<option value="' . $fasilitas->id_fasilitas . '">' . $fasilitas->judul_fasilitas . '</option>';
+                                                echo '<option value="' . $tipe_kamar->id_tipe_kamar . '">' . $tipe_kamar->judul_tipe_kamar . '</option>';
                                             }
                                         ?>
                                         <?php

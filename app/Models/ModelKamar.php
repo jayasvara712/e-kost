@@ -11,7 +11,7 @@ class ModelKamar extends Model
     protected $primaryKey           = 'id_kamar';
     protected $returnType           = 'object';
     protected $allowedFields        = [
-        'nomor_kamar', 'harga_kamar', 'status_kamar', 'keterangan_kamar'
+        'nomor_kamar', 'harga_kamar', 'status_kamar', 'keterangan_kamar', 'id_tipe_kamar'
     ];
 
     public function count_all()
@@ -23,6 +23,193 @@ class ModelKamar extends Model
 
     public function getAll()
     {
+        $dataTemp = [];
+
+        $kamar = [];
+        $fasilitas = [];
+        $gambar = [];
+
+        $builder = $this->db->table($this->table);
+        $builder->select('kamar.id_kamar,kamar.id_tipe_kamar,kamar.nomor_kamar,kamar.status_kamar,kamar.keterangan_kamar,kamar.harga_kamar, tipe_kamar.judul_tipe_kamar, tipe_kamar_fasilitas.id_fasilitas,tipe_kamar_fasilitas.id_tipe_kamar_fasilitas,fasilitas.judul_fasilitas,tipe_kamar_gambar.image,tipe_kamar_gambar.id_tipe_kamar_gambar');
+        $builder->join('tipe_kamar', 'tipe_kamar.id_tipe_kamar =  kamar.id_tipe_kamar', 'LEFT');
+        $builder->join('tipe_kamar_fasilitas', 'tipe_kamar_fasilitas.id_tipe_kamar =  tipe_kamar.id_tipe_kamar', 'LEFT');
+        $builder->join('tipe_kamar_gambar', 'tipe_kamar_gambar.id_tipe_kamar =  tipe_kamar.id_tipe_kamar', 'LEFT');
+        $builder->join('fasilitas', 'fasilitas.id_fasilitas =  tipe_kamar_fasilitas.id_fasilitas', 'LEFT');
+        $builder->groupBy('kamar.id_kamar,kamar.id_tipe_kamar,kamar.nomor_kamar,kamar.status_kamar,kamar.keterangan_kamar,kamar.harga_kamar, tipe_kamar.judul_tipe_kamar, tipe_kamar_fasilitas.id_fasilitas,tipe_kamar_fasilitas.id_tipe_kamar_fasilitas,fasilitas.judul_fasilitas,tipe_kamar_gambar.image,tipe_kamar_gambar.id_tipe_kamar_gambar');
+        $objKamar = $builder->get()->getResult();
+
+        foreach ($objKamar as $key => $value) {
+
+            array_push(
+                $dataTemp,
+                [
+                    'id_kamar'              => $value->id_kamar,
+                    'nomor_kamar'           => $value->nomor_kamar,
+                    'harga_kamar'           => $value->harga_kamar,
+                    'status_kamar'          => $value->status_kamar,
+                    'keterangan_kamar'      => $value->keterangan_kamar,
+                    'id_tipe_kamar'         => $value->id_tipe_kamar,
+                    'judul_tipe_kamar'      => $value->judul_tipe_kamar,
+                    'id_fasilitas'          => $value->id_fasilitas,
+                    'judul_fasilitas'       => $value->judul_fasilitas,
+                    'id_tipe_kamar_gambar'  => $value->id_tipe_kamar_gambar,
+                    'image'                 => $value->image,
+                ]
+            );
+
+            $temp_kamar =
+                [
+                    'id_kamar'          => $value->id_kamar,
+                    'nomor_kamar'       => $value->nomor_kamar,
+                    'harga_kamar'       => $value->harga_kamar,
+                    'status_kamar'      => $value->status_kamar,
+                    'keterangan_kamar'  => $value->keterangan_kamar,
+                    'id_tipe_kamar'     => $value->id_tipe_kamar,
+                    'judul_tipe_kamar'  => $value->judul_tipe_kamar,
+                ];
+
+            $temp_fasilitas =
+                [
+                    'id_kamar'          => $value->id_kamar,
+                    'id_tipe_kamar'  => $value->id_tipe_kamar,
+                    'id_fasilitas'      => $value->id_fasilitas,
+                    'judul_fasilitas'   => $value->judul_fasilitas,
+                ];
+
+            $temp_gambar =
+                [
+                    'id_kamar'              => $value->id_kamar,
+                    'id_tipe_kamar'  => $value->id_tipe_kamar,
+                    'id_tipe_kamar_gambar'  => $value->id_tipe_kamar_gambar,
+                    'image'                 => $value->image,
+                ];
+
+            if (!in_array($temp_kamar, $kamar)) {
+                array_push(
+                    $kamar,
+                    $temp_kamar
+                );
+            }
+            if (!in_array($temp_fasilitas, $fasilitas)) {
+                array_push(
+                    $fasilitas,
+                    $temp_fasilitas
+                );
+            }
+            if (!in_array($temp_gambar, $gambar)) {
+                array_push(
+                    $gambar,
+                    $temp_gambar
+                );
+            }
+        }
+
+        $dataKamar =
+            [
+                'kamar'     => $kamar,
+                'fasilitas' => $fasilitas,
+                'gambar'    => $gambar
+            ];
+
+        return $dataKamar;
+    }
+
+    public function getAll_Available()
+    {
+        $dataTemp = [];
+
+        $kamar = [];
+        $fasilitas = [];
+        $gambar = [];
+
+        $builder = $this->db->table($this->table);
+        $builder->select('kamar.id_kamar,kamar.id_tipe_kamar,kamar.nomor_kamar,kamar.status_kamar,kamar.keterangan_kamar,kamar.harga_kamar, tipe_kamar.judul_tipe_kamar, tipe_kamar_fasilitas.id_fasilitas,tipe_kamar_fasilitas.id_tipe_kamar_fasilitas,fasilitas.judul_fasilitas,tipe_kamar_gambar.image,tipe_kamar_gambar.id_tipe_kamar_gambar');
+        $builder->join('tipe_kamar', 'tipe_kamar.id_tipe_kamar =  kamar.id_tipe_kamar', 'LEFT');
+        $builder->join('tipe_kamar_fasilitas', 'tipe_kamar_fasilitas.id_tipe_kamar =  tipe_kamar.id_tipe_kamar', 'LEFT');
+        $builder->join('tipe_kamar_gambar', 'tipe_kamar_gambar.id_tipe_kamar =  tipe_kamar.id_tipe_kamar', 'LEFT');
+        $builder->join('fasilitas', 'fasilitas.id_fasilitas =  tipe_kamar_fasilitas.id_fasilitas', 'LEFT');
+        $builder->groupBy('kamar.id_kamar,kamar.id_tipe_kamar,kamar.nomor_kamar,kamar.status_kamar,kamar.keterangan_kamar,kamar.harga_kamar, tipe_kamar.judul_tipe_kamar, tipe_kamar_fasilitas.id_fasilitas,tipe_kamar_fasilitas.id_tipe_kamar_fasilitas,fasilitas.judul_fasilitas,tipe_kamar_gambar.image,tipe_kamar_gambar.id_tipe_kamar_gambar');
+        $builder->orderBy('status_kamar', 'ASC');
+        $objKamar = $builder->get()->getResult();
+
+        foreach ($objKamar as $key => $value) {
+
+            array_push(
+                $dataTemp,
+                [
+                    'id_kamar'              => $value->id_kamar,
+                    'nomor_kamar'           => $value->nomor_kamar,
+                    'harga_kamar'           => $value->harga_kamar,
+                    'status_kamar'          => $value->status_kamar,
+                    'keterangan_kamar'      => $value->keterangan_kamar,
+                    'id_tipe_kamar'         => $value->id_tipe_kamar,
+                    'judul_tipe_kamar'      => $value->judul_tipe_kamar,
+                    'id_fasilitas'          => $value->id_fasilitas,
+                    'judul_fasilitas'       => $value->judul_fasilitas,
+                    'id_tipe_kamar_gambar'  => $value->id_tipe_kamar_gambar,
+                    'image'                 => $value->image,
+                ]
+            );
+
+            $temp_kamar =
+                [
+                    'id_kamar'          => $value->id_kamar,
+                    'nomor_kamar'       => $value->nomor_kamar,
+                    'harga_kamar'       => $value->harga_kamar,
+                    'status_kamar'      => $value->status_kamar,
+                    'keterangan_kamar'  => $value->keterangan_kamar,
+                    'id_tipe_kamar'     => $value->id_tipe_kamar,
+                    'judul_tipe_kamar'  => $value->judul_tipe_kamar,
+                ];
+
+            $temp_fasilitas =
+                [
+                    'id_kamar'          => $value->id_kamar,
+                    'id_tipe_kamar'  => $value->id_tipe_kamar,
+                    'id_fasilitas'      => $value->id_fasilitas,
+                    'judul_fasilitas'   => $value->judul_fasilitas,
+                ];
+
+            $temp_gambar =
+                [
+                    'id_kamar'              => $value->id_kamar,
+                    'id_tipe_kamar'  => $value->id_tipe_kamar,
+                    'id_tipe_kamar_gambar'  => $value->id_tipe_kamar_gambar,
+                    'image'                 => $value->image,
+                ];
+
+            if (!in_array($temp_kamar, $kamar)) {
+                array_push(
+                    $kamar,
+                    $temp_kamar
+                );
+            }
+            if (!in_array($temp_fasilitas, $fasilitas)) {
+                array_push(
+                    $fasilitas,
+                    $temp_fasilitas
+                );
+            }
+            if (!in_array($temp_gambar, $gambar)) {
+                array_push(
+                    $gambar,
+                    $temp_gambar
+                );
+            }
+        }
+
+        $dataKamar =
+            [
+                'kamar'     => $kamar,
+                'fasilitas' => $fasilitas,
+                'gambar'    => $gambar
+            ];
+
+        return $dataKamar;
+    }
+
+    public function getAll_Fasilitas()
+    {
         $builder = $this->db->table($this->table);
         $builder->select('id_kamar');
         $id_kamar = $builder->get()->getResult();
@@ -31,8 +218,9 @@ class ModelKamar extends Model
 
         foreach ($id_kamar as $key => $value) {
             $builder = $this->db->table($this->table);
-            $builder->join('kamar_detail', 'kamar_detail.id_kamar =  kamar.id_kamar', 'LEFT');
-            $builder->join('fasilitas', 'fasilitas.id_fasilitas =  kamar_detail.id_fasilitas', 'LEFT');
+            $builder->join('tipe_kamar', 'tipe_kamar.id_tipe_kamar =  kamar.id_tipe_kamar', 'LEFT');
+            $builder->join('tipe_kamar_fasilitas', 'tipe_kamar_fasilitas.id_tipe_kamar =  tipe_kamar.id_tipe_kamar', 'LEFT');
+            $builder->join('fasilitas', 'fasilitas.id_fasilitas =  tipe_kamar_fasilitas.id_fasilitas', 'LEFT');
             $builder->where('kamar.id_kamar', $value->id_kamar);
             $data = $builder->get()->getResult();
             $fasilitas = '';
@@ -71,8 +259,9 @@ class ModelKamar extends Model
 
         foreach ($id_kamar as $key => $value) {
             $builder = $this->db->table($this->table);
-            $builder->join('kamar_detail', 'kamar_detail.id_kamar =  kamar.id_kamar', 'LEFT');
-            $builder->join('fasilitas', 'fasilitas.id_fasilitas =  kamar_detail.id_fasilitas', 'LEFT');
+            $builder->join('tipe_kamar', 'tipe_kamar.id_tipe_kamar =  kamar.id_tipe_kamar', 'LEFT');
+            $builder->join('tipe_kamar_fasilitas', 'tipe_kamar_fasilitas.id_tipe_kamar =  tipe_kamar.id_tipe_kamar', 'LEFT');
+            $builder->join('fasilitas', 'fasilitas.id_fasilitas =  tipe_kamar_fasilitas.id_fasilitas', 'LEFT');
             $builder->where('kamar.id_kamar', $value->id_kamar);
             $data = $builder->get()->getResult();
             $fasilitas = '';
@@ -131,15 +320,6 @@ class ModelKamar extends Model
         );
 
         return $kamar;
-    }
-
-    public function simpan($data)
-    {
-        $builder = $this->db->table($this->table);
-        $builder->insert($data);
-        $insert_id = $this->db->insertID();
-
-        return  $insert_id;
     }
 
     public function noKamar()

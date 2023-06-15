@@ -19,6 +19,10 @@ class TiketDetail extends Migration
                 'type'           => 'INT',
                 'constraint'     => 11,
             ],
+            'user' => [
+                'type'           => 'INT',
+                'constraint'     => 11,
+            ],
             'tgl_pesan' => [
                 'type'           => 'DATE'
             ],

@@ -52,3 +52,7 @@ input.invalid {
 .layout-onclick {
     border: 4px solid blue;
 }
+
+.tickets .ticket-content {
+    width: 100% !important;
+}

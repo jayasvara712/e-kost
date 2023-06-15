@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="<?= base_url(); ?>/stisla/node_modules/@fortawesome/fontawesome-free/css/all.min.css">
 
     <!-- CSS Libraries -->
+    <link rel="stylesheet" href="<?= base_url(); ?>/stisla/node_modules/chocolat/dist/css/chocolat.css">
     <link rel="stylesheet" href="<?= base_url(); ?>/stisla/node_modules/bootstrap-social/bootstrap-social.css">
     <link rel="stylesheet" href="<?= base_url(); ?>/stisla/node_modules/summernote/dist/summernote-bs4.css">
     <link rel="stylesheet" href="<?= base_url(); ?>/stisla/node_modules/codemirror/lib/codemirror.css">
@@ -43,6 +44,7 @@
     <!-- /END GA -->
 </head>
 
+
 <body class="<?= session('role') == 'penghuni' ? 'sidebar-mini' : '' ?>">
 
     <div id="app">
@@ -50,6 +52,8 @@
             <?php
             if (session('isLoggedIn')) {
                 include('menu.php');
+            } else if (current_url() != 'http://localhost:8081/login') {
+                include('menu_guest.php');
             }
             ?>
             <?= $this->renderSection('content'); ?>
@@ -70,6 +74,7 @@
     <script src="<?= base_url(); ?>/stisla/assets/js/stisla.js"></script>
 
     <!-- JS Libraies -->
+    <script src="<?= base_url(); ?>/stisla/node_modules/chocolat/dist/js/jquery.chocolat.min.js"></script>
     <script src="<?= base_url(); ?>/stisla/node_modules/cleave.js/dist/cleave.min.js"></script>
     <script src="<?= base_url(); ?>/stisla/node_modules/cleave.js/dist/addons/cleave-phone.id.js"></script>
     <script src="<?= base_url(); ?>/stisla/node_modules/jquery-pwstrength/jquery.pwstrength.min.js"></script>
@@ -98,14 +103,16 @@
     <script src="<?= base_url(); ?>/stisla/assets/js/scripts.js"></script>
     <script src="<?= base_url(); ?>/stisla/assets/js/custom.js"></script>
 
+    <script src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="<?= getenv('midtrans_client_key') ?>"></script>
+
     <!-- custom js -->
     <script>
         var csrfToken = "<?= csrf_token() ?>";
         var csrfHash = "<?= csrf_hash() ?>";
     </script>
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-94034622-3"></script>
-    <script src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="<?= getenv('midtrans_client_key') ?>"></script>
     <script src="<?= base_url(); ?>/asset/js/custom.js"></script>
+    <script src="<?= base_url(); ?>/asset/js/previewImage.js"></script>
 
 </body>
 

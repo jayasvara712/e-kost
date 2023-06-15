@@ -21,7 +21,8 @@ class Tiket extends Migration
             ],
             'id_karyawan' => [
                 'type'           => 'INT',
-                'constraint'     => 11
+                'constraint'     => 11,
+                'null'           => true,
             ],
             'judul_tiket' => [
                 'type'           => 'VARCHAR',
@@ -38,7 +39,7 @@ class Tiket extends Migration
         ]);
         $this->forge->addKey('id_tiket', true);
         $this->forge->addForeignKey('id_penghuni', 'penghuni', 'id_penghuni', 'CASCADE', 'CASCADE');
-        $this->forge->addForeignKey('id_karyawan', 'karyawan', 'id_karyawan', 'CASCADE', 'CASCADE');
+        $this->forge->addForeignKey('id_karyawan', 'karyawan', 'id_karyawan', 'CASCADE');
         $this->forge->createTable('tiket');
         $this->db->enableForeignKeyChecks();
     }

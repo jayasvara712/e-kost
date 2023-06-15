@@ -27,7 +27,7 @@ class Home extends BaseController
     public function index()
     {
         $data = [
-            'kamar'     => $this->modelKamar->getAllAvailable(),
+            'dataKamar'     => $this->modelKamar->getAll_Available(),
         ];
         echo view('index', $data);
     }

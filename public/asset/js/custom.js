@@ -3,6 +3,75 @@ function menu(e) {
   $("#" + e).addClass("active");
 }
 
+function previewFiles() {
+  const preview = document.querySelector("#preview");
+  const files = document.querySelector("input[type=file]").files;
+  const old_image = document.getElementById("old-image");
+  const change = preview.classList.contains("old_data");
+  let array = [];
+
+  if (old_image) {
+    if (!change) {
+      // preview.className += "old_data";
+      data_old_image = old_image.value.split(",");
+      for (i = 0; i < data_old_image.length; i++) {
+        const img = document.createElement("img");
+        array.push(data_old_image[i]);
+        img.id = "temp_img" + i;
+        img.height = 100;
+        img.title = data_old_image[i];
+        img.src = "/uploads/kamar/" + data_old_image[i];
+        preview.appendChild(img);
+      }
+    }
+  }
+
+  function readAndPreview(file) {
+    // Make sure `file.name` matches our extensions criteria
+    if (/\.(jpe?g|png|gif|jfif)$/i.test(file.name)) {
+      preview.innerHTML = "";
+
+      const reader = new FileReader();
+
+      reader.addEventListener(
+        "load",
+        () => {
+          const image = new Image();
+          image.height = 100;
+          image.title = file.name;
+          image.src = reader.result;
+          preview.appendChild(image);
+        },
+        false
+      );
+
+      reader.readAsDataURL(file);
+    }
+  }
+
+  if (files) {
+    Array.prototype.forEach.call(files, readAndPreview);
+  }
+}
+
+// const picker = document.querySelector("#browse");
+// picker.addEventListener("change", previewFiles);
+
+function imagePreview() {
+  const gambar = document.querySelector("#gambar");
+  const label = document.querySelector(".gambar-label");
+  const imgPrev = document.querySelector(".img-preview");
+  if (label) {
+    label.textContent = gambar.files[0].name;
+  }
+  const fileImage = new FileReader();
+  fileImage.readAsDataURL(gambar.files[0]);
+
+  fileImage.onload = function (e) {
+    imgPrev.src = e.target.result;
+  };
+}
+
 function buatNoInvoice() {
   let tanggal = $("#tgl_penyewaan").val();
 
@@ -244,7 +313,6 @@ $(document).ready(function () {
             text: response.error,
             icon: "error",
           });
-          console.log(response);
         } else {
           snap.pay(response.snapToken, {
             // Optional
@@ -384,6 +452,7 @@ $(document).ready(function () {
         id_penyewaan: $("#id_penyewaan").val(),
         no_invoice: $("#no_invoice").val(),
         periode: $("#periode").val(),
+        total_bayar: $("#total_bayar").val(),
       },
       dataType: "json",
       success: function (response) {
@@ -392,11 +461,14 @@ $(document).ready(function () {
             text: response.error,
             icon: "error",
           });
-          console.log(response);
         } else {
+          console.log("---------------------------------------------");
+          console.log("snap :" + response.snapToken);
           snap.pay(response.snapToken, {
             // Optional
             onSuccess: function (result) {
+              console.log("---------------------------------------------");
+              console.log("sukses");
               /* You may add your own js here, this is just example */
               let dataResult = JSON.stringify(result, null, 2);
               let dataObj = JSON.parse(dataResult);
@@ -435,6 +507,8 @@ $(document).ready(function () {
             },
             // Optional
             onPending: function (result) {
+              console.log("---------------------------------------------");
+              console.log("pending");
               /* You may add your own js here, this is just example */
               let dataResult = JSON.stringify(result, null, 2);
               let dataObj = JSON.parse(dataResult);
@@ -473,6 +547,8 @@ $(document).ready(function () {
             },
             // Optional
             onError: function (result) {
+              console.log("---------------------------------------------");
+              console.log("error");
               /* You may add your own js here, this is just example */
               let dataResult = JSON.stringify(result, null, 2);
               let dataObj = JSON.parse(dataResult);

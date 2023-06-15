@@ -44,26 +44,28 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <?php foreach ($kamar as $key => $value) : ?>
+                                        <?php foreach ($dataKamar['kamar'] as $key => $kamar) : ?>
                                             <tr>
                                                 <td>
-                                                    <?= $value['nomor_kamar'] ?>
+                                                    <?= $kamar['nomor_kamar'] ?>
                                                 </td>
                                                 <td>
-                                                    <?= $value['harga_kamar'] ?>
+                                                    <?= $kamar['harga_kamar'] ?>
                                                 </td>
                                                 <td>
-                                                    <?= $value['fasilitas_kamar'] ?>
+                                                    <?php foreach ($dataKamar['fasilitas'] as $key => $fasilitas) : ?>
+                                                        <?= $kamar['id_kamar'] == $fasilitas['id_kamar'] ? $fasilitas['judul_fasilitas'] . ',' : '' ?>
+                                                    <?php endforeach; ?>
                                                 </td>
                                                 <td>
-                                                    <?= $value['status_kamar'] ?>
+                                                    <?= $kamar['status_kamar'] ?>
                                                 </td>
                                                 <td>
-                                                    <?= $value['keterangan_kamar'] ?>
+                                                    <?= $kamar['keterangan_kamar'] ?>
                                                 </td>
                                                 <td>
-                                                    <a href="<?= site_url($url . '/edit/' .  $value['id_kamar']) ?>" class="btn btn-warning"><i class="fas fa-edit"></i></a>
-                                                    <button class="btn btn-danger" id="btndelete<?= $key ?>" type="button" onclick="deleteData(<?= $key ?>,<?= $value['id_kamar'] ?>,'<?= '/' . $url ?>','<?= $alert ?>')"><i class="fas fa-trash"></i></button>
+                                                    <a href="<?= site_url($url . '/edit/' .  $kamar['id_kamar']) ?>" class="btn btn-warning"><i class="fas fa-edit"></i></a>
+                                                    <button class="btn btn-danger" id="btndelete<?= $key ?>" type="button" onclick="deleteData(<?= $key ?>,<?= $kamar['id_kamar'] ?>,'<?= '/' . $url ?>','<?= $alert ?>')"><i class="fas fa-trash"></i></button>
                                                 </td>
                                             </tr>
                                         <?php endforeach ?>

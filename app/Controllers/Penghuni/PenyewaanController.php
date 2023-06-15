@@ -75,7 +75,7 @@ class PenyewaanController extends BaseController
     {
         $data = [
             'no_invoice' => $this->invoice(),
-            'kamar'     => $this->modelKamar->getAllAvailable(),
+            'dataKamar'     => $this->modelKamar->getAll_Available(),
             'url'       => $this->url
         ];
         echo view('penghuni/index', $data) . $this->menu1;
@@ -289,6 +289,16 @@ class PenyewaanController extends BaseController
             $dataKamar = $this->modelKamar->find($dataPenyewaan->id_kamar);
             $periode = $this->modelPenyewaanDetail->periode($cekData->id_penyewaan)->getFirstRow();
 
+            $tgl_penyewaan = $dataPenyewaan->tgl_penyewaan;
+            $tgl_pembayaran = date('Y-m-d', strtotime($periode->x . ' month', strtotime($tgl_penyewaan)));
+            $tgl_sekarang = date_create();
+            $jarak_waktu = date_diff(date_create($tgl_pembayaran), $tgl_sekarang);
+            if ($jarak_waktu->m > 0) {
+                $total_denda = $dataKamar->harga_kamar * 0.05;
+                $total_bayar = $dataKamar->harga_kamar + $total_denda;
+            } else {
+                $total_bayar = $dataKamar->harga_kamar;
+            }
             $data = [
                 'url'                   => $this->url,
                 'id_penyewaan'          => $id,
@@ -304,6 +314,13 @@ class PenyewaanController extends BaseController
                 'transaction_time'      => date('d M, Y'),
                 'lama_penyewaan'        => $dataPenyewaan->lama_penyewaan,
                 'harga_kamar'           => number_format($dataKamar->harga_kamar, 0, ',', '.'),
+
+                // denda
+
+                'keterlambatan'         => $jarak_waktu->m > 0 ? $jarak_waktu->days : '',
+                'total_denda'         => $jarak_waktu->m > 0 ? number_format($total_denda, 0, ',', '.') : '',
+
+                'total_bayar'           => $total_bayar,
 
                 'nomor_kamar'           => $dataKamar->nomor_kamar,
                 'period'                => $periode->x + 1,

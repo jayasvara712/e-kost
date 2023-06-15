@@ -19,6 +19,7 @@
                 <input type="hidden" id="no_invoice" value="<?= $no_invoice ?>">
                 <input type="hidden" id="id_penyewaan" value="<?= $id_penyewaan ?>">
                 <input type="hidden" id="periode" value="<?= $period ?>">
+                <input type="hidden" id="total_bayar" value="<?= $total_bayar ?>">
 
                 <div class="invoice">
                     <div class="invoice-print">
@@ -86,14 +87,28 @@
                                             <td class="text-right"><?= $period ?></td>
                                         </tr>
                                     </table>
+
+                                    <?php if ($keterlambatan != '' && $keterlambatan != null) : ?>
+                                        <table class="table table-striped table-hover table-md">
+                                            <tr>
+                                                <th>Keterlambatan</th>
+                                                <th class="text-center">Denda</th>
+                                            </tr>
+                                            <tr>
+                                                <td><?= $keterlambatan ?> Hari</td>
+                                                <td class="text-center">Rp.<?= $total_denda ?></td>
+                                            </tr>
+                                        </table>
+                                    <?php endif; ?>
                                 </div>
                             </div>
                         </div>
+
                         <div class="row mt-2">
                             <div class="col-lg-12 text-right">
                                 <div class="invoice-detail-item">
                                     <div class="invoice-detail-name">Total</div>
-                                    <div class="invoice-detail-value invoice-detail-value-lg">Rp.<?= $harga_kamar ?></div>
+                                    <div class="invoice-detail-value invoice-detail-value-lg">Rp.<?= number_format($total_bayar, 0, ',', '.') ?></div>
                                 </div>
                             </div>
                         </div>

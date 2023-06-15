@@ -19,10 +19,6 @@ class TipeKamarGambar extends Migration
                 'type'           => 'INT',
                 'constraint'     => 11
             ],
-            'judul' => [
-                'type'           => 'VARCHAR',
-                'constraint'     => 250
-            ],
             'image' => [
                 'type'           => 'VARCHAR',
                 'constraint'     => 250

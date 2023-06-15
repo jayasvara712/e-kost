@@ -29,30 +29,43 @@
                     <div class="row">
 
                         <?php
-                        foreach ($kamar as $key => $value) :
+                        foreach ($dataKamar['kamar'] as $key => $kamar) :
                         ?>
 
                             <div class="col-12 col-sm-6 col-lg-6">
-                                <div class="card <?= ($value['status_kamar'] == 'Tersedia') ? 'card-success' : 'card-danger' ?>">
+                                <div class="card <?= ($kamar['status_kamar'] == 'Tersedia') ? 'card-success' : 'card-danger' ?>">
                                     <div class="card-header">
-                                        <h4>Kamar <?= $value['nomor_kamar'] ?></h4>
+                                        <h4>Kamar <?= $kamar['nomor_kamar'] ?></h4>
                                         <div class="card-header-action">
-                                            <a data-collapse="#kamar<?= $value['id_kamar'] ?>" class="btn btn-icon btn-info" href="#"><i class="fas fa-minus"></i></a>
+                                            <a data-collapse="#kamar<?= $kamar['id_kamar'] ?>" class="btn btn-icon btn-info" href="#"><i class="fas fa-minus"></i></a>
                                         </div>
                                     </div>
-                                    <div class="collapse <?= $value['status_kamar'] == 'Tersedia' ? 'show' : '' ?>" id="kamar<?= $value['id_kamar'] ?>">
+                                    <div class="collapse <?= $kamar['status_kamar'] == 'Tersedia' ? 'show' : '' ?>" id="kamar<?= $kamar['id_kamar'] ?>">
                                         <div class="card-body">
                                             <h5>Fasilitas Kamar : </h5>
-                                            <p><?= $value['fasilitas_kamar'] ?></p>
+                                            <p>
+                                                <?php foreach ($dataKamar['fasilitas'] as $key => $fasilitas) : ?>
+                                                    <?= $kamar['id_kamar'] == $fasilitas['id_kamar'] ? $fasilitas['judul_fasilitas'] : '' ?>
+                                                <?php endforeach ?>
+                                            </p>
                                             <h5>Keterangan : </h5>
-                                            <p><?= $value['keterangan_kamar'] ?></p>
+                                            <p><?= $kamar['keterangan_kamar'] ?></p>
                                             <h5>Status : </h5>
-                                            <p><?= $value['status_kamar'] ?></p>
+                                            <p><?= $kamar['status_kamar'] ?></p>
                                             <h5>Harga Perbulan : </h5>
-                                            <b><?= $value['harga_kamar'] ?></b>
+                                            <b><?= $kamar['harga_kamar'] ?></b>
+
+                                            <br>
+                                            <div class="gallery">
+                                                <?php foreach ($dataKamar['gambar'] as $key => $gambar) : ?>
+                                                    <?= $kamar['id_kamar'] == $gambar['id_kamar'] ? '<div class="gallery-item" data-image = "uploads/kamar/' . $gambar['image'] . '"></div>' : '' ?>
+                                                <?php endforeach ?>
+                                            </div>
                                         </div>
+
+
                                         <div class="card-footer">
-                                            <button class="btn btn-info" type="button" id="nextBtn" onclick="nextPrev(1,<?= $value['id_kamar'] ?>, <?= $value['harga_kamar'] ?>, <?= $value['nomor_kamar'] ?>)" <?= ($value['status_kamar'] == 'Tidak Tersedia') ? 'disabled' : '' ?>><i class="fas fa-cart-plus"></i> Pesan</button>
+                                            <button class="btn btn-info" type="button" id="nextBtn" onclick="nextPrev(1,<?= $kamar['id_kamar'] ?>, <?= $kamar['harga_kamar'] ?>, <?= $kamar['nomor_kamar'] ?>)" <?= ($kamar['status_kamar'] == 'Tidak Tersedia') ? 'disabled' : '' ?>><i class="fas fa-cart-plus"></i> Pesan</button>
                                         </div>
                                     </div>
                                 </div>

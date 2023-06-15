@@ -60,6 +60,9 @@
                         <li class="nav-item" id="m-fasilitas">
                             <a href="<?= site_url("/admin/fasilitas") ?>" class="nav-link"><i class="fas fa-bath"></i><span>Data Fasilitas</span></a>
                         </li>
+                        <li class="nav-item" id="m-tipekamar">
+                            <a href="<?= site_url("/admin/tipekamar") ?>" class="nav-link"><i class="fas fa-person-booth"></i><span>Data Tipe Kamar</span></a>
+                        </li>
                         <li class="nav-item" id="m-kamar">
                             <a href="<?= site_url("/admin/kamar") ?>" class="nav-link"><i class="fas fa-door-open"></i><span>Data Kamar</span></a>
                         </li>
@@ -76,6 +79,10 @@
                             <a href="<?= site_url("/admin/karyawan") ?>" class="nav-link"><i class="fas fa-user-tie"></i><span>Data Karyawan</span></a>
                         </li>
                     </ul>
+                </li>
+
+                <li class="nav-item" id="m-ticket">
+                    <a href="<?= site_url("/admin/tiket") ?>" class="nav-link"><i class="fas fa-comments"></i><span>Data Komplain</span></a>
                 </li>
 
                 <li class="nav-item" id="m-penyewaan">
@@ -106,15 +113,21 @@
                 <li class="nav-item" id="m-penyewaan">
                     <a href="<?= site_url("/karyawan/penyewaan") ?>" class="nav-link"><i class="fas fa-file-invoice"></i><span>Data Penyewaan Kos</span></a>
                 </li>
+
+                <li class="nav-item" id="m-ticket">
+                    <a href="<?= site_url("/karyawan/tiket") ?>" class="nav-link"><i class="fas fa-comments"></i><span>Data Komplain</span></a>
+                </li>
             <?php
             } else if (session('role') == 'penghuni') {
-
             ?>
                 <li class="nav-item" id="m-kamar">
                     <a href="<?= site_url("/penghuni") ?>" class="nav-link <?= session('pembayaran') == 'yes' ? 'disabled' : '' ?>"><i class="fas fa-door-open"></i><span>Home</span></a>
                 </li>
                 <li class="nav-item" id="m-penyewaan">
                     <a href="<?= site_url("/penghuni/penyewaan") ?>" class="nav-link <?= session('pembayaran') == 'yes' ? 'disabled' : '' ?>"><i class="fas fa-house-user"></i><span>Penyewaan Kamar</span></a>
+                </li>
+                <li class="nav-item" id="m-ticket">
+                    <a href="<?= site_url("/penghuni/tiket") ?>" class="nav-link <?= session('pembayaran') == 'yes' ? 'disabled' : '' ?>"><i class="fas fa-comments"></i><span>Data Komplain</span></a>
                 </li>
                 <!-- <li class="nav-item" id="m-laporan">
                     <a href="<?= site_url("/penghuni/laporan") ?>" class="nav-link"><i class="fas fa-file"></i><span>Data Laporan</span></a>

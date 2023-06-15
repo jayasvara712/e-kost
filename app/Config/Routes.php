@@ -37,6 +37,9 @@ $routes->group('', ['namespace' => 'App\Controllers'], static function ($routes)
         $routes->get('/', 'Dashboard::index');
         $routes->presenter('fasilitas');
         $routes->presenter('kamar');
+        $routes->presenter('tipekamar');
+        $routes->presenter('tiket');
+        $routes->presenter('tiketdetail');
         $routes->presenter('karyawan');
         $routes->presenter('penghuni');
         $routes->group('penyewaan', ['filter' => 'isAdmin', 'namespace' => 'App\Controllers\Admin'], static function ($routes) {
@@ -48,6 +51,8 @@ $routes->group('', ['namespace' => 'App\Controllers'], static function ($routes)
 
     //Karyawan
     $routes->group('karyawan', ['filter' => 'isKaryawan', 'namespace' => 'App\Controllers\Karyawan'], static function ($routes) {
+        $routes->presenter('tiket');
+        $routes->presenter('tiketdetail');
         $routes->get('/', 'Dashboard::index');
         $routes->presenter('penghuni');
         $routes->presenter('kamar');
@@ -61,6 +66,8 @@ $routes->group('', ['namespace' => 'App\Controllers'], static function ($routes)
 
     // Penghuni
     $routes->group('penghuni', ['filter' => 'isPenghuni', 'namespace' => 'App\Controllers\Penghuni'], static function ($routes) {
+        $routes->presenter('tiket');
+        $routes->presenter('tiketdetail');
         $routes->get('', 'PenyewaanController::index');
         $routes->group('penyewaan', ['filter' => 'isPenghuni', 'namespace' => 'App\Controllers\Penghuni'], static function ($routes) {
             $routes->get('/', 'PenyewaanController::penyewaan');

@@ -8,6 +8,7 @@ class TipeKamar extends Migration
 {
     public function up()
     {
+        $this->db->disableForeignKeyChecks();
         $this->forge->addField([
             'id_tipe_kamar' => [
                 'type'           => 'INT',
@@ -18,13 +19,10 @@ class TipeKamar extends Migration
                 'type'           => 'VARCHAR',
                 'constraint'     => 250
             ],
-            'gambar_tipe_kamar' => [
-                'type'           => 'VARCHAR',
-                'constraint'     => 250
-            ],
         ]);
         $this->forge->addKey('id_tipe_kamar', true);
         $this->forge->createTable('tipe_kamar');
+        $this->db->enableForeignKeyChecks();
     }
 
     public function down()

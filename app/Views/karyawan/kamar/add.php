@@ -40,15 +40,15 @@
                                 </div>
 
                                 <div class="form-group">
-                                    <label>Fasilitas Kamar</label>
-                                    <select class="form-control selectric <?= (validation_show_error('id_fasilitas')) ? 'is-invalid' : ''; ?>" multiple="multiple" name="id_fasilitas[]">
-                                        <option value="">Silahkan pilih fasilitas kamar</option>
-                                        <?php foreach ($fasilitas as $key => $value) : ?>
-                                            <option value="<?= $value->id_fasilitas ?>"><?= $value->judul_fasilitas ?></option>
+                                    <label>Tipe Kamar</label>
+                                    <select class="form-control selectric <?= (validation_show_error('id_tipe_kamar')) ? 'is-invalid' : ''; ?>" name="id_tipe_kamar">
+                                        <option value="">Silahkan pilih tipe kamar</option>
+                                        <?php foreach ($tipe_kamar as $key => $value) : ?>
+                                            <option value="<?= $value->id_tipe_kamar ?>"><?= $value->judul_tipe_kamar ?></option>
                                         <?php endforeach ?>
                                     </select>
                                     <div class="invalid-feedback">
-                                        <?= (validation_show_error('id_fasilitas')) ? validation_show_error('id_fasilitas') : ''; ?>
+                                        <?= (validation_show_error('id_tipe_kamar')) ? validation_show_error('id_tipe_kamar') : ''; ?>
                                     </div>
                                 </div>
 

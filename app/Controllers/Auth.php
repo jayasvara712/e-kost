@@ -71,6 +71,7 @@ class Auth extends BaseController
                     $karyawan = $query->getRow();
                     $params = [
                         'id_user'       => $user->id_user,
+                        'id_karyawan'   => $karyawan->id_karyawan,
                         'username'      => $user->username,
                         'name'          => $karyawan->nama_karyawan,
                         'role'          => $user->role,

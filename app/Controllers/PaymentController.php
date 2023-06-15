@@ -37,7 +37,7 @@ class PaymentController extends BaseController
         // Set sanitization on (default)
         \Midtrans\Config::$isSanitized = true;
         // Set 3DS transaction for credit card to true
-        \Midtrans\Config::$is3ds = true;
+        \Midtrans\Config::$is3ds = false;
     }
 
     public function buatNoInvoice()
@@ -73,6 +73,7 @@ class PaymentController extends BaseController
             $id_penyewaan = $post['id_penyewaan'];
             $periode = $post['periode'];
             $no_invoice = $post['no_invoice'];
+            $total_bayar = $post['total_bayar'];
 
             $cekdata = $this->modelPenyewaan->getAllDetail($id_penyewaan);
 
@@ -82,7 +83,7 @@ class PaymentController extends BaseController
 
                 $transaction_details = array(
                     'order_id'    => rand(),
-                    'gross_amount'  => $cekdata[0]->harga_kamar
+                    'gross_amount'  => $total_bayar
                 );
 
                 // Populate customer's info
@@ -101,7 +102,7 @@ class PaymentController extends BaseController
                     'id_penyewaan' => $id_penyewaan,
                     'periode' => $periode,
                     'no_invoice' => $no_invoice,
-                    'payment' => $cekdata[0]->harga_kamar,
+                    'payment' => $total_bayar,
                     'snapToken' => \Midtrans\Snap::getSnapToken($params)
                 ];
             } else {
