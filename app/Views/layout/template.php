@@ -52,7 +52,7 @@
             <?php
             if (session('isLoggedIn')) {
                 include('menu.php');
-            } else if (current_url() != 'http://localhost:8081/login') {
+            } else if (session('url') == 'home') {
                 include('menu_guest.php');
             }
             ?>

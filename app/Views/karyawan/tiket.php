@@ -53,7 +53,9 @@
                                                     } ?>
                                                 </td>
                                                 <td>
-                                                    <a href="<?= site_url($url . 'detail/show/' .  $value->id_tiket) ?>" class="btn btn-info"><i class="fas fa-eye"></i></a>
+                                                    <?php if ($value->status_tiket != 'waiting') : ?>
+                                                        <a href="<?= site_url($url . 'detail/show/' .  $value->id_tiket) ?>" class="btn btn-info"><i class="fas fa-eye"></i></a>
+                                                    <?php endif ?>
                                                     <?php if ($value->id_karyawan == '') :
                                                     ?>
                                                         <form action="<?= site_url($url . '/update/' . $value->id_tiket) ?>" class="d-inline" method="post">

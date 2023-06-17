@@ -72,9 +72,10 @@ class Karyawan extends ResourceController
         $post = $this->request->getPost();
         $validation = $this->validate([
             'nik_karyawan' => [
-                'rules'  => 'required',
+                'rules'  => 'required|is_unique[karyawan.nik_karyawan]',
                 'errors' => [
-                    'required' => 'Nomor KTP Tidak Boleh Kosong!'
+                    'required' => 'Nomor KTP Tidak Boleh Kosong!',
+                    'is_unique' => 'NIK Sudah Terdaftar!'
                 ]
             ],
             'nama_karyawan' => [
@@ -115,11 +116,11 @@ class Karyawan extends ResourceController
                 ]
             ],
             'no_telp_karyawan' => [
-                'rules'  => 'required|min_length[10]|max_length[13]',
+                'rules'  => 'required|min_length[10]|is_unique[karyawan.no_telp_karyawan]',
                 'errors' => [
-                    'required' => 'Nomor Telepon karyawan Tidak Boleh Kosong!',
+                    'required' => 'Nomor Telepon Karyawan Tidak Boleh Kosong!',
                     'min_length' => 'Nomor Telepon Minimal 10 Angka!',
-                    'max_length' => 'Nomor Telepon Minimal 13 Angka!'
+                    'is_unique' => 'No Telepon Sudah Terdaftar!'
                 ]
             ],
             'jk_karyawan' => [

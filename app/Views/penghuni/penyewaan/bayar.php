@@ -19,6 +19,7 @@
                 <input type="hidden" id="no_invoice" value="<?= $no_invoice ?>">
                 <input type="hidden" id="id_penyewaan" value="<?= $id_penyewaan ?>">
                 <input type="hidden" id="periode" value="<?= $period ?>">
+                <input type="hidden" id="denda" value="<?= $total_denda ?>">
                 <input type="hidden" id="total_bayar" value="<?= $total_bayar ?>">
 
                 <div class="invoice">
@@ -96,7 +97,7 @@
                                             </tr>
                                             <tr>
                                                 <td><?= $keterlambatan ?> Hari</td>
-                                                <td class="text-center">Rp.<?= $total_denda ?></td>
+                                                <td class="text-center">Rp.<?= number_format($total_denda, 0, ',', '.') ?></td>
                                             </tr>
                                         </table>
                                     <?php endif; ?>

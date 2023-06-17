@@ -100,12 +100,15 @@ class Tiket extends ResourceController
                 //upload  ke public folder
                 $newName = $gambar->getRandomName();
                 $gambar->move('uploads/tiket/' . $id_tiket, $newName);
+            } else {
+                $newName = '';
             }
 
             $data2 = [
                 'id_tiket' => $id_tiket,
                 'tgl_pesan' =>  date('y-m-d'),
                 'pesan' => $post['pesan'],
+                'user' => $post['user'],
                 'gambar' => $newName
             ];
             $this->modelTiketDetail->insert($data2);

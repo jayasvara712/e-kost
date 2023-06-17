@@ -53,6 +53,14 @@ class PenyewaanDetail extends Migration
                 'type'           => 'VARCHAR',
                 'constraint'     => 50
             ],
+            'denda' => [
+                'type'           => 'double',
+                'null'           => true
+            ],
+            'periode' => [
+                'type'           => 'int',
+                'constraint'     => 50
+            ],
 
         ]);
         $this->forge->addKey('id_penyewaan_detail', true);

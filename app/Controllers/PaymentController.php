@@ -72,6 +72,7 @@ class PaymentController extends BaseController
             $post = $this->request->getPost();
             $id_penyewaan = $post['id_penyewaan'];
             $periode = $post['periode'];
+            $denda = $post['denda'];
             $no_invoice = $post['no_invoice'];
             $total_bayar = $post['total_bayar'];
 
@@ -101,6 +102,7 @@ class PaymentController extends BaseController
                 $json = [
                     'id_penyewaan' => $id_penyewaan,
                     'periode' => $periode,
+                    'denda' => $denda,
                     'no_invoice' => $no_invoice,
                     'payment' => $total_bayar,
                     'snapToken' => \Midtrans\Snap::getSnapToken($params)
@@ -128,6 +130,7 @@ class PaymentController extends BaseController
             $transaction_status = $post['transaction_status'];
             $va_number = $post['va_number'];
             $bank = $post['bank'];
+            $denda = $post['denda'];
             $periode = $post['periode'];
 
             $data1 = [
@@ -150,6 +153,8 @@ class PaymentController extends BaseController
                 'transaction_status' => $transaction_status,
                 'va_number' => $va_number,
                 'bank' => $bank,
+                'denda' => $denda,
+                'periode' => $periode,
             ];
             $this->modelPenyewaanDetail->insert($data2);
 

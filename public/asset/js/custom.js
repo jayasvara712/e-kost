@@ -452,6 +452,7 @@ $(document).ready(function () {
         id_penyewaan: $("#id_penyewaan").val(),
         no_invoice: $("#no_invoice").val(),
         periode: $("#periode").val(),
+        denda: $("#denda").val(),
         total_bayar: $("#total_bayar").val(),
       },
       dataType: "json",
@@ -462,13 +463,9 @@ $(document).ready(function () {
             icon: "error",
           });
         } else {
-          console.log("---------------------------------------------");
-          console.log("snap :" + response.snapToken);
           snap.pay(response.snapToken, {
             // Optional
             onSuccess: function (result) {
-              console.log("---------------------------------------------");
-              console.log("sukses");
               /* You may add your own js here, this is just example */
               let dataResult = JSON.stringify(result, null, 2);
               let dataObj = JSON.parse(dataResult);
@@ -481,6 +478,7 @@ $(document).ready(function () {
                   no_invoice: response.no_invoice,
                   id_penyewaan: response.id_penyewaan,
                   periode: response.periode,
+                  denda: response.denda,
                   payment: response.payment,
                   order_id: dataObj.order_id,
                   payment_type: dataObj.payment_type,
@@ -507,9 +505,6 @@ $(document).ready(function () {
             },
             // Optional
             onPending: function (result) {
-              console.log("---------------------------------------------");
-              console.log("pending");
-              /* You may add your own js here, this is just example */
               let dataResult = JSON.stringify(result, null, 2);
               let dataObj = JSON.parse(dataResult);
 
@@ -521,6 +516,7 @@ $(document).ready(function () {
                   no_invoice: response.no_invoice,
                   id_penyewaan: response.id_penyewaan,
                   periode: response.periode,
+                  denda: response.denda,
                   payment: response.payment,
                   order_id: dataObj.order_id,
                   payment_type: dataObj.payment_type,
@@ -547,42 +543,15 @@ $(document).ready(function () {
             },
             // Optional
             onError: function (result) {
-              console.log("---------------------------------------------");
-              console.log("error");
-              /* You may add your own js here, this is just example */
-              let dataResult = JSON.stringify(result, null, 2);
-              let dataObj = JSON.parse(dataResult);
-
-              $.ajax({
-                type: "post",
-                url: "/penyewaan_detail/payment",
-                data: {
-                  [csrfToken]: csrfHash,
-                  no_invoice: response.no_invoice,
-                  id_penyewaan: response.id_penyewaan,
-                  periode: response.periode,
-                  payment: response.payment,
-                  order_id: dataObj.order_id,
-                  payment_type: dataObj.payment_type,
-                  transaction_time: dataObj.transaction_time,
-                  transaction_status: dataObj.transaction_status,
-                  va_number: dataObj.va_numbers[0].va_number,
-                  bank: dataObj.va_numbers[0].bank,
-                },
-                dataType: "json",
-                success: function (response) {
-                  if (response.success) {
-                    swal({
-                      text: response.success,
-                      icon: "success",
-                    }).then((confirm) => {
-                      if (confirm) {
-                        window.location.replace("/penghuni/penyewaan/");
-                      }
-                    });
-                  } else if (response.data) {
-                  }
-                },
+              swal({
+                text: "pembayaran gagal silahkan ulangi!",
+                icon: "error",
+              }).then((confirm) => {
+                if (confirm) {
+                  window.location.replace(
+                    "/penghuni/penyewaan/bayar/" + response.id_penyewaan
+                  );
+                }
               });
             },
           });

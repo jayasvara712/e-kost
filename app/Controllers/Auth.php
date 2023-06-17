@@ -27,6 +27,7 @@ class Auth extends BaseController
 
     public function login()
     {
+        session()->remove('url');
         if (session('id_user')) {
             return redirect()->to(site_url('/' . session('role')));
         }

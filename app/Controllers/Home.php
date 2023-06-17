@@ -26,6 +26,10 @@ class Home extends BaseController
 
     public function index()
     {
+        $params = [
+            'url'       => 'home',
+        ];
+        session()->set($params);
         $data = [
             'dataKamar'     => $this->modelKamar->getAll_Available(),
         ];

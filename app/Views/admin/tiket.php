@@ -17,13 +17,6 @@
                 <div class="col-12">
                     <div class="card">
 
-                        <div class="card-header">
-                            <h4 class="btn-group">
-                                <a href="<?= site_url($url . "/new") ?>" class="btn btn-success btn-lg">
-                                    <i class="fas fa-plus"></i> Tambah Tiket</a>
-                            </h4>
-                        </div>
-
                         <div class="card-body">
                             <div class="table-responsive">
                                 <table class="table table-striped" id="table-1">

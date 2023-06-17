@@ -39,7 +39,7 @@
                     </div>
                 </div>
                 <div class="simple-footer">
-                    Copyright &copy; Stisla 2018
+                    <?= getenv('copyright') ?>
                 </div>
             </div>
         </div>

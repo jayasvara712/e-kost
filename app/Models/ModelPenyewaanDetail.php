@@ -11,7 +11,7 @@ class ModelPenyewaanDetail extends Model
     protected $primaryKey           = 'id_penyewaan_detail';
     protected $returnType           = 'object';
     protected $allowedFields        = [
-        'id_penyewaan', 'no_invoice', 'payment', 'order_id', 'payment_method', 'payment_type', 'transaction_time', 'transaction_status', 'va_number', 'bank'
+        'id_penyewaan', 'no_invoice', 'payment', 'order_id', 'payment_method', 'payment_type', 'transaction_time', 'transaction_status', 'va_number', 'bank', 'denda', 'periode'
     ];
 
     public function getAllDetail($id)
@@ -57,9 +57,9 @@ class ModelPenyewaanDetail extends Model
     public function noInvoice($tanggal)
     {
         $builder = $this->db->table($this->table);
-        $builder->select('max(' . $this->table . '.no_invoice) as noInvoice');
-        $builder->join('penyewaan', 'penyewaan.id_penyewaan=' . $this->table . '.id_penyewaan', 'LEFT');
-        $builder->where('penyewaan.tgl_penyewaan', $tanggal);
+        $builder->select('max(no_invoice) as noInvoice');
+        // $builder->join('penyewaan', 'penyewaan.id_penyewaan=' . $this->table . '.id_penyewaan', 'LEFT');
+        $builder->like('no_invoice', $tanggal, 'after');
         $query = $builder->get();
         return $query;
     }

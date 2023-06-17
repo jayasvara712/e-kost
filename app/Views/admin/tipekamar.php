@@ -27,7 +27,7 @@
                         <div class="card-header">
                             <h4 class="btn-group">
                                 <a href="<?= site_url($url . "/new") ?>" class="btn btn-success btn-lg">
-                                    <i class="fas fa-plus"></i> Tambah Data Kamar</a>
+                                    <i class="fas fa-plus"></i> Tambah Data Tipe Kamar</a>
                             </h4>
                         </div>
                         <div class="card-body">

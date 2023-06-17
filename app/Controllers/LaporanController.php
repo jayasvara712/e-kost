@@ -112,7 +112,7 @@ class LaporanController extends BaseController
             'owner'     => $this->pemilik,
             'company'   => $this->nama_perusahaan,
             'alamat'    => $this->alamat,
-            'kamar'     => $kamar,
+            'dataKamar'     => $kamar,
             'date'      => date('d M Y')
         ];
 

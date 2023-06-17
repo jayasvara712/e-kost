@@ -62,19 +62,25 @@
     <table>
         <tr>
             <th>Nomor Kamar</th>
+            <th>Tipe Kamar</th>
             <th>Harga</th>
-            <th>Status</th>
             <th>Fasilitas</th>
+            <th>Status</th>
             <th>Keterangan</th>
         </tr>
-        <?php if ($kamar) { ?>
-            <?php foreach ($kamar as $key => $value) :  ?>
+        <?php if ($dataKamar) { ?>
+            <?php foreach ($dataKamar['kamar'] as $key => $kamar) :  ?>
                 <tr>
-                    <td><?= $value['nomor_kamar'] ?></td>
-                    <td>Rp. <?= number_format($value['harga_kamar'], 0, ',', '.') ?></td>
-                    <td><?= $value['fasilitas_kamar'] ?></td>
-                    <td><?= $value['status_kamar'] ?></td>
-                    <td><?= $value['keterangan_kamar'] ?></td>
+                    <td><?= $kamar['nomor_kamar'] ?></td>
+                    <td><?= $kamar['judul_tipe_kamar'] ?></td>
+                    <td>Rp. <?= number_format($kamar['harga_kamar'], 0, ',', '.') ?></td>
+                    <td>
+                        <?php foreach ($dataKamar['fasilitas'] as $key => $fasilitas) : ?>
+                            <?= $kamar['id_kamar'] == $fasilitas['id_kamar'] ? $fasilitas['judul_fasilitas'] . ',' : '' ?>
+                        <?php endforeach; ?>
+                    </td>
+                    <td><?= $kamar['status_kamar'] ?></td>
+                    <td><?= $kamar['keterangan_kamar'] ?></td>
                 </tr>
             <?php endforeach ?>
 

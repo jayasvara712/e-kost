@@ -58,24 +58,54 @@ class PenyewaanController extends BaseController
     public function penyewaan_detail($id = null)
     {
         $cekData = $this->modelPenyewaan->getAllDetail($id);
+        // $status = $this->modelPenyewaan->status;
         $id_penyewaan = $cekData[0]->id_penyewaan;
-        $status_count = $this->modelPenyewaanDetail->cek_status($id_penyewaan)->getFirstRow();
+        $periode = $this->modelPenyewaanDetail->cek_status($id_penyewaan)->getFirstRow();
 
+        // dd($cekData);
         if ($cekData) {
 
+            $this->midtrans();
+            foreach ($cekData as $value) {
+                $status = \Midtrans\Transaction::status($value->order_id);
+                if ($status->transaction_status == 'settlement') {
+                    $data1 = [
+                        'transaction_status'    => $status->transaction_status,
+                        'transaction_time'      => $status->settlement_time,
+                    ];
+                    $data2 = [
+                        'last_transaction_status'    => $status->transaction_status,
+                        'last_transaction_time'      => $status->settlement_time,
+                        'last_payment'          => $status->gross_amount,
+                    ];
+                } else {
+                    $data1 = [
+                        'transaction_status'    => $status->transaction_status,
+                        'transaction_time'      => $status->transaction_time,
+                    ];
+                    $data2 = [
+                        'last_transaction_status'    => $status->transaction_status,
+                        'last_transaction_time'      => $status->transaction_time,
+                        'last_payment'          => $status->gross_amount,
+                    ];
+                }
+                $this->modelPenyewaanDetail->update($value->id_penyewaan_detail, $data1);
+                $this->modelPenyewaan->update($id, $data2);
+            }
             $data = [
                 'url'               => $this->url,
-                'status'            => (int)$status_count->x,
+                'periode'            => (int)$periode->x,
                 'lama_penyewaan'   => $cekData[0]->lama_penyewaan,
                 'no_kamar'          => $cekData[0]->nomor_kamar,
                 'payment_method'    => $cekData[0]->payment_method,
                 'id_penyewaan'      => $id_penyewaan,
                 'penyewaan'         => $cekData,
+                'status'            => $cekData[0]->last_transaction_status,
             ];
 
-            return view($this->url . '/penyewaan_detail', $data) . $this->menu . $this->header;
+            return view($this->url . '/penyewaan_detail', $data) . $this->menu;
         } else {
-            return view($this->url) . $this->menu . $this->header;
+            return view($this->url) . $this->menu;
         }
     }
 
@@ -91,6 +121,15 @@ class PenyewaanController extends BaseController
             $periode = $this->modelPenyewaanDetail->periode($cekData->id_penyewaan)->getFieldCount();
 
             $status = \Midtrans\Transaction::status($cekData->order_id);
+
+            $tgl_penyewaan = date('Y-m-d', strtotime($cekData->periode . ' month', strtotime($dataPenyewaan->tgl_penyewaan)));
+            $tgl_pembayaran = date('Y-m-d', strtotime($cekData->transaction_time));
+            $jarak_waktu = date_diff(date_create($tgl_penyewaan), date_create($tgl_pembayaran));
+            if ($tgl_penyewaan < $tgl_pembayaran) {
+                $keterlambatan = $jarak_waktu->days;
+            } else {
+                $keterlambatan = 0;
+            }
 
             if ($status->transaction_status == 'settlement') {
                 $data1 = [
@@ -132,9 +171,14 @@ class PenyewaanController extends BaseController
                 'lama_penyewaan'        => $dataPenyewaan->lama_penyewaan,
                 'harga_kamar'           => number_format($cekData->payment, 0, ',', '.'),
 
+                // denda
+                'keterlambatan'         => $keterlambatan,
+                'total_denda'           => $cekData->denda,
+                'total_bayar'           => $cekData->payment,
+
                 'nomor_kamar'           => $dataKamar->nomor_kamar,
                 'payment'               => number_format($cekData->payment, 0, ',', '.'),
-                'period'                => $periode,
+                'periode'                => $cekData->periode,
 
                 'nama_penghuni'         => $dataPenghuni->nama_penghuni,
                 'no_telp_penghuni'      => $dataPenghuni->no_telp_penghuni,
@@ -143,7 +187,7 @@ class PenyewaanController extends BaseController
 
             ];
 
-            return view($this->url . '/cek_transaksi', $data) . $this->menu . $this->header;
+            return view($this->url . '/cek_transaksi', $data) . $this->menu;
         } else {
             exit('Data tidak ditemukan');
         }

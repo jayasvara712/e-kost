@@ -41,7 +41,8 @@ class PenyewaanController extends BaseController
 
     public function invoice()
     {
-        $tanggal = date('Y-m-d');
+        $today = date('Y-m-d');
+        $tanggal = date('dmy', strtotime($today));
         $no_invoice = $this->modelPenyewaanDetail->noInvoice($tanggal)->getRowArray();
         $data = $no_invoice['noInvoice'];
 
@@ -222,6 +223,15 @@ class PenyewaanController extends BaseController
 
             $status = \Midtrans\Transaction::status($cekData->order_id);
 
+            $tgl_penyewaan = date('Y-m-d', strtotime($cekData->periode . ' month', strtotime($dataPenyewaan->tgl_penyewaan)));
+            $tgl_pembayaran = date('Y-m-d', strtotime($cekData->transaction_time));
+            $jarak_waktu = date_diff(date_create($tgl_penyewaan), date_create($tgl_pembayaran));
+            if ($tgl_penyewaan < $tgl_pembayaran) {
+                $keterlambatan = $jarak_waktu->days;
+            } else {
+                $keterlambatan = 0;
+            }
+
             if ($status->transaction_status == 'settlement') {
                 $data1 = [
                     'transaction_status'    => $status->transaction_status,
@@ -262,9 +272,14 @@ class PenyewaanController extends BaseController
                 'lama_penyewaan'        => $dataPenyewaan->lama_penyewaan,
                 'harga_kamar'           => number_format($cekData->payment, 0, ',', '.'),
 
+                // denda
+                'keterlambatan'         => $keterlambatan,
+                'total_denda'           => $cekData->denda,
+                'total_bayar'           => $cekData->payment,
+
                 'nomor_kamar'           => $dataKamar->nomor_kamar,
                 'payment'               => number_format($cekData->payment, 0, ',', '.'),
-                'period'                => $periode,
+                'periode'                => $cekData->periode,
 
                 'nama_penghuni'         => $dataPenghuni->nama_penghuni,
                 'no_telp_penghuni'      => $dataPenghuni->no_telp_penghuni,
@@ -289,6 +304,7 @@ class PenyewaanController extends BaseController
             $dataKamar = $this->modelKamar->find($dataPenyewaan->id_kamar);
             $periode = $this->modelPenyewaanDetail->periode($cekData->id_penyewaan)->getFirstRow();
 
+            //denda
             $tgl_penyewaan = $dataPenyewaan->tgl_penyewaan;
             $tgl_pembayaran = date('Y-m-d', strtotime($periode->x . ' month', strtotime($tgl_penyewaan)));
             $tgl_sekarang = date_create();
@@ -299,6 +315,7 @@ class PenyewaanController extends BaseController
             } else {
                 $total_bayar = $dataKamar->harga_kamar;
             }
+
             $data = [
                 'url'                   => $this->url,
                 'id_penyewaan'          => $id,
@@ -316,10 +333,8 @@ class PenyewaanController extends BaseController
                 'harga_kamar'           => number_format($dataKamar->harga_kamar, 0, ',', '.'),
 
                 // denda
-
                 'keterlambatan'         => $jarak_waktu->m > 0 ? $jarak_waktu->days : '',
-                'total_denda'         => $jarak_waktu->m > 0 ? number_format($total_denda, 0, ',', '.') : '',
-
+                'total_denda'         => $jarak_waktu->m > 0 ? $total_denda : '',
                 'total_bayar'           => $total_bayar,
 
                 'nomor_kamar'           => $dataKamar->nomor_kamar,
