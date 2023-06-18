@@ -7,7 +7,7 @@
         <div class="section-header">
             <h1>List Kamar</h1>
             <div class="section-header-breadcrumb">
-                <div class="breadcrumb-item active"><a href="#">Penghuni</a></div>
+                <div class="breadcrumb-item active"><a href="#">Guest</a></div>
                 <div class="breadcrumb-item">Kamar</div>
             </div>
         </div>
