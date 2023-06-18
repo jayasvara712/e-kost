@@ -3,6 +3,7 @@
 namespace Config;
 
 use App\Filters\isAdmin;
+use App\Filters\IsGuest;
 use App\Filters\IsKaryawan;
 use App\Filters\IsPenghuni;
 use CodeIgniter\Config\BaseConfig;
@@ -27,6 +28,7 @@ class Filters extends BaseConfig
         'isAdmin'       => isAdmin::class,
         'isKaryawan'    => IsKaryawan::class,
         'isPenghuni'    => IsPenghuni::class,
+        'isGuest'       => IsGuest::class,
     ];
 
     /**

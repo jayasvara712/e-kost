@@ -208,7 +208,8 @@ class TipeKamar extends ResourceController
                     $this->modelTipeKamarGambar->where('image', $value)->delete();
                 }
             };
-            if ($image[0] != '----------') {
+
+            if ($image[0]->getName() != '') {
                 foreach ($image as $key => $value) {
                     $new_name =  $value->getRandomName();
                     array_push($dataGambar, [

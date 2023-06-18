@@ -101,7 +101,7 @@ $routes->group('', ['namespace' => 'App\Controllers'], static function ($routes)
     $routes->post('/logout', 'Auth::logout');
 
     // index
-    $routes->get('/', 'Home::index');
+    $routes->get('/', 'Home::index', ['filter' => 'isGuest']);
 });
 
 $routes->presenter('dashboard');
