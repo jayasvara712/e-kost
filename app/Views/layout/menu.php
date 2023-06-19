@@ -82,7 +82,7 @@
                 </li>
 
                 <li class="nav-item" id="m-ticket">
-                    <a href="<?= site_url("/admin/tiket") ?>" class="nav-link"><i class="fas fa-comments"></i><span>Data Komplain</span></a>
+                    <a href="<?= site_url("/admin/tiket") ?>" class="nav-link"><i class="fas fa-comments"></i><span>Data Tiket</span></a>
                 </li>
 
                 <li class="nav-item" id="m-penyewaan">
@@ -115,7 +115,7 @@
                 </li>
 
                 <li class="nav-item" id="m-ticket">
-                    <a href="<?= site_url("/karyawan/tiket") ?>" class="nav-link"><i class="fas fa-comments"></i><span>Data Komplain</span></a>
+                    <a href="<?= site_url("/karyawan/tiket") ?>" class="nav-link"><i class="fas fa-comments"></i><span>Data Tiket</span></a>
                 </li>
             <?php
             } else if (session('role') == 'penghuni') {
@@ -127,7 +127,7 @@
                     <a href="<?= site_url("/penghuni/penyewaan") ?>" class="nav-link <?= session('pembayaran') == 'yes' ? 'disabled' : '' ?>"><i class="fas fa-house-user"></i><span>Penyewaan Kamar</span></a>
                 </li>
                 <li class="nav-item" id="m-ticket">
-                    <a href="<?= site_url("/penghuni/tiket") ?>" class="nav-link <?= session('pembayaran') == 'yes' ? 'disabled' : '' ?>"><i class="fas fa-comments"></i><span>Data Komplain</span></a>
+                    <a href="<?= site_url("/penghuni/tiket") ?>" class="nav-link <?= session('pembayaran') == 'yes' ? 'disabled' : '' ?>"><i class="fas fa-comments"></i><span>Data Tiket</span></a>
                 </li>
                 <!-- <li class="nav-item" id="m-laporan">
                     <a href="<?= site_url("/penghuni/laporan") ?>" class="nav-link"><i class="fas fa-file"></i><span>Data Laporan</span></a>
