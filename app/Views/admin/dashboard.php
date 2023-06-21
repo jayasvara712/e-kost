@@ -81,7 +81,7 @@
                                         </div>
                                         <div class="card-wrap">
                                             <div class="card-header">
-                                                <h4>Karaywan</h4>
+                                                <h4>Karyawan</h4>
                                             </div>
                                             <div class="card-body">
                                                 <?= $karyawan ?>
