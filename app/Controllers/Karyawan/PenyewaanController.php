@@ -169,7 +169,7 @@ class PenyewaanController extends BaseController
                 'tgl_penyewaan'         => date('d M, Y', strtotime($dataPenyewaan->tgl_penyewaan)),
                 'transaction_time'      => date('d M, Y', strtotime($cekData->transaction_time)),
                 'lama_penyewaan'        => $dataPenyewaan->lama_penyewaan,
-                'harga_kamar'           => number_format($cekData->payment, 0, ',', '.'),
+                'harga_kamar'           => number_format($dataKamar->harga_kamar, 0, ',', '.'),
 
                 // denda
                 'keterlambatan'         => $keterlambatan,
