@@ -179,6 +179,13 @@ class Auth extends BaseController
                     'required' => 'Alamat Penghuni Tidak Boleh Kosong!'
                 ]
             ],
+            'foto_ktp' => [
+                'rules'  => 'uploaded[image]|mime_in[image,image/png,image/jpeg,image/jpg]',
+                'errors' => [
+                    'uploaded' => 'Masukan Foto KTP!',
+                    'mime_in'  => 'Tipe File salah!'
+                ]
+            ],
             'agree' => [
                 'rules'  => 'required',
                 'errors' => [
@@ -199,6 +206,16 @@ class Auth extends BaseController
                 'role' => $post['role'],
             ];
             $id_user = $this->user->register($data1);
+
+            $foto_ktp = $this->request->getFile('foto_ktp');
+            if ($foto_ktp->isValid()) {
+                //upload  ke public folder
+                $newName = $foto_ktp->getRandomName();
+                $foto_ktp->move('uploads/ktp/', $newName);
+            } else {
+                $newName = '';
+            }
+
             $data2 = [
                 'nik_penghuni' => $post['nik_penghuni'],
                 'nama_penghuni' => $post['nama_penghuni'],
@@ -207,6 +224,7 @@ class Auth extends BaseController
                 'tgl_lahir_penghuni' => $post['tgl_lahir_penghuni'],
                 'jk_penghuni' => $post['jk_penghuni'],
                 'alamat_penghuni' => $post['alamat_penghuni'],
+                'foto_ktp'         => $foto_ktp,
                 'id_user' => $id_user
             ];
             $this->penghuni->insert($data2);

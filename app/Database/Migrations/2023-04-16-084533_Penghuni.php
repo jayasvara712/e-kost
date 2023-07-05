@@ -44,6 +44,10 @@ class Penghuni extends Migration
                 'type'           => 'VARCHAR',
                 'constraint'     => 250
             ],
+            'foto_ktp' => [
+                'type'           => 'VARCHAR',
+                'constraint'     => 250
+            ],
             'id_user' => [
                 'type'           => 'INT',
                 'constraint'     => 11

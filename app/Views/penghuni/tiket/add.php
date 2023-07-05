@@ -43,7 +43,8 @@
 
                                 <div class="form-group">
                                     <label>Gambar</label>
-                                    <img src="/uploads/galeri/no-image.png" alt="" srcset="" class="image-thumbnail img-preview" width="150px">
+                                    <br>
+                                    <img src="/uploads/galeri/no-image.png" alt="" srcset="" class="image-thumbnail img-preview" width="150px" id="img-preview">
                                     <div class="col-sm-12 col-md-12">
                                         <input type="file" id="gambar" name="gambar" class="form-control <?= (validation_show_error('gambar')) ? 'is-invalid' : ''; ?>" onchange="imagePreview()">
                                         <div class="invalid-feedback">

@@ -226,6 +226,7 @@ class PenyewaanController extends BaseController
             $tgl_penyewaan = date('Y-m-d', strtotime($cekData->periode . ' month', strtotime($dataPenyewaan->tgl_penyewaan)));
             $tgl_pembayaran = date('Y-m-d', strtotime($cekData->transaction_time));
             $jarak_waktu = date_diff(date_create($tgl_penyewaan), date_create($tgl_pembayaran));
+
             if ($tgl_penyewaan < $tgl_pembayaran) {
                 $keterlambatan = $jarak_waktu->days;
             } else {

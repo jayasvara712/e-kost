@@ -61,6 +61,7 @@ function imagePreview() {
   const gambar = document.querySelector("#gambar");
   const label = document.querySelector(".gambar-label");
   const imgPrev = document.querySelector(".img-preview");
+
   if (label) {
     label.textContent = gambar.files[0].name;
   }

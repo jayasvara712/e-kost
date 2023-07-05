@@ -135,6 +135,20 @@
                             </div>
 
                             <div class="form-group">
+                                <label>KTP</label>
+                                <br>
+                                <img alt="" srcset="" class="image-thumbnail img-preview" width="150px">
+                                <div class="col-sm-12 col-md-12">
+                                    <input type="file" id="gambar" name="foto_ktp" class="form-control <?= (validation_show_error('foto_ktp')) ? 'is-invalid' : ''; ?>" onchange="imagePreview()">
+                                    <div class="invalid-feedback">
+                                        <?= (validation_show_error('foto_ktp')) ? validation_show_error('foto_ktp') : ''; ?>
+                                    </div>
+                                    <label for="gambar" class="custom-file-label gambar-label">Tambah Foto KTP</label>
+                                    <p>File Format PNG/JPG/JPEG | Max Size 5mb</p>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
                                 <div class="custom-control custom-checkbox">
                                     <input type="checkbox" name="agree" class="custom-control-input <?= (validation_show_error('agree')) ? 'is-invalid' : ''; ?>" id="agree">
                                     <label class="custom-control-label" for="agree">I agree with the terms and conditions</label>

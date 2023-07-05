@@ -27,6 +27,10 @@ class Kamar extends Migration
                 'type'           => 'VARCHAR',
                 'constraint'     => 100
             ],
+            'lantai_kamar' => [
+                'type'           => 'INT',
+                'constraint'     => 10
+            ],
             'keterangan_kamar' => [
                 'type'           => 'TEXT'
             ],

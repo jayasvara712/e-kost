@@ -11,7 +11,7 @@ class ModelPenghuni extends Model
     protected $primaryKey           = 'id_penghuni';
     protected $returnType           = 'object';
     protected $allowedFields        = [
-        'nama_penghuni', 'tgl_lahir_penghuni', 'tempat_lahir_penghuni', 'nik_penghuni', 'jk_penghuni', 'no_telp_penghuni', 'alamat_penghuni', 'id_user'
+        'nama_penghuni', 'tgl_lahir_penghuni', 'tempat_lahir_penghuni', 'nik_penghuni', 'jk_penghuni', 'no_telp_penghuni', 'alamat_penghuni', 'foto_ktp', 'id_user'
     ];
 
     public function count_all()
