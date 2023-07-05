@@ -83,6 +83,12 @@ class Kamar extends ResourceController
                     'required' => 'Masukan Harga Kamar!'
                 ]
             ],
+            'lantai_kamar' => [
+                'rules'  => 'required',
+                'errors' => [
+                    'required' => 'Pilih Lantai Kamar!'
+                ]
+            ],
             'id_tipe_kamar' => [
                 'rules'  => 'required',
                 'errors' => [

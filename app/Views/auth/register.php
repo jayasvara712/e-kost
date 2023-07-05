@@ -15,7 +15,7 @@
                     </div>
 
                     <div class="card-body">
-                        <form method="POST" action="registerProcess">
+                        <form action="registerProcess" method="POST" autocomplete="off" enctype="multipart/form-data">
 
                             <?= csrf_field() ?>
 
@@ -116,10 +116,10 @@
 
                             <div class="form-group">
                                 <label>Jenis Kelamin</label>
-                                <select class="form-control selectric <?= (validation_show_error('jk_penghuni')) ? 'is-invalid' : ''; ?>" name="jk_penghuni" value="<?= old('jk_penghuni') ?>">
+                                <select class="form-control selectric <?= (validation_show_error('jk_penghuni')) ? 'is-invalid' : ''; ?>" name="jk_penghuni">
                                     <option value="">Pilih jenis kelamin</option>
-                                    <option value="Laki-laki">Laki-laki</option>
-                                    <option value="Perempuan">Perempuan</option>
+                                    <option value="Laki-laki" <?= 'Laki-laki' == old('jk_penghuni') ? 'selected' : '' ?>>Laki-laki</option>
+                                    <option value="Perempuan" <?= 'Perempuan' == old('jk_penghuni') ? 'selected' : '' ?>>Perempuan</option>
                                 </select>
                                 <div class="invalid-feedback">
                                     <?= (validation_show_error('jk_penghuni')) ? validation_show_error('jk_penghuni') : ''; ?>
@@ -135,15 +135,15 @@
                             </div>
 
                             <div class="form-group">
-                                <label>KTP</label>
+                                <label>Gambar</label>
                                 <br>
-                                <img alt="" srcset="" class="image-thumbnail img-preview" width="150px">
+                                <img src="/uploads/galeri/no-image.png" alt="" srcset="" class="image-thumbnail img-preview" width="150px" id="img-preview">
                                 <div class="col-sm-12 col-md-12">
                                     <input type="file" id="gambar" name="foto_ktp" class="form-control <?= (validation_show_error('foto_ktp')) ? 'is-invalid' : ''; ?>" onchange="imagePreview()">
                                     <div class="invalid-feedback">
                                         <?= (validation_show_error('foto_ktp')) ? validation_show_error('foto_ktp') : ''; ?>
                                     </div>
-                                    <label for="gambar" class="custom-file-label gambar-label">Tambah Foto KTP</label>
+                                    <label for="gambar" class="custom-file-label gambar-label">Tambah Gambar</label>
                                     <p>File Format PNG/JPG/JPEG | Max Size 5mb</p>
                                 </div>
                             </div>

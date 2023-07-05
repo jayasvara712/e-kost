@@ -44,11 +44,25 @@
                                     <select class="form-control selectric <?= (validation_show_error('id_tipe_kamar')) ? 'is-invalid' : ''; ?>" name="id_tipe_kamar">
                                         <option value="">Silahkan pilih tipe kamar</option>
                                         <?php foreach ($tipe_kamar as $key => $value) : ?>
-                                            <option value="<?= $value->id_tipe_kamar ?>"><?= $value->judul_tipe_kamar ?></option>
+                                            <option value="<?= $value->id_tipe_kamar ?>" <?= $value->id_tipe_kamar == old('id_tipe_kamar') ? 'selected' : '' ?>><?= $value->judul_tipe_kamar ?></option>
                                         <?php endforeach ?>
                                     </select>
                                     <div class="invalid-feedback">
                                         <?= (validation_show_error('id_tipe_kamar')) ? validation_show_error('id_tipe_kamar') : ''; ?>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Lantai Kamar</label>
+                                    <select class="form-control selectric <?= (validation_show_error('lantai_kamar')) ? 'is-invalid' : ''; ?>" name="lantai_kamar">
+                                        <option value="">Silahkan pilih lantai kamar</option>
+                                        <option value="1" <?= '1' == old('lantai_kamar') ? 'selected' : '' ?>>Lantai 1</option>
+                                        <option value="2" <?= '2' == old('lantai_kamar') ? 'selected' : '' ?>>Lantai 2</option>
+                                        <option value="3" <?= '3' == old('lantai_kamar') ? 'selected' : '' ?>>Lantai 3</option>
+                                        <option value="4" <?= '4' == old('lantai_kamar') ? 'selected' : '' ?>>Lantai 4</option>
+                                    </select>
+                                    <div class="invalid-feedback">
+                                        <?= (validation_show_error('lantai_kamar')) ? validation_show_error('lantai_kamar') : ''; ?>
                                     </div>
                                 </div>
 

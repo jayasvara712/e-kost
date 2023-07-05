@@ -11,7 +11,7 @@ class ModelKamar extends Model
     protected $primaryKey           = 'id_kamar';
     protected $returnType           = 'object';
     protected $allowedFields        = [
-        'nomor_kamar', 'harga_kamar', 'status_kamar', 'keterangan_kamar', 'id_tipe_kamar'
+        'nomor_kamar', 'harga_kamar', 'status_kamar', 'keterangan_kamar', 'id_tipe_kamar', 'lantai_kamar'
     ];
 
     public function count_all()

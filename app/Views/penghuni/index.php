@@ -104,7 +104,7 @@
                             <div class="form-group row mb-4">
                                 <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Lama Penyewaan</label>
                                 <div class="col-sm-12 col-md-7">
-                                    <select name="lama_penyewaan" class="form-control" id="lama_penyewaan">
+                                    <select name="lama_penyewaan" class="form-control" id="lama_penyewaan" onchange="countRangeDate()">
                                         <option value=""> Pilih Lama Penyewaan</option>
                                         <?php for ($i = 1; $i <= 12; $i++) { ?>
                                             <option value="<?= $i ?>" <?= ($i == old('lama_penyewaan')) ? 'selected' : '' ?>><?= $i ?> Bulan</option>
@@ -114,6 +114,13 @@
                             </div>
 
                             <div class="form-group row mb-4">
+                                <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Tanggal Berakhir</label>
+                                <div class="col-sm-12 col-md-7">
+                                    <input type="date" class="form-control" id="tanggal_berakhir" readonly>
+                                </div>
+                            </div>
+
+                            <div class=" form-group row mb-4">
                                 <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Total Harga</label>
                                 <div class="col-sm-12 col-md-7">
                                     <input type="text" class="form-control" name="total_harga" id="total_harga" readonly>

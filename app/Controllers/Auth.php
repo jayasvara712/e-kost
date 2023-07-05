@@ -13,6 +13,7 @@ class Auth extends BaseController
     protected $penghuni;
     protected $karyawan;
     protected $helpers = ['form'];
+
     function __construct()
     {
         $this->user = new ModelUser();
@@ -102,6 +103,8 @@ class Auth extends BaseController
     public function registerProcess()
     {
         $post = $this->request->getPost();
+        $foto_ktp = $this->request->getFile('foto_ktp');
+
         $validation = $this->validate([
             'nik_penghuni' => [
                 'rules'  => 'required|is_unique[penghuni.nik_penghuni]',
@@ -180,9 +183,9 @@ class Auth extends BaseController
                 ]
             ],
             'foto_ktp' => [
-                'rules'  => 'uploaded[image]|mime_in[image,image/png,image/jpeg,image/jpg]',
+                'rules'  => 'uploaded[foto_ktp]|mime_in[foto_ktp,image/png,image/jpeg,image/jpg,image/jfif]',
                 'errors' => [
-                    'uploaded' => 'Masukan Foto KTP!',
+                    'uploaded' => 'Pilih Gambar Kamar!',
                     'mime_in'  => 'Tipe File salah!'
                 ]
             ],
@@ -196,9 +199,8 @@ class Auth extends BaseController
 
         if (!$validation) {
             $validation = \config\Services::validation();
-            return redirect()->to('/register')->withInput()->with('validation', $validation);
+            return redirect()->to('/register')->withInput()->with('error', '$this->validator->getErrors()');
         } else {
-
             $data1 = [
                 'username' => $post['username'],
                 'email' => $post['email'],
@@ -207,7 +209,6 @@ class Auth extends BaseController
             ];
             $id_user = $this->user->register($data1);
 
-            $foto_ktp = $this->request->getFile('foto_ktp');
             if ($foto_ktp->isValid()) {
                 //upload  ke public folder
                 $newName = $foto_ktp->getRandomName();
@@ -224,7 +225,7 @@ class Auth extends BaseController
                 'tgl_lahir_penghuni' => $post['tgl_lahir_penghuni'],
                 'jk_penghuni' => $post['jk_penghuni'],
                 'alamat_penghuni' => $post['alamat_penghuni'],
-                'foto_ktp'         => $foto_ktp,
+                'foto_ktp'         => $newName,
                 'id_user' => $id_user
             ];
             $this->penghuni->insert($data2);

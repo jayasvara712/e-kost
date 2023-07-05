@@ -69,6 +69,8 @@ class Penghuni extends ResourceController
     public function create()
     {
         $post = $this->request->getPost();
+        $foto_ktp = $this->request->getFile('foto_ktp');
+
         $validation = $this->validate([
             'nik_penghuni' => [
                 'rules'  => 'required',
@@ -143,7 +145,14 @@ class Penghuni extends ResourceController
                 'errors' => [
                     'required' => 'Alamat Penghuni Tidak Boleh Kosong!'
                 ]
-            ]
+            ],
+            'foto_ktp' => [
+                'rules'  => 'uploaded[foto_ktp]|mime_in[foto_ktp,image/png,image/jpeg,image/jpg,image/jfif]',
+                'errors' => [
+                    'uploaded' => 'Pilih Gambar Kamar!',
+                    'mime_in'  => 'Tipe File salah!'
+                ]
+            ],
         ]);
 
         if (!$validation) {
@@ -158,6 +167,15 @@ class Penghuni extends ResourceController
                 'role' => $post['role'],
             ];
             $id_user = $this->modelUser->register($data1);
+
+            if ($foto_ktp->isValid()) {
+                //upload  ke public folder
+                $newName = $foto_ktp->getRandomName();
+                $foto_ktp->move('uploads/ktp/', $newName);
+            } else {
+                $newName = '';
+            }
+
             $data2 = [
                 'nik_penghuni' => $post['nik_penghuni'],
                 'nama_penghuni' => $post['nama_penghuni'],
@@ -166,6 +184,7 @@ class Penghuni extends ResourceController
                 'tgl_lahir_penghuni' => $post['tgl_lahir_penghuni'],
                 'jk_penghuni' => $post['jk_penghuni'],
                 'alamat_penghuni' => $post['alamat_penghuni'],
+                'foto_ktp'  => $newName,
                 'id_user' => $id_user
             ];
             $this->modelPenghuni->insert($data2);
@@ -202,6 +221,8 @@ class Penghuni extends ResourceController
     public function update($id_penghuni = null)
     {
         $post = $this->request->getPost();
+        $foto_ktp = $this->request->getFile('foto_ktp');
+
         $validation = $this->validate([
             'nik_penghuni' => [
                 'rules'  => 'required',
@@ -275,7 +296,13 @@ class Penghuni extends ResourceController
                 'errors' => [
                     'required' => 'Alamat Penghuni Tidak Boleh Kosong!'
                 ]
-            ]
+            ],
+            'foto_ktp' => [
+                'rules'  => 'mime_in[foto_ktp,image/png,image/jpeg,image/jpg,image/jfif]',
+                'errors' => [
+                    'mime_in'  => 'Tipe File salah!'
+                ]
+            ],
         ]);
 
         if (!$validation) {
@@ -291,6 +318,18 @@ class Penghuni extends ResourceController
                 'role' => $post['role'],
             ];
             $this->modelUser->update($id_user, $data1);
+
+            if ($foto_ktp->getError() == 4) {
+                $newName = $this->request->getPost('foto_ktp_lama');
+            } else {
+                $newName = $foto_ktp->getRandomName();
+                $foto_ktp->move('uploads/ktp/', $newName);
+                //jika gambar default
+                if ($this->request->getPost('foto_lama') != 'no-image.png') {
+                    unlink('uploads/ktp/' . $this->request->getPost('foto_ktp_lama'));
+                }
+            }
+
             $data2 = [
                 'nik_penghuni' => $post['nik_penghuni'],
                 'nama_penghuni' => $post['nama_penghuni'],
@@ -299,6 +338,7 @@ class Penghuni extends ResourceController
                 'tgl_lahir_penghuni' => $post['tgl_lahir_penghuni'],
                 'jk_penghuni' => $post['jk_penghuni'],
                 'alamat_penghuni' => $post['alamat_penghuni'],
+                'foto_ktp' => $newName,
                 'id_user' => $id_user
             ];
             $this->modelPenghuni->update($id_penghuni, $data2);
@@ -313,9 +353,11 @@ class Penghuni extends ResourceController
      */
     public function delete($id_penghuni = null)
     {
-        $data = $this->modelPenghuni->select('id_user')->where('id_penghuni', $id_penghuni)->first();
-        $this->modelUser->where('id_user', $data->id_user)->delete();
+        $data = $this->modelPenghuni->select('id_user, foto_ktp')->where('id_penghuni', $id_penghuni)->first();
+        unlink('uploads/ktp/' . $data->foto_ktp);
+
         $this->modelPenghuni->where('id_penghuni', $id_penghuni)->delete();
+        $this->modelUser->where('id_user', $data->id_user)->delete();
         $json = [
             'success' => 'Data penghuni berhasil dihapus!'
         ];

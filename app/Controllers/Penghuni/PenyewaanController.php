@@ -311,7 +311,7 @@ class PenyewaanController extends BaseController
             $tgl_sekarang = date_create();
             $jarak_waktu = date_diff(date_create($tgl_pembayaran), $tgl_sekarang);
             if ($jarak_waktu->m > 0) {
-                $total_denda = $dataKamar->harga_kamar * 0.05;
+                $total_denda = $dataKamar->harga_kamar * 0.20;
                 $total_bayar = $dataKamar->harga_kamar + $total_denda;
             } else {
                 $total_bayar = $dataKamar->harga_kamar;

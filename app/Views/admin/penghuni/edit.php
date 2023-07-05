@@ -25,6 +25,7 @@
 
                                 <input type="hidden" class="form-control" name="role" value="<?= $penghuni->role ?>">
                                 <input type="hidden" class="form-control" name="id_user" value="<?= $penghuni->id_user ?>">
+                                <input type="hidden" name="foto_ktp_lama" value="<?= $penghuni->foto_ktp ?>">
 
                                 <div class="form-group">
                                     <label>Nomor KTP</label>
@@ -135,6 +136,20 @@
                                     <input type="text" class="form-control <?= (validation_show_error('alamat_penghuni')) ? 'is-invalid' : ''; ?>" name="alamat_penghuni" value="<?= $penghuni->alamat_penghuni ?>">
                                     <div class="invalid-feedback">
                                         <?= (validation_show_error('alamat_penghuni')) ? validation_show_error('alamat_penghuni') : ''; ?>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Gambar</label>
+                                    <br>
+                                    <img src="/uploads/ktp/<?= $penghuni->foto_ktp ?>" alt="" srcset="" class="image-thumbnail img-preview" width="150px" id="img-preview">
+                                    <div class="col-sm-12 col-md-12">
+                                        <input type="file" id="gambar" name="foto_ktp" class="form-control <?= (validation_show_error('foto_ktp')) ? 'is-invalid' : ''; ?>" onchange="imagePreview()">
+                                        <div class="invalid-feedback">
+                                            <?= (validation_show_error('foto_ktp')) ? validation_show_error('foto_ktp') : ''; ?>
+                                        </div>
+                                        <label for="gambar" class="custom-file-label gambar-label">Tambah Gambar</label>
+                                        <p>File Format PNG/JPG/JPEG | Max Size 5mb</p>
                                     </div>
                                 </div>
 

@@ -125,6 +125,20 @@
                                 </div>
 
                                 <div class="form-group">
+                                    <label>Foto KTP</label>
+                                    <br>
+                                    <img src="/uploads/galeri/no-image.png" alt="" srcset="" class="image-thumbnail img-preview" width="150px" id="img-preview">
+                                    <div class="col-sm-12 col-md-12">
+                                        <input type="file" id="gambar" name="foto_ktp" class="form-control <?= (validation_show_error('foto_ktp')) ? 'is-invalid' : ''; ?>" onchange="imagePreview()">
+                                        <div class="invalid-feedback">
+                                            <?= (validation_show_error('foto_ktp')) ? validation_show_error('foto_ktp') : ''; ?>
+                                        </div>
+                                        <label for="gambar" class="custom-file-label gambar-label">Tambah Gambar</label>
+                                        <p>File Format PNG/JPG/JPEG | Max Size 5mb</p>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
                                     <button class="btn btn-success"><i class="fas fa-save"></i> Simpan</button>
                                 </div>
                         </div>

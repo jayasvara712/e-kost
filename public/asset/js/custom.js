@@ -3,6 +3,34 @@ function menu(e) {
   $("#" + e).addClass("active");
 }
 
+function countRangeDate() {
+  const current_date = document.getElementById("tgl_penyewaan").value;
+  const selector = document.getElementById("lama_penyewaan").value;
+  const text = document.getElementById("tanggal_berakhir");
+
+  if (selector != null) {
+    // Convert current_date to a Date object
+    const currentDateObj = new Date(current_date);
+
+    // Add the selected number of months to the current date
+    const endDate = new Date(
+      currentDateObj.getFullYear(),
+      currentDateObj.getMonth() + parseInt(selector),
+      currentDateObj.getDate()
+    );
+
+    // Format the end date as desired (e.g., "YYYY-MM-DD")
+    const formattedEndDate = `${endDate.getFullYear()}-${(
+      endDate.getMonth() + 1
+    )
+      .toString()
+      .padStart(2, "0")}-${endDate.getDate().toString().padStart(2, "0")}`;
+
+    // Update the text element with the formatted end date
+    text.value = formattedEndDate;
+  }
+}
+
 function previewFiles() {
   const preview = document.querySelector("#preview");
   const files = document.querySelector("input[type=file]").files;
