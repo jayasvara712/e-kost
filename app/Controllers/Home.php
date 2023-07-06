@@ -16,6 +16,8 @@ class Home extends BaseController
     protected $modelPenyewaanDetail;
     protected $modelKamar;
 
+    private $menu = "<script language=\"javascript\">menu('m-home');</script>";
+
     function __construct()
     {
         $this->modelPenyewaan = new ModelPenyewaan();
@@ -33,6 +35,6 @@ class Home extends BaseController
         $data = [
             'dataKamar'     => $this->modelKamar->getAll_Available(),
         ];
-        echo view('index', $data);
+        echo view('index', $data) . $this->menu;
     }
 }

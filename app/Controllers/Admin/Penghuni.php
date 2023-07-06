@@ -342,7 +342,7 @@ class Penghuni extends ResourceController
                 'id_user' => $id_user
             ];
             $this->modelPenghuni->update($id_penghuni, $data2);
-            return redirect()->to($this->url)->with('success', 'Data Penhuni Berhasil Dirubah!');
+            return redirect()->to($this->url)->with('success', 'Data Penghuni Berhasil Dirubah!');
         }
     }
 

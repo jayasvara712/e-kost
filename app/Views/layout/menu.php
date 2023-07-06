@@ -66,6 +66,9 @@
                         <li class="nav-item" id="m-kamar">
                             <a href="<?= site_url("/admin/kamar") ?>" class="nav-link"><i class="fas fa-door-open"></i><span>Data Kamar</span></a>
                         </li>
+                        <li class="nav-item" id="m-denah">
+                            <a href="<?= site_url("/admin/denah") ?>" class="nav-link"><i class="fas fa-map-marked"></i><span>Data Denah</span></a>
+                        </li>
                     </ul>
                 </li>
 
@@ -108,6 +111,10 @@
 
                 <li class="nav-item" id="m-kamar">
                     <a href="<?= site_url("/karyawan/kamar") ?>" class="nav-link"><i class="fas fa-door-open"></i><span>Data Kamar</span></a>
+                </li>
+
+                <li class="nav-item" id="m-denah">
+                    <a href="<?= site_url("/karyawan/denah") ?>" class="nav-link"><i class="fas fa-map-marked"></i><span>Data Denah</span></a>
                 </li>
 
                 <li class="nav-item" id="m-penyewaan">

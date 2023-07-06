@@ -19,14 +19,11 @@
             <a href="/" .<?= session('role') ?>>E-Kost</a>
         </div>
         <ul class="sidebar-menu">
-            <li class="nav-item" id="m-kamar">
-                <a href="<?= site_url("/penghuni") ?>" class="nav-link <?= session('pembayaran') == 'yes' ? 'disabled' : '' ?>"><i class="fas fa-door-open"></i><span>Home</span></a>
+            <li class="nav-item" id="m-home">
+                <a href="<?= site_url("/") ?>" class="nav-link <?= session('pembayaran') == 'yes' ? 'disabled' : '' ?>"><i class="fas fa-door-open"></i><span>Home</span></a>
             </li>
-            <li class="nav-item" id="m-penyewaan">
-                <a href="<?= site_url("/penghuni/penyewaan") ?>" class="nav-link <?= session('pembayaran') == 'yes' ? 'disabled' : '' ?>"><i class="fas fa-house-user"></i><span>Penyewaan Kamar</span></a>
-            </li>
-            <li class="nav-item" id="m-ticket">
-                <a href="<?= site_url("/penghuni/tiket") ?>" class="nav-link <?= session('pembayaran') == 'yes' ? 'disabled' : '' ?>"><i class="fas fa-comments"></i><span>Data Komplain</span></a>
+            <li class="nav-item" id="m-denah">
+                <a href="<?= site_url("/denah") ?>" class="nav-link <?= session('pembayaran') == 'yes' ? 'disabled' : '' ?>"><i class="fas fa-house-user"></i><span>Penyewaan Kamar</span></a>
             </li>
 
         </ul>

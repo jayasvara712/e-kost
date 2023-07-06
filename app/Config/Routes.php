@@ -37,6 +37,7 @@ $routes->group('', ['namespace' => 'App\Controllers'], static function ($routes)
         $routes->get('/', 'Dashboard::index');
         $routes->presenter('fasilitas');
         $routes->presenter('kamar');
+        $routes->presenter('denah');
         $routes->presenter('tipekamar');
         $routes->presenter('tiket');
         $routes->presenter('tiketdetail');
@@ -56,6 +57,7 @@ $routes->group('', ['namespace' => 'App\Controllers'], static function ($routes)
         $routes->get('/', 'Dashboard::index');
         $routes->presenter('penghuni');
         $routes->presenter('kamar');
+        $routes->presenter('denah');
         $routes->group('penyewaan', ['filter' => 'isKaryawan', 'namespace' => 'App\Controllers\Karyawan'], static function ($routes) {
             $routes->get('/', 'PenyewaanController::index');
             $routes->get('detail_penyewaan/(:num)', 'PenyewaanController::penyewaan_detail/$1');
