@@ -88,6 +88,9 @@ $routes->group('', ['namespace' => 'App\Controllers'], static function ($routes)
     $routes->post('/penyewaan_detail/payment', 'paymentController::payment');
     $routes->post('/kamar/detailKamar', 'Kamar::detailKamar');
 
+    // filter
+    $routes->post('home/getKamar', 'Home::getKamar');
+
     // laporan
     $routes->get('(:any)/laporan', 'LaporanController::index');
     $routes->get('(:any)/laporan/cetak_karyawan', 'LaporanController::cetak_karyawan');

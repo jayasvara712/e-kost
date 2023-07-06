@@ -23,7 +23,7 @@
                 <a href="<?= site_url("/") ?>" class="nav-link <?= session('pembayaran') == 'yes' ? 'disabled' : '' ?>"><i class="fas fa-door-open"></i><span>Home</span></a>
             </li>
             <li class="nav-item" id="m-denah">
-                <a href="<?= site_url("/denah") ?>" class="nav-link <?= session('pembayaran') == 'yes' ? 'disabled' : '' ?>"><i class="fas fa-house-user"></i><span>Penyewaan Kamar</span></a>
+                <a href="<?= site_url("/denah") ?>" class="nav-link"><i class="fas fa-map-marked"></i><span>Denah</span></a>
             </li>
 
         </ul>

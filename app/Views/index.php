@@ -8,7 +8,9 @@
             <h1>List Kamar</h1>
             <div class="section-header-breadcrumb">
                 <div class="breadcrumb-item">
-                    <select name="" id="lantai_kamar" class="form-control selectric">
+                    <input type="hidden" id="csrfName" value="<?= csrf_token() ?>">
+                    <input type="hidden" id="csrfHash" value="<?= csrf_hash() ?>">
+                    <select name="" id="lantai_kamar" class="form-control selectric" onchange="select_lantai()">
                         <option value="">Silahkan Pilih lantai</option>
                         <option value="1">Lantai 1</option>
                         <option value="2">Lantai 2</option>

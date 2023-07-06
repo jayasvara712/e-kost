@@ -37,4 +37,19 @@ class Home extends BaseController
         ];
         echo view('index', $data) . $this->menu;
     }
+
+    public function getKamar()
+    {
+        $lantai_kamarObj = $this->request->getPost('lantai_kamar');
+
+        // cek lantai
+        if ($lantai_kamarObj != null) {
+            $lantai_kamar = $lantai_kamarObj;
+        } else {
+            $lantai_kamar = '';
+        }
+
+        $data = $this->modelKamar->getAll_Available_filter($lantai_kamar);
+        echo json_encode($data);
+    }
 }

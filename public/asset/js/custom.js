@@ -31,6 +31,33 @@ function countRangeDate() {
   }
 }
 
+function select_lantai() {
+  // variabel dari nilai combo box
+  var lantai = document.getElementById("lantai_kamar");
+  var lantaiValue = lantai.options[lantai.selectedIndex].value;
+  var csrfName = document.getElementById("csrfName").value,
+    csrfHash = document.getElementById("csrfHash").value;
+  // Menggunakan ajax untuk mengirim dan dan menerima data dari server
+  var dataJson = {
+    [csrfName]: csrfHash,
+    lantai_kamar: lantaiValue,
+  };
+
+  $.ajax({
+    url: "/home/getKamar",
+    method: "POST",
+    data: dataJson,
+    async: false,
+    dataType: "json",
+    success: function (data) {},
+    error: function (err, e) {
+      for (var x in err) {
+        console.log(x + " <=> error index of <=> " + err[x]);
+      }
+    },
+  });
+}
+
 function previewFiles() {
   const preview = document.querySelector("#preview");
   const files = document.querySelector("input[type=file]").files;
