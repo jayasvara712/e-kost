@@ -224,7 +224,9 @@ class ModelKamar extends Model
         $builder->join('fasilitas', 'fasilitas.id_fasilitas =  tipe_kamar_fasilitas.id_fasilitas', 'LEFT');
         $builder->groupBy('kamar.id_kamar,kamar.id_tipe_kamar,kamar.nomor_kamar,kamar.status_kamar,kamar.keterangan_kamar,kamar.harga_kamar, tipe_kamar.judul_tipe_kamar, tipe_kamar_fasilitas.id_fasilitas,tipe_kamar_fasilitas.id_tipe_kamar_fasilitas,fasilitas.judul_fasilitas,tipe_kamar_gambar.image,tipe_kamar_gambar.id_tipe_kamar_gambar');
         $builder->orderBy('status_kamar', 'ASC');
-        $builder->where('kamar.lantai_kamar', $lantai_kamar);
+        if ($lantai_kamar != null || $lantai_kamar != '') {
+            $builder->where('kamar.lantai_kamar', $lantai_kamar);
+        }
         $objKamar = $builder->get()->getResult();
 
         foreach ($objKamar as $key => $value) {

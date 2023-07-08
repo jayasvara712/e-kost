@@ -74,9 +74,31 @@ class PenyewaanController extends BaseController
 
     public function index()
     {
+        $lantai_kamar = '';
+        $dataTemp = [];
+
+        $post = $this->request->getPost();
+        if (isset($post['lantai_kamar'])) {
+            $lantai_kamar = $post['lantai_kamar'];
+        }
+
+        if (session('id_kamar') != '' && session('nomor_kamar') != '' && session('harga_kamar') != '' && session('current_tab') != '') {
+            $dataTemp = [
+                'id_kamar'      => session('id_kamar'),
+                'nomor_kamar'   => session('nomor_kamar'),
+                'harga_kamar'   => session('harga_kamar'),
+                'current_tab'   => session('current_tab')
+            ];
+
+            $session_del = ['id_kamar', 'nomor_kamar', 'harga_kamar', 'current_tab'];
+            session()->remove($session_del);
+        }
+
+        // dd($dataTemp);
         $data = [
             'no_invoice' => $this->invoice(),
-            'dataKamar'     => $this->modelKamar->getAll_Available(),
+            'dataKamar'     => $this->modelKamar->getAll_Available_filter($lantai_kamar),
+            'dataTemp'     => $dataTemp,
             'url'       => $this->url
         ];
         echo view('penghuni/index', $data) . $this->menu1;

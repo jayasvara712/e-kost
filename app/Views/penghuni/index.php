@@ -6,6 +6,23 @@
     <section class="section">
         <div class="section-header">
             <h1>List Kamar</h1>
+            <form action="<?= site_url('/penghuni') ?>" method="POST" autocomplete="off" enctype="multipart/form-data">
+                <div class="section-header-breadcrumb">
+                    <div class="breadcrumb-item">
+                        <?= csrf_field() ?>
+                        <select name="lantai_kamar" class="form-control selectric">
+                            <option value="">Silahkan Pilih lantai</option>
+                            <option value="1">Lantai 1</option>
+                            <option value="2">Lantai 2</option>
+                            <option value="3">Lantai 3</option>
+                        </select>
+                    </div>
+                    <div class="col-sm-4">
+                        <button class="btn btn-info"><i class="fa fa-search"></i></button>
+                    </div>
+                </div>
+            </form>
+
             <div class="section-header-breadcrumb">
                 <div class="breadcrumb-item active"><a href="#">Penghuni</a></div>
                 <div class="breadcrumb-item">Kamar</div>
@@ -13,6 +30,7 @@
         </div>
 
         <div class="section-body">
+
             <?php if (session()->getFlashdata('success')) : ?>
                 <div id="success" style="visibility: hidden">
                     <?= session()->getFlashdata('success') ?>
@@ -23,9 +41,12 @@
                 <?= csrf_field() ?>
 
                 <div class="tab">
-                    <input type="hidden" name="id_kamar" id="id_kamar" class="id_kamar" value="">
-                    <input type="hidden" name="nomor_kamar" id="nomor_kamar" class="nomor_kamar" value="">
+
+                    <input type="hidden" name="current_tab" id="current_tab" class="current_tab" value="<?= (isset($dataTemp['current_tab'])) ? $dataTemp['current_tab'] : 0 ?>">
+                    <input type="hidden" name="id_kamar" id="id_kamar" class="id_kamar" value="<?= (isset($dataTemp['id_kamar'])) ? $dataTemp['id_kamar'] : '' ?>">
+                    <input type="hidden" name="nomor_kamar" id="nomor_kamar" class="nomor_kamar" value="<?= (isset($dataTemp['nomor_kamar'])) ? $dataTemp['nomor_kamar'] : '' ?>">
                     <input type="hidden" class="form-control" name="id_penghuni" id="id_penghuni" value="<?= session('id_penghuni') ?>">
+
                     <div class="row">
 
                         <?php
@@ -33,42 +54,64 @@
                         ?>
 
                             <div class="col-12 col-sm-6 col-lg-6">
-                                <div class="card <?= ($kamar['status_kamar'] == 'Tersedia') ? 'card-success' : 'card-danger' ?>">
-                                    <div class="card-header">
-                                        <h4>Kamar <?= $kamar['nomor_kamar'] ?></h4>
-                                        <div class="card-header-action">
-                                            <a data-collapse="#kamar<?= $kamar['id_kamar'] ?>" class="btn btn-icon btn-info" href="#"><i class="fas fa-minus"></i></a>
-                                        </div>
-                                    </div>
-                                    <div class="collapse <?= $kamar['status_kamar'] == 'Tersedia' ? 'show' : '' ?>" id="kamar<?= $kamar['id_kamar'] ?>">
-                                        <div class="card-body">
-                                            <h5>Fasilitas Kamar : </h5>
-                                            <p>
-                                                <?php foreach ($dataKamar['fasilitas'] as $key => $fasilitas) : ?>
-                                                    <?= $kamar['id_kamar'] == $fasilitas['id_kamar'] ? $fasilitas['judul_fasilitas'] : '' ?>
-                                                <?php endforeach ?>
-                                            </p>
-                                            <h5>Keterangan : </h5>
-                                            <p><?= $kamar['keterangan_kamar'] ?></p>
-                                            <h5>Status : </h5>
-                                            <p><?= $kamar['status_kamar'] ?></p>
-                                            <h5>Harga Perbulan : </h5>
-                                            <b><?= $kamar['harga_kamar'] ?></b>
+                                <article class="article article-style-b">
+                                    <div class="article-header">
 
-                                            <br>
-                                            <div class="gallery">
-                                                <?php foreach ($dataKamar['gambar'] as $key => $gambar) : ?>
-                                                    <?= $kamar['id_kamar'] == $gambar['id_kamar'] ? '<div class="gallery-item" data-image = "uploads/kamar/' . $gambar['image'] . '"></div>' : '' ?>
-                                                <?php endforeach ?>
+                                        <div class="article-image" data-background="">
+                                            <div class=" gallery gallery-fw" data-item-height="200">
+                                                <?php
+                                                $i = 0;
+                                                foreach ($dataKamar['gambar'] as $key => $gambar) :
+                                                    if ($kamar['id_tipe_kamar'] == $gambar['id_tipe_kamar']) {
+                                                        $i += 1;
+                                                        if ($i < 1) {
+                                                            echo '
+                                                    <div class="gallery-item" data-image="../uploads/kamar/' . $gambar['image'] . '" data-title="image ' . $i . '"></div>
+                                                ';
+                                                        } else  if ($i == 1) {
+                                                            echo '
+                                                    <div class="gallery-item gallery-more" data-image="../uploads/kamar/' . $gambar['image'] . '" data-title="image ' . $i . '">
+                                                        <div>+</div>
+                                                    </div>
+                                                ';
+                                                        } else {
+                                                            echo '
+                                                    <div class="gallery-item gallery-hide" data-image="../uploads/kamar/' . $gambar['image'] . '" data-title="image ' . $i . '"></div>
+                                                ';
+                                                        }
+                                                    }
+                                                endforeach;
+                                                ?>
                                             </div>
                                         </div>
 
+                                        <div class="article-badge">
+                                            <?php if ($kamar['status_kamar'] == 'Tersedia') { ?>
+                                                <div class="article-badge-item bg-success"><i class="fas fa-check"></i> Tersedia</div>
+                                            <?php } else { ?>
+                                                <div class="article-badge-item bg-danger"><i class="fas fa-times"></i> Penuh</div>
+                                            <?php }; ?>
+                                        </div>
 
-                                        <div class="card-footer">
+                                    </div>
+                                    <div class="article-details">
+                                        <div class="article-title">
+                                            <h3>No : <?= $kamar['nomor_kamar'] ?></h3>
+                                        </div>
+                                        <p>
+                                            <?php foreach ($dataKamar['fasilitas'] as $key => $fasilitas) : ?>
+                                                <?= $kamar['id_kamar'] == $fasilitas['id_kamar'] ? $fasilitas['judul_fasilitas'] . ',' : '' ?>
+                                            <?php endforeach ?>
+                                        </p>
+                                        <?= $kamar['keterangan_kamar'] != null ? $kamar['keterangan_kamar'] : '' ?>
+                                        <h5>
+                                            <?= $kamar['harga_kamar'] ?>
+                                        </h5>
+                                        <div class="article-cta">
                                             <button class="btn btn-info" type="button" id="nextBtn" onclick="nextPrev(1,<?= $kamar['id_kamar'] ?>, <?= $kamar['harga_kamar'] ?>, <?= $kamar['nomor_kamar'] ?>)" <?= ($kamar['status_kamar'] == 'Tidak Tersedia') ? 'disabled' : '' ?>><i class="fas fa-cart-plus"></i> Pesan</button>
                                         </div>
                                     </div>
-                                </div>
+                                </article>
                             </div>
 
                         <?php endforeach ?>
@@ -97,7 +140,7 @@
                             <div class="form-group row mb-4">
                                 <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Harga Kamar</label>
                                 <div class="col-sm-12 col-md-7">
-                                    <input type="text" class="form-control" name="harga_kamar" id="harga_kamar" value="" readonly>
+                                    <input type="text" class="form-control" name="harga_kamar" id="harga_kamar" value="<?= (isset($dataTemp['harga_kamar'])) ? $dataTemp['harga_kamar'] : '' ?>" readonly>
                                 </div>
                             </div>
 
@@ -130,7 +173,7 @@
                             <div class="form-group row mb-4 content-section">
                             </div>
 
-                            <button class="btn btn-primary" type="button" id="prevBtn" onclick="nextPrev(-1)">Previous</button>
+                            <button class="btn btn-primary" type="button" id="prevBtn" onclick="nextPrev(0)">Previous</button>
                             <button class="btn btn-primary" id="saveBtn">Sewa</button>
                         </div>
                     </div>
@@ -147,8 +190,12 @@
 </div>
 
 <script>
-    var currentTab = 0; // Current tab is set to be the first tab (0)
-    showTab(currentTab); // Display the current tab
+    let currentTab = document.getElementById('current_tab').value; // Current tab is set to be the first tab (0)
+    if (currentTab == 1) {
+        showTab(currentTab); // Display the current tab
+    } else {
+        showTab(currentTab);
+    }
 
     function showTab(n) {
         // This function will display the specified tab of the form...
@@ -182,7 +229,8 @@
         // Hide the current tab:
         x[currentTab].style.display = "none";
         // Increase or decrease the current tab by 1:
-        currentTab = currentTab + n;
+        currentTab = n;
+        console.log(currentTab);
         // if you have reached the end of the form...
         if (currentTab > x.length) {
             // ... the form gets submitted:

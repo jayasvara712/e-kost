@@ -7,6 +7,7 @@ use App\Models\ModelPenghuni;
 use App\Models\ModelPenyewaan;
 use App\Models\ModelPenyewaanDetail;
 use App\Controllers\BaseController;
+use App\Models\ModelDenah;
 
 class Home extends BaseController
 {
@@ -15,8 +16,10 @@ class Home extends BaseController
     protected $modelPenyewaan;
     protected $modelPenyewaanDetail;
     protected $modelKamar;
+    protected $modelDenah;
 
-    private $menu = "<script language=\"javascript\">menu('m-home');</script>";
+    private $menu1 = "<script language=\"javascript\">menu('m-home');</script>";
+    private $menu2 = "<script language=\"javascript\">menu('m-denah');</script>";
 
     function __construct()
     {
@@ -24,6 +27,7 @@ class Home extends BaseController
         $this->modelPenyewaanDetail = new ModelPenyewaanDetail();
         $this->modelPenghuni = new ModelPenghuni();
         $this->modelKamar = new ModelKamar();
+        $this->modelDenah = new ModelDenah();
     }
 
     public function index()
@@ -32,24 +36,25 @@ class Home extends BaseController
             'url'       => 'home',
         ];
         session()->set($params);
-        $data = [
-            'dataKamar'     => $this->modelKamar->getAll_Available(),
-        ];
-        echo view('index', $data) . $this->menu;
-    }
 
-    public function getKamar()
-    {
-        $lantai_kamarObj = $this->request->getPost('lantai_kamar');
-
-        // cek lantai
-        if ($lantai_kamarObj != null) {
-            $lantai_kamar = $lantai_kamarObj;
-        } else {
-            $lantai_kamar = '';
+        $lantai_kamar = '';
+        $post = $this->request->getPost();
+        if (isset($post['lantai_kamar'])) {
+            $lantai_kamar = $post['lantai_kamar'];
         }
 
-        $data = $this->modelKamar->getAll_Available_filter($lantai_kamar);
-        echo json_encode($data);
+        $data = [
+            'dataKamar'     => $this->modelKamar->getAll_Available_filter($lantai_kamar),
+        ];
+
+        echo view('index', $data) . $this->menu1;
+    }
+
+    public function denah()
+    {
+        $data = [
+            'denah'    => $this->modelDenah->findAll(),
+        ];
+        echo view('denah', $data) . $this->menu2;
     }
 }

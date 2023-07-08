@@ -70,7 +70,8 @@ $routes->group('', ['namespace' => 'App\Controllers'], static function ($routes)
     $routes->group('penghuni', ['filter' => 'isPenghuni', 'namespace' => 'App\Controllers\Penghuni'], static function ($routes) {
         $routes->presenter('tiket');
         $routes->presenter('tiketdetail');
-        $routes->get('', 'PenyewaanController::index');
+        $routes->get('/', 'PenyewaanController::index');
+        $routes->post('/', 'PenyewaanController::index');
         $routes->group('penyewaan', ['filter' => 'isPenghuni', 'namespace' => 'App\Controllers\Penghuni'], static function ($routes) {
             $routes->get('/', 'PenyewaanController::penyewaan');
             $routes->post('/', 'PenyewaanController::save');
@@ -89,7 +90,6 @@ $routes->group('', ['namespace' => 'App\Controllers'], static function ($routes)
     $routes->post('/kamar/detailKamar', 'Kamar::detailKamar');
 
     // filter
-    $routes->post('home/getKamar', 'Home::getKamar');
 
     // laporan
     $routes->get('(:any)/laporan', 'LaporanController::index');
@@ -105,8 +105,10 @@ $routes->group('', ['namespace' => 'App\Controllers'], static function ($routes)
     $routes->post('(:any)/update/(:any)', 'Auth::update/$1');
     $routes->post('/logout', 'Auth::logout');
 
-    // index
+    //  guest
     $routes->get('/', 'Home::index', ['filter' => 'isGuest']);
+    $routes->post('/', 'Home::index', ['filter' => 'isGuest']);
+    $routes->get('/denah', 'Home::denah', ['filter' => 'isGuest']);
 });
 
 $routes->presenter('dashboard');
