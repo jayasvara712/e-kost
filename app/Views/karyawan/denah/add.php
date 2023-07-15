@@ -47,7 +47,7 @@
 
                                 <div class="form-group">
                                     <label>Deskripsi Denah</label>
-                                    <input type="text" class="form-control <?= (validation_show_error('deskripsi_denah')) ? 'is-invalid' : ''; ?>" name=" deskripsi_denah" value="<?= old('deskripsi_denah') ?>" placeholder="Nama Tipe Kamar">
+                                    <input type="text" class="form-control <?= (validation_show_error('deskripsi_denah')) ? 'is-invalid' : ''; ?>" name=" deskripsi_denah" value="<?= old('deskripsi_denah') ?>" placeholder="Deskripsi Denah">
                                     <div class="invalid-feedback">
                                         <?= (validation_show_error('deskripsi_denah')) ? validation_show_error('deskripsi_denah') : ''; ?>
                                     </div>
