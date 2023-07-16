@@ -53,6 +53,20 @@
                                 </div>
 
                                 <div class="form-group">
+                                    <label>Lantai Kamar</label>
+                                    <select class="form-control selectric <?= (validation_show_error('lantai_kamar')) ? 'is-invalid' : ''; ?>" name="lantai_kamar">
+                                        <option value="">Silahkan pilih lantai kamar</option>
+                                        <option value="1" <?= '1' == old('lantai_kamar') ? 'selected' : '' ?>>Lantai 1</option>
+                                        <option value="2" <?= '2' == old('lantai_kamar') ? 'selected' : '' ?>>Lantai 2</option>
+                                        <option value="3" <?= '3' == old('lantai_kamar') ? 'selected' : '' ?>>Lantai 3</option>
+                                        <option value="4" <?= '4' == old('lantai_kamar') ? 'selected' : '' ?>>Lantai 4</option>
+                                    </select>
+                                    <div class="invalid-feedback">
+                                        <?= (validation_show_error('lantai_kamar')) ? validation_show_error('lantai_kamar') : ''; ?>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
                                     <label>Status Kamar</label>
                                     <input type="text" class="form-control <?= (validation_show_error('status_kamar')) ? 'is-invalid' : ''; ?>" name="status_kamar" value="Tersedia" readonly>
                                     <div class="invalid-feedback">

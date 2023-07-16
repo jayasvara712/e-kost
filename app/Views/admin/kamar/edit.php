@@ -59,6 +59,12 @@
                                 </div>
 
                                 <div class="form-group">
+                                    <label>Lantai Kamar</label>
+
+                                    <input type="text" class="form-control" name="lantai_kamar" value="Lantai <?= $kamar->lantai_kamar ?>" readonly>
+                                </div>
+
+                                <div class="form-group">
                                     <label>Status Kamar</label>
 
                                     <input type="text" class="form-control" name="status_kamar" value="<?= $kamar->status_kamar ?>" readonly>

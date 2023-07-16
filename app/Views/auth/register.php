@@ -135,7 +135,7 @@
                             </div>
 
                             <div class="form-group">
-                                <label>Gambar</label>
+                                <label>Foto KTP</label>
                                 <br>
                                 <img src="/uploads/galeri/no-image.png" alt="" srcset="" class="image-thumbnail img-preview" width="150px" id="img-preview">
                                 <div class="col-sm-12 col-md-12">

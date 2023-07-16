@@ -83,6 +83,12 @@ class Kamar extends ResourceController
                     'required' => 'Masukan Harga Kamar!'
                 ]
             ],
+            'lantai_kamar' => [
+                'rules'  => 'required',
+                'errors' => [
+                    'required' => 'Pilih Lantai Kamar!'
+                ]
+            ],
             'id_tipe_kamar' => [
                 'rules'  => 'required',
                 'errors' => [
@@ -106,6 +112,7 @@ class Kamar extends ResourceController
             $data1 = [
                 'id_tipe_kamar' => $post['id_tipe_kamar'],
                 'nomor_kamar' => $post['nomor_kamar'],
+                'lantai_kamar' => $post['lantai_kamar'],
                 'harga_kamar' => $harga_kamar,
                 'status_kamar' => $post['status_kamar'],
                 'keterangan_kamar' => $post['keterangan_kamar']
