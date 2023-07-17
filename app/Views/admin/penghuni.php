@@ -5,10 +5,10 @@
 <div class="main-content">
     <section class="section">
         <div class="section-header">
-            <h1>List Data Penghuni</h1>
+            <h1>List Data Penyewa</h1>
             <div class="section-header-breadcrumb">
                 <div class="breadcrumb-item active"><a href="#">Data User</a></div>
-                <div class="breadcrumb-item">Data Penghuni</div>
+                <div class="breadcrumb-item">Data Penyewa</div>
             </div>
         </div>
 
@@ -27,7 +27,7 @@
                         <div class="card-header">
                             <p class="btn-group">
                                 <a href="<?= site_url($url . "/new") ?>" class="btn btn-success btn-lg">
-                                    <i class="fas fa-plus"></i> Tambah Data Penghuni</a>
+                                    <i class="fas fa-plus"></i> Tambah Data Penyewa</a>
                             </p>
                         </div>
                         <div class="card-body">

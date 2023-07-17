@@ -49,7 +49,7 @@
                                                 </td>
                                                 <td>
                                                     <?php foreach ($dataTipeKamar['fasilitas'] as $key => $fasilitas) : ?>
-                                                        <?= $tipeKamar['id_tipe_kamar'] == $fasilitas['id_tipe_kamar'] ? $fasilitas['judul_fasilitas'] : '' ?>
+                                                        <?= $tipeKamar['id_tipe_kamar'] == $fasilitas['id_tipe_kamar'] ? $fasilitas['judul_fasilitas'].',' : '' ?>
                                                     <?php endforeach; ?>
                                                 </td>
                                                 <td>

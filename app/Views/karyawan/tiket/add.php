@@ -22,7 +22,7 @@
                             <form action="<?= site_url($url) ?>" method="POST" autocomplete="off" enctype="multipart/form-data">
                                 <?= csrf_field() ?>
 
-                                <input type="hidden" class="form-control" name="id_penghuni" id="id_penghuni" value="<?= session('id_penghuni') ?>">
+                                <input type="hidden" class="form-control" name="id_karyawan" id="id_karyawan" value="<?= session('id_karyawan') ?>">
                                 <input type="hidden" class="form-control" name="user" value="1">
 
                                 <div class="form-group">

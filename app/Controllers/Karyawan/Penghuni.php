@@ -155,7 +155,7 @@ class Penghuni extends ResourceController
                 'alamat_penghuni' => $post['alamat_penghuni'],
             ];
             $this->modelPenghuni->update($id_penghuni, $data);
-            return redirect()->to(site_url($this->url))->with('success', 'Data Penghuni Berhasil Dirubah!');
+            return redirect()->to(site_url($this->url))->with('success', 'Data Penyewa Berhasil Dirubah!');
         }
     }
 

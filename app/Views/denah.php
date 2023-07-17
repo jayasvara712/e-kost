@@ -17,12 +17,13 @@
 
             <h2 class="section-title">Denah <?= getenv('judul_web') ?></h2>
 
-            <?php
-            foreach ($denah as $key => $data) :
-            ?>
-
                 <div class="row">
-                    <div class="col-12 col-md-4 col-lg-4">
+
+                    <?php
+                    foreach ($denah as $key => $data) :
+                    ?>
+
+                    <div class="col-sm-3 col-md-3 col-lg-3">
                         <article class="article article-style-c">
                             <div class="article-header">
                                 <div class="article-image" data-background="uploads/denah/<?= $data->image_denah ?>">
@@ -36,9 +37,10 @@
                             </div>
                         </article>
                     </div>
-                </div>
 
-            <?php endforeach ?>
+                    <?php endforeach ?>
+
+                </div>
 
         </div>
     </section>

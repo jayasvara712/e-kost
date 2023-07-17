@@ -5,9 +5,10 @@
 <div class="main-content">
     <section class="section">
         <div class="section-header">
-            <h1>List Data Tiket</h1>
+            <h1>List Data Komplain <?=$judul?></h1>
             <div class="section-header-breadcrumb">
-                <div class="breadcrumb-item">Data Tiket</div>
+                <div class="breadcrumb-item">Data Komplain</div>
+                <div class="breadcrumb-item"><?=$judul?></div>
             </div>
         </div>
 
@@ -17,13 +18,19 @@
                 <div class="col-12">
                     <div class="card">
 
+                    <?php if (session()->getFlashdata('success')) : ?>
+                            <div id="success" style="visibility: hidden">
+                                <?= session()->getFlashdata('success') ?>
+                            </div>
+                        <?php endif ?>
+
                         <div class="card-body">
                             <div class="table-responsive">
                                 <table class="table table-striped" id="table-1">
                                     <thead>
                                         <tr>
                                             <th>No</th>
-                                            <th>Judul Tiket</th>
+                                            <th>Judul</th>
                                             <th>Tanggal</th>
                                             <th>Status</th>
                                             <th>Action</th>
@@ -53,7 +60,30 @@
                                                     } ?>
                                                 </td>
                                                 <td>
-                                                    <a href="<?= site_url($url . 'detail/show/' .  $value->id_tiket) ?>" class="btn btn-info"><i class="fas fa-eye"></i></a>
+                                                    <?php if ($value->status_tiket != 'waiting') : ?>
+                                                        <a href="<?= site_url($url . 'detail/show/' .  $value->id_tiket) ?>" class="btn btn-info"><i class="fas fa-eye"></i></a>
+                                                    <?php endif ?>
+                                                    <?php if ($value->id_penghuni == null && $value->status_tiket == 'waiting') :
+                                                    ?>
+                                                        <form action="<?= site_url($url . '/update/' . $value->id_tiket) ?>" class="d-inline" method="post">
+                                                            <?= csrf_field() ?>
+                                                            <input type="hidden" name="status_tiket" value="ongoing">
+                                                            <button class="btn btn-primary"><i class="fas fa-plus"></i></button>
+                                                        </form>
+                                                    <?php
+                                                    endif;
+                                                    ?>
+                                                    <?php if ($value->id_penghuni == null && $value->status_tiket == 'ongoing') :
+                                                    ?>
+                                                        <form action="<?= site_url($url . '/update/' . $value->id_tiket) ?>" class="d-inline" method="post">
+                                                            <?= csrf_field() ?>
+                                                            <input type="hidden" name="id_karyawan" value="<?= session('id_karyawan') ?>">
+                                                            <input type="hidden" name="status_tiket" value="done">
+                                                            <button class="btn btn-success"><i class="fas fa-check"></i></button>
+                                                        </form>
+                                                    <?php
+                                                    endif;
+                                                    ?>
                                                 </td>
                                             </tr>
                                         <?php endforeach ?>

@@ -25,13 +25,27 @@ class Tiket extends ResourceController
         $this->modelTiketDetail = new ModelTiketDetail();
     }
 
-    public function index()
+    public function index($role = null)
     {
-        $data = [
-            'tiket'    => $this->modelTiket->findAll(),
-            'url'           => $this->url
-        ];
-        echo view($this->url, $data) . $this->menu;
+        if($role != null){
+            $sub_menu = "<script language=\"javascript\">menu('m-tiket-".$role."');</script>";
+            if($role == 'penyewa'){
+                $data = [
+                    'judul'     =>ucwords($role),
+                    'tiket'    => $this->modelTiket->getAllGroup($role),
+                    'url'           => $this->url
+                ];
+            }else if($role =='karyawan'){
+                $data = [
+                    'judul'     =>ucwords($role),
+                    'tiket'    => $this->modelTiket->getAllGroup($role),
+                    'url'           => $this->url
+                ];
+            }
+            echo view($this->url, $data) . $this->menu . $sub_menu;
+        }else{
+            echo 'Halaman Tidak Ditemukan';
+        }
     }
 
     /**
@@ -62,6 +76,19 @@ class Tiket extends ResourceController
     public function create()
     {
         //
+    }
+
+    public function update($id_tiket = null)
+    {
+        if ($id_tiket != null) {
+            $post = $this->request->getPost();
+            $data = [
+                'status_tiket' => $post['status_tiket'],
+            ];
+            $this->modelTiket->update($id_tiket, $data);
+            $url = "admin/tiket/karyawan";
+            return redirect()->to(site_url($url))->with('success', 'Tiket Berhasil Di ambil');
+        }
     }
 
     /**

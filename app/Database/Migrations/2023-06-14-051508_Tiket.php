@@ -17,7 +17,8 @@ class Tiket extends Migration
             ],
             'id_penghuni' => [
                 'type'           => 'INT',
-                'constraint'     => 11
+                'constraint'     => 11,
+                'null'           => true,
             ],
             'id_karyawan' => [
                 'type'           => 'INT',

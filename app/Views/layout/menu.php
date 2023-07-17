@@ -76,7 +76,7 @@
                     <a href="#" class="nav-link has-dropdown"><i class="fas fa-user-cog"></i> <span>Data User</span></a>
                     <ul class="dropdown-menu">
                         <li class="nav-item" id="m-penghuni">
-                            <a href="<?= site_url("/admin/penghuni") ?>" class="nav-link"><i class="fas fa-user"></i><span>Data Penghuni</span></a>
+                            <a href="<?= site_url("/admin/penghuni") ?>" class="nav-link"><i class="fas fa-user"></i><span>Data Penyewa</span></a>
                         </li>
                         <li class="nav-item" id="m-karyawan">
                             <a href="<?= site_url("/admin/karyawan") ?>" class="nav-link"><i class="fas fa-user-tie"></i><span>Data Karyawan</span></a>
@@ -84,8 +84,17 @@
                     </ul>
                 </li>
 
-                <li class="nav-item" id="m-ticket">
-                    <a href="<?= site_url("/admin/tiket") ?>" class="nav-link"><i class="fas fa-comments"></i><span>Data Tiket</span></a>
+                <li class="nav-item dropdown" id="m-ticket">
+                    <a href="#" class="nav-link has-dropdown"><i class="fas fa-comments"></i> <span>Data Komplain</span></a>
+                    <ul class="dropdown-menu">
+                    <li class="nav-item" id="m-tiket-penyewa">
+                        <a href="<?= site_url("/admin/tiket/penyewa") ?>" class="nav-link"><i class="fas fa-comments"></i><span>Penyewa</span></a>
+                    </li>
+
+                    <li class="nav-item" id="m-tiket-karyawan">
+                        <a href="<?= site_url("/admin/tiket/karyawan") ?>" class="nav-link"><i class="fas fa-comments"></i><span>Karyawan</span></a>
+                    </li>
+                    </ul>
                 </li>
 
                 <li class="nav-item" id="m-penyewaan">
@@ -106,7 +115,7 @@
                 </li>
 
                 <li class="nav-item" id="m-penghuni">
-                    <a href="<?= site_url("/karyawan/penghuni") ?>" class="nav-link"><i class="fas fa-user"></i><span>Data Penghuni</span></a>
+                    <a href="<?= site_url("/karyawan/penghuni") ?>" class="nav-link"><i class="fas fa-user"></i><span>Data Penyewa</span></a>
                 </li>
 
                 <li class="nav-item" id="m-kamar">
@@ -121,9 +130,19 @@
                     <a href="<?= site_url("/karyawan/penyewaan") ?>" class="nav-link"><i class="fas fa-file-invoice"></i><span>Data Penyewaan Kos</span></a>
                 </li>
 
-                <li class="nav-item" id="m-ticket">
-                    <a href="<?= site_url("/karyawan/tiket") ?>" class="nav-link"><i class="fas fa-comments"></i><span>Data Tiket</span></a>
+                <li class="nav-item dropdown" id="m-ticket">
+                    <a href="#" class="nav-link has-dropdown"><i class="fas fa-comments"></i> <span>Data Komplain</span></a>
+                    <ul class="dropdown-menu">
+                    <li class="nav-item" id="m-tiket-penyewa">
+                        <a href="<?= site_url("/karyawan/tiket/penyewa") ?>" class="nav-link"><i class="fas fa-comments"></i><span>Penyewa</span></a>
+                    </li>
+
+                    <li class="nav-item" id="m-tiket-karyawan">
+                        <a href="<?= site_url("/karyawan/tiket/karyawan") ?>" class="nav-link"><i class="fas fa-comments"></i><span>Karyawan</span></a>
+                    </li>
+                    </ul>
                 </li>
+
             <?php
             } else if (session('role') == 'penghuni') {
             ?>
@@ -134,7 +153,7 @@
                     <a href="<?= site_url("/penghuni/penyewaan") ?>" class="nav-link <?= session('pembayaran') == 'yes' ? 'disabled' : '' ?>"><i class="fas fa-house-user"></i><span>Penyewaan Kamar</span></a>
                 </li>
                 <li class="nav-item" id="m-ticket">
-                    <a href="<?= site_url("/penghuni/tiket") ?>" class="nav-link <?= session('pembayaran') == 'yes' ? 'disabled' : '' ?>"><i class="fas fa-comments"></i><span>Data Tiket</span></a>
+                    <a href="<?= site_url("/penghuni/tiket") ?>" class="nav-link <?= session('pembayaran') == 'yes' ? 'disabled' : '' ?>"><i class="fas fa-comments"></i><span>Komplain</span></a>
                 </li>
                 <!-- <li class="nav-item" id="m-laporan">
                     <a href="<?= site_url("/penghuni/laporan") ?>" class="nav-link"><i class="fas fa-file"></i><span>Data Laporan</span></a>

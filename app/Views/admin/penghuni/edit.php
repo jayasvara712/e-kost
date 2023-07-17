@@ -5,10 +5,10 @@
 <div class="main-content">
     <section class="section">
         <div class="section-header">
-            <h1>Edit Data Penghuni</h1>
+            <h1>Edit Data Penyewa</h1>
             <div class="section-header-breadcrumb">
                 <div class="breadcrumb-item active"><a href="#">Data User</a></div>
-                <div class="breadcrumb-item">Data Penghuni</div>
+                <div class="breadcrumb-item">Data Penyewa</div>
                 <div class="breadcrumb-item">Edit</div>
             </div>
         </div>

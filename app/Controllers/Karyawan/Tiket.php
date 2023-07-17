@@ -20,13 +20,27 @@ class Tiket extends ResourceController
         $this->modelTiketDetail = new ModelTiketDetail();
     }
 
-    public function index()
+    public function index($role = null)
     {
-        $data = [
-            'tiket'    => $this->modelTiket->findAll(),
-            'url'           => $this->url
-        ];
-        echo view($this->url, $data) . $this->menu;
+        if($role != null){
+            $sub_menu = "<script language=\"javascript\">menu('m-tiket-".$role."');</script>";
+            if($role == 'penyewa'){
+                $data = [
+                    'judul'     =>ucwords($role),
+                    'tiket'    => $this->modelTiket->getAllGroup($role),
+                    'url'           => $this->url
+                ];
+            }else if($role =='karyawan'){
+                $data = [
+                    'judul'     =>ucwords($role),
+                    'tiket'    => $this->modelTiket->getAllGroup($role),
+                    'url'           => $this->url
+                ];
+            }
+            echo view($this->url, $data) . $this->menu . $sub_menu;
+        }else{
+            echo 'Halaman Tidak Ditemukan';
+        }
     }
 
     /**
@@ -46,7 +60,11 @@ class Tiket extends ResourceController
      */
     public function new()
     {
-        //
+        $sub_menu = "<script language=\"javascript\">menu('m-karyawan');</script>";
+        $data = [
+            'url'           => $this->url
+        ];
+        echo view($this->url . '/add', $data) . $this->menu.$sub_menu;
     }
 
     /**
@@ -56,7 +74,58 @@ class Tiket extends ResourceController
      */
     public function create()
     {
-        //
+        $post = $this->request->getPost();
+
+        $validation = $this->validate([
+            'judul_tiket' => [
+                'rules'  => 'required',
+                'errors' => [
+                    'required' => 'Masukan Judul Tiket!',
+                ]
+            ],
+            'pesan' => [
+                'rules'  => 'required',
+                'errors' => [
+                    'required' => 'Masukkan Pesan Kamar!'
+                ]
+            ],
+
+        ]);
+
+        if (!$validation) {
+            return redirect()->to(site_url($this->url . '/new'))->withInput()->with('error', '$this->validator->getErrors()');
+        } else {
+
+            $data1 = [
+                'id_penghuni' => null,
+                'id_karyawan' => $post['id_karyawan'],
+                'judul_tiket' => $post['judul_tiket'],
+                'tgl_tiket'   => date('y-m-d'),
+                'status_tiket'      => 'waiting',
+            ];
+            $id_tiket = $this->modelTiket->simpan($data1);
+
+            $gambar = $this->request->getFile('gambar');
+            if ($gambar->isValid()) {
+                //upload  ke public folder
+                $newName = $gambar->getRandomName();
+                $gambar->move('uploads/tiket/' . $id_tiket, $newName);
+            } else {
+                $newName = '';
+            }
+
+            $data2 = [
+                'id_tiket' => $id_tiket,
+                'tgl_pesan' =>  date('y-m-d'),
+                'pesan' => $post['pesan'],
+                'user' => $post['user'],
+                'gambar' => $newName
+            ];
+            $this->modelTiketDetail->insert($data2);
+            $url = 'karyawan/tiket/karyawan';
+
+            return redirect()->to($url)->with('success', 'Tiket Berhasil Dibuat!');
+        }
     }
 
     /**
@@ -83,7 +152,7 @@ class Tiket extends ResourceController
                 'status_tiket' => $post['status_tiket'],
             ];
             $this->modelTiket->update($id_tiket, $data);
-            return redirect()->to(site_url($this->url))->with('success', 'Tiket Berhasil Di ambil');
+            return redirect()->back()->with('success', 'Tiket Berhasil Di ambil');
         }
     }
 

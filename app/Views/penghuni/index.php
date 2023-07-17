@@ -11,10 +11,11 @@
                     <div class="breadcrumb-item">
                         <?= csrf_field() ?>
                         <select name="lantai_kamar" class="form-control selectric">
-                            <option value="">Silahkan Pilih lantai</option>
-                            <option value="1">Lantai 1</option>
-                            <option value="2">Lantai 2</option>
-                            <option value="3">Lantai 3</option>
+                            <option value="">Silahkan pilih lantai kamar</option>
+                            <option value="1" <?= '1' == old('lantai_kamar') ? 'selected' : '' ?>>Lantai 1</option>
+                            <option value="2" <?= '2' == old('lantai_kamar') ? 'selected' : '' ?>>Lantai 2</option>
+                            <option value="3" <?= '3' == old('lantai_kamar') ? 'selected' : '' ?>>Lantai 3</option>
+                            <option value="4" <?= '4' == old('lantai_kamar') ? 'selected' : '' ?>>Lantai 4</option>
                         </select>
                     </div>
                     <div class="col-sm-4">
@@ -24,7 +25,7 @@
             </form>
 
             <div class="section-header-breadcrumb">
-                <div class="breadcrumb-item active"><a href="#">Penghuni</a></div>
+                <div class="breadcrumb-item active"><a href="#">Penyewa</a></div>
                 <div class="breadcrumb-item">Kamar</div>
             </div>
         </div>

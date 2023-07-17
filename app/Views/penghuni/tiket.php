@@ -5,9 +5,9 @@
 <div class="main-content">
     <section class="section">
         <div class="section-header">
-            <h1>List Tiket</h1>
+            <h1>List Komplain</h1>
             <div class="section-header-breadcrumb">
-                <div class="breadcrumb-item">Tiket</div>
+                <div class="breadcrumb-item">Komplain</div>
             </div>
         </div>
 
@@ -26,7 +26,7 @@
                         <div class="card-header">
                             <h4 class="btn-group">
                                 <a href="<?= site_url($url . "/new") ?>" class="btn btn-success btn-lg">
-                                    <i class="fas fa-plus"></i> Tambah Tiket</a>
+                                    <i class="fas fa-plus"></i> Buat Komplain</a>
                             </h4>
                         </div>
 
@@ -36,7 +36,7 @@
                                     <thead>
                                         <tr>
                                             <th>No</th>
-                                            <th>Judul Tiket</th>
+                                            <th>Judul</th>
                                             <th>Tanggal</th>
                                             <th>Status</th>
                                             <th>Action</th>

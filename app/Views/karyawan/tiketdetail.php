@@ -5,9 +5,9 @@
 <div class="main-content">
     <section class="section">
         <div class="section-header">
-            <h1>Detail Tiket</h1>
+            <h1>Detail Komplain</h1>
             <div class="section-header-breadcrumb">
-                <div class="breadcrumb-item active"><a href="#">Tiket</a></div>
+                <div class="breadcrumb-item active"><a href="#">Komplain</a></div>
                 <div class="breadcrumb-item"><?= $judul_tiket ?></div>
             </div>
         </div>
@@ -28,7 +28,7 @@
                                         <div class="ticket-header">
                                             <div class="ticket-detail">
                                                 <div class="ticket-title">
-                                                    <h4><?= $value->user == 1 ? $value->nama_penghuni : $value->nama_karyawan ?></h4>
+                                                    <h4><?= $value->user == 1 ? $value->nama_karyawan : 'admin' ?></h4>
                                                 </div>
                                                 <div class="ticket-info">
                                                     <div class="text-primary font-weight-600"><?= $value->tgl_pesan ?></div>
@@ -58,7 +58,7 @@
                                         <?= csrf_field() ?>
                                         <label for="">Reply</label>
                                         <input type="hidden" name="id_tiket" value="<?= $value->id_tiket ?>">
-                                        <input type="hidden" name="user" value="2">
+                                        <input type="hidden" name="user" value="<?=$value->id_penghuni!=null ? 2 : 1 ?>">
 
                                         <div class="form-group">
                                             <textarea class="form-control <?= (validation_show_error('pesan')) ? 'is-invalid' : ''; ?>" placeholder="Type a reply ..." name="pesan"></textarea>

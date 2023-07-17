@@ -39,6 +39,8 @@ $routes->group('', ['namespace' => 'App\Controllers'], static function ($routes)
         $routes->presenter('kamar');
         $routes->presenter('denah');
         $routes->presenter('tipekamar');
+        $routes->get('tiket/penyewa', 'Tiket::index/penyewa');
+        $routes->get('tiket/karyawan', 'Tiket::index/karyawan');
         $routes->presenter('tiket');
         $routes->presenter('tiketdetail');
         $routes->presenter('karyawan');
@@ -52,6 +54,8 @@ $routes->group('', ['namespace' => 'App\Controllers'], static function ($routes)
 
     //Karyawan
     $routes->group('karyawan', ['filter' => 'isKaryawan', 'namespace' => 'App\Controllers\Karyawan'], static function ($routes) {
+        $routes->get('tiket/penyewa', 'Tiket::index/penyewa');
+        $routes->get('tiket/karyawan', 'Tiket::index/karyawan');
         $routes->presenter('tiket');
         $routes->presenter('tiketdetail');
         $routes->get('/', 'Dashboard::index');

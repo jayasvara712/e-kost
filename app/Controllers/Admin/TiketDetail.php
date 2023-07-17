@@ -33,13 +33,28 @@ class TiketDetail extends ResourceController
     public function show($id_tiket = null)
     {
         $dataTiket = $this->modelTiketDetail->getAll($id_tiket);
-        $data = [
-            'id_tiket'    => $id_tiket,
-            'tiket_detail'    => $dataTiket,
-            'judul_tiket'   => $dataTiket[0]->judul_tiket,
-            'url'           => $this->url
-        ];
-        echo view($this->url, $data) . $this->menu;
+        if($dataTiket[0]->id_penghuni != null){
+            $sub_menu = "<script language=\"javascript\">menu('m-tiket-penyewa');</script>";
+            $data = [
+                'judul'         => 'Penyewa',
+                'id_tiket'    => $id_tiket,
+                'tiket_detail'    => $dataTiket,
+                'judul_tiket'   => $dataTiket[0]->judul_tiket,
+                'status_tiket'   => $dataTiket[0]->status_tiket,
+                'url'           => $this->url
+            ];
+        }else if($dataTiket[0]->id_karyawan != null){
+            $sub_menu = "<script language=\"javascript\">menu('m-tiket-karyawan');</script>";
+            $data = [
+                'judul'         => 'Karyawan',
+                'id_tiket'    => $id_tiket,
+                'tiket_detail'    => $dataTiket,
+                'judul_tiket'   => $dataTiket[0]->judul_tiket,
+                'status_tiket'   => $dataTiket[0]->status_tiket,
+                'url'           => $this->url
+            ];
+        }
+        echo view($this->url, $data) . $this->menu . $sub_menu;
     }
 
     /**
