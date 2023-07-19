@@ -98,7 +98,7 @@ $routes->group('', ['namespace' => 'App\Controllers'], static function ($routes)
     // laporan
     $routes->get('(:any)/laporan', 'LaporanController::index');
     $routes->get('(:any)/laporan/cetak_karyawan', 'LaporanController::cetak_karyawan');
-    $routes->get('(:any)/laporan/cetak_penghuni', 'LaporanController::cetak_penghuni');
+    $routes->get('(:any)/laporan/cetak_penyewa', 'LaporanController::cetak_penghuni');
     $routes->get('(:any)/laporan/cetak_kamar', 'LaporanController::cetak_kamar');
     $routes->get('(:any)/laporan/cetak_penyewaan', 'LaporanController::cetak_penyewaan');
     $routes->get('(:any)/laporan/cetak_pembayaran', 'LaporanController::cetak_pembayaran');

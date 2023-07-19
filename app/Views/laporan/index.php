@@ -27,7 +27,7 @@
                                     </li>
                                     <li class="nav-item">
                                         <a class="nav-link text-center" id="penghuni-tab6" data-toggle="tab" href="#penghuni" role="tab" aria-controls="penghuni" aria-selected="false">
-                                            <span><i class="fas fa-user"></i></span> Penghuni</a>
+                                            <span><i class="fas fa-user"></i></span> Penyewa</a>
                                     </li>
                                     <li class="nav-item">
                                         <a class="nav-link text-center" id="kamar-tab6" data-toggle="tab" href="#kamar" role="tab" aria-controls="kamar" aria-selected="false">
@@ -57,8 +57,8 @@
 
                                 <div class="tab-pane fade show" id="penghuni" role="tabpanel" aria-labelledby="penghuni">
                                     <center>
-                                        <h2>Cetak Data Penghuni</h2>
-                                        <a href="/<?= session()->role ?>/laporan/cetak_penghuni" class="btn btn-primary">Cetak <i class="fas fa-print"></i></a>
+                                        <h2>Cetak Data Penyewa</h2>
+                                        <a href="/<?= session()->role ?>/laporan/cetak_penyewa" class="btn btn-primary">Cetak <i class="fas fa-print"></i></a>
                                     </center>
                                 </div>
 

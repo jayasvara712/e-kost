@@ -79,7 +79,7 @@ class LaporanController extends BaseController
         $penghuni = $this->modelPenghuni->findAll();
         // title dari pdf
         $data = [
-            'title'     => 'Data Penghuni',
+            'title'     => 'Data Penyewa',
             'owner'     => $this->pemilik,
             'company'   => $this->nama_perusahaan,
             'alamat'    => $this->alamat,
@@ -94,7 +94,7 @@ class LaporanController extends BaseController
         //orientasi paper potrait / landscape
         $orientation = "portrait";
 
-        $html = view('laporan/cetak_penghuni', $data);
+        $html = view('laporan/cetak_penyewa', $data);
 
         // run dompdf
         $Pdfgenerator->generate($html, $file_pdf, $paper, $orientation);
