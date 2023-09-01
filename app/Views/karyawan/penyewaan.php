@@ -60,24 +60,24 @@
                                                     <?= $value->last_transaction_time ?>
                                                 </td>
                                                 <td>
-                                                    <?php if ($value->payment_method == 'M') {
-                                                        if ($value->last_transaction_status == 'pending') {
-                                                            echo "<span class='badge badge-warning'><i class='fas fa-clock'></i> Menunggu Pembayaran</span>";
-                                                        } else if ($value->last_transaction_status == 'settlement') {
-                                                            echo "<span class='badge badge-success'><i class='fas fa-check'></i> Sudah Terbayar</span>";
-                                                        } else if ($value->last_transaction_status == 'expire') {
-                                                            echo "<span class='badge badge-danger'><i class='fas fa-times'></i> Pembayaran Kadaluarsa</span>";
-                                                        } else {
-                                                            echo "<span class='badge badge-danger'><i class='fas fa-times'></i> Pemesanan Dibatalkkan</span>";
-                                                        }
+                                                    <?php
+                                                    if ($value->last_transaction_status == 'pending') {
+                                                        echo "<span class='badge badge-warning'><i class='fas fa-clock'></i> Menunggu Pembayaran</span>";
+                                                    } else if ($value->last_transaction_status == 'settlement') {
+                                                        echo "<span class='badge badge-success'><i class='fas fa-check'></i> Sudah Terbayar</span>";
+                                                    } else if ($value->last_transaction_status == 'expire') {
+                                                        echo "<span class='badge badge-danger'><i class='fas fa-times'></i> Pembayaran Kadaluarsa</span>";
+                                                    } else if ($value->last_transaction_status == 'cancel') {
+                                                        echo "<span class='badge badge-danger'><i class='fas fa-times'></i> Pemesanan Dibatalkkan</span>";
                                                     } else {
                                                         "<span class='badge badge-success'><i class='fas fa-check'></i></span>";
-                                                    } ?>
+                                                    }
+                                                    ?>
                                                 </td>
                                                 <td>
                                                     <a href="<?= site_url($url . '/detail_penyewaan/' .  $value->id_penyewaan) ?>" class="btn btn-info"><i class="fas fa-eye"></i></a>
-
-                                                    <?php if ($value->payment_period == $value->lama_penyewaan && $value->status_kamar == 'Tidak Tersedia' && $value->last_transaction_status == 'settlement' && date('Y-m-d', strtotime('+' . $value->lama_penyewaan . ' month', strtotime($value->tgl_penyewaan))) == date('Y-m-d')) { ?>
+                                                    <?php
+                                                    if ($value->payment_period == $value->lama_penyewaan && $value->status_kamar == 'Tidak Tersedia' && $value->last_transaction_status == 'settlement' && date('Y-m-d', strtotime('+' . $value->lama_penyewaan . ' month', strtotime($value->tgl_penyewaan))) > strtotime('today')) { ?>
                                                         <button class="btn btn-success" id="btn<?= $key ?>" type="button" onclick="action(<?= $key ?>,<?= $value->id_penyewaan ?>,'<?= '/' . $url . '/'  ?>','lunas','<?= $alert ?>')"><i class="fas fa-check"></i></button>
                                                     <?php } ?>
                                                 </td>

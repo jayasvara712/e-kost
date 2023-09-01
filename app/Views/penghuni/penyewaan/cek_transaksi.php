@@ -37,6 +37,7 @@
                                         <?= $nama_penghuni ?><br>
                                         <?= $no_telp_penghuni ?><br>
                                         <?= $alamat_penghuni ?><br>
+                                        <strong>Metode Pembayaran:</strong><br>
                                         <?= $va_number == null ? $payment_type : strtoupper($bank) . ' ' . $va_number ?><br>
                                     </address>
                                 </div>
@@ -66,6 +67,8 @@
                                     <address>
                                         <strong>Tanggal Pemesanan:</strong><br>
                                         <?= $tgl_penyewaan ?><br><br>
+                                        <strong>Tanggal Jatuh Tempo:</strong><br>
+                                        <?= $jatuh_tempo ?><br><br>
                                     </address>
                                 </div>
                             </div>

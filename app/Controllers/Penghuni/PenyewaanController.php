@@ -187,7 +187,7 @@ class PenyewaanController extends BaseController
         $id_penyewaan = $cekData[0]->id_penyewaan;
         $periode = $this->modelPenyewaanDetail->cek_status($id_penyewaan)->getFirstRow();
 
-        // dd($cekData);
+        // midtrans;
         if ($cekData) {
 
             // apabila menggunakan midtrans
@@ -310,6 +310,7 @@ class PenyewaanController extends BaseController
                 'keterlambatan'         => $keterlambatan,
                 'total_denda'           => $cekData->denda,
                 'total_bayar'           => $cekData->payment,
+                'jatuh_tempo'           => date('d M, Y', strtotime($tgl_penyewaan)),
 
                 'nomor_kamar'           => $dataKamar->nomor_kamar,
                 'payment'               => number_format($cekData->payment, 0, ',', '.'),

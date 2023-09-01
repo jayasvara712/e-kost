@@ -12,7 +12,7 @@
     <div class="container-fluid">
         <div class="row">
 
-            <table class="table table-borderless">
+            <table class="table table-borderless table-sm">
                 <tr>
                     <td width='70%'>
                         <h1>Invoice</h1>
@@ -55,6 +55,8 @@
                     <td>
                         <h5>Tanggal Pemesanan:</h5>
                         <p><?= $tgl_penyewaan ?></p>
+                        <h5>Tanggal Jatuh Tempo:</h5>
+                        <p><?= $jatuh_tempo ?></p>
                     </td>
                 </tr>
                 <tr>
@@ -62,25 +64,34 @@
                         <h4>Detail Pemesanan</h4>
                     </td>
                 </tr>
+            </table>
+
+            <table class="table table-striped table-hover table-md">
                 <tr>
-                    <td colspan="2">
-                        <table class="table table-striped table-hover table-md">
-                            <tr>
-                                <th>Nomor Kamar</th>
-                                <th class="text-center">Tanggal Pembayaran</th>
-                                <th class="text-center">Harga</th>
-                            </tr>
-                            <tr>
-                                <td><?= $nomor_kamar ?></td>
-                                <td class="text-center"><?= $transaction_time ?></td>
-                                <td class="text-center">Rp.<?= $harga_kamar ?></td>
-                            </tr>
-                        </table>
+                    <th>Nomor Kamar</th>
+                    <th class="text-center">Tanggal Pembayaran</th>
+                    <th class="text-center">Harga</th>
+                </tr>
+                <tr>
+                    <td><?= $nomor_kamar ?></td>
+                    <td class="text-center"><?= $transaction_time ?></td>
+                    <td class="text-center">Rp.<?= $harga_kamar ?></td>
+                </tr>
+                <tr>
+                    <th colspan="2">Keterlambatan</th>
+                    <th>Denda</th>
+                </tr>
+                <tr>
+                    <td colspan="2"><?= $keterlambatan ?> Hari</td>
+                    <td>Rp.<?= $total_denda ?></td>
+                </tr>
+                <tr>
+                    <td colspan="3" class="text-right">
+                        <h4>Total</h4>
                     </td>
                 </tr>
                 <tr>
-                    <td colspan="2" class="text-right">
-                        <h4>Total</h4>
+                    <td colspan="3" class="text-right">
                         <h4>Rp.<?= $harga_kamar ?></h4>
                     </td>
                 </tr>

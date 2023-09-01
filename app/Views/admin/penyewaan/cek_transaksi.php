@@ -37,6 +37,8 @@
                                         <?= $nama_penghuni ?><br>
                                         <?= $no_telp_penghuni ?><br>
                                         <?= $alamat_penghuni ?><br>
+                                        <strong>Metode Pembayaran:</strong><br>
+                                        <?= $va_number == null ? $payment_type : strtoupper($bank) . ' ' . $va_number ?><br>
                                     </address>
                                 </div>
                                 <div class="col-md-6 text-md-right">
@@ -49,6 +51,8 @@
                                             echo "<span class='badge badge-warning'>Belum Di Bayar</span>";
                                         } else if ($transaction_status == 'failure') {
                                             echo "<span class='badge badge-danger'>Pembayaran Gagal</span>";
+                                        } else if ($transaction_status == 'expire') {
+                                            echo "<span class='badge badge-danger'>Pembayaran Kadaluarsa</span>";
                                         } else if ($transaction_status == 'cancel') {
                                             echo "<span class='badge badge-danger'>Pembayaran Dibatalkan</span>";
                                         }
@@ -63,6 +67,8 @@
                                     <address>
                                         <strong>Tanggal Pemesanan:</strong><br>
                                         <?= $tgl_penyewaan ?><br><br>
+                                        <strong>Tanggal Jatuh Tempo:</strong><br>
+                                        <?= $jatuh_tempo ?><br><br>
                                     </address>
                                 </div>
                             </div>
@@ -118,7 +124,7 @@
                     <div class="float-lg-left mb-lg-0 mb-3">
                         <a href="<?= site_url($url . '/detail_penyewaan/' . $id_penyewaan) ?>" class="btn btn-danger btn-icon icon-left"><i class="fas fa-times"></i> Cancel</a>
                     </div>
-                    <form action="/admin/laporan/cetak_pembayaran_detail/">
+                    <form action="/penghuni/laporan/cetak_pembayaran_detail/" target="_blank">
                         <input type="hidden" name="id_penyewaan_detail" value="<?= $id_penyewaan_detail ?>">
                         <button class="btn btn-warning btn-icon icon-left"><i class="fas fa-print"></i> Print</button>
                     </form>

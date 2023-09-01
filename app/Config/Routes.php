@@ -67,6 +67,7 @@ $routes->group('', ['namespace' => 'App\Controllers'], static function ($routes)
             $routes->get('detail_penyewaan/(:num)', 'PenyewaanController::penyewaan_detail/$1');
             $routes->get('detail_pembayaran/(:num)', 'PenyewaanController::pembayaran_detail/$1');
             $routes->post('lunas/(:num)', 'PenyewaanController::lunas/$1');
+            $routes->post('bayar_cod/(:num)', 'PenyewaanController::bayar_cod/$1');
         });
     });
 

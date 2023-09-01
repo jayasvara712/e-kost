@@ -211,6 +211,15 @@ class LaporanController extends BaseController
 
         // data
         $penyewaan_detail = $this->modelPenyewaanDetail->getAllDetail($id);
+        $tgl_penyewaan = date('Y-m-d', strtotime($penyewaan_detail[0]->periode . ' month', strtotime($penyewaan_detail[0]->tgl_penyewaan)));
+        $tgl_pembayaran = date('Y-m-d', strtotime($penyewaan_detail[0]->transaction_time));
+        $jarak_waktu = date_diff(date_create($tgl_penyewaan), date_create($tgl_pembayaran));
+
+        if ($tgl_penyewaan < $tgl_pembayaran) {
+            $keterlambatan = $jarak_waktu->days;
+        } else {
+            $keterlambatan = 0;
+        }
 
         // title dari pdf
         $data = [
@@ -230,7 +239,13 @@ class LaporanController extends BaseController
             'tgl_penyewaan'         => date('d M, Y', strtotime($penyewaan_detail[0]->tgl_penyewaan)),
             'transaction_time'      => date('d M, Y', strtotime($penyewaan_detail[0]->transaction_time)),
             'lama_penyewaan'        => $penyewaan_detail[0]->lama_penyewaan,
-            'harga_kamar'           => number_format($penyewaan_detail[0]->payment, 0, ',', '.'),
+            'harga_kamar'           => number_format($penyewaan_detail[0]->harga_kamar, 0, ',', '.'),
+
+            // denda
+            'keterlambatan'         => $keterlambatan,
+            'total_denda'           => number_format($penyewaan_detail[0]->denda, 0, ',', '.'),
+            'total_bayar'           => number_format($penyewaan_detail[0]->payment, 0, ',', '.'),
+            'jatuh_tempo'           => date('d M, Y', strtotime($tgl_penyewaan)),
 
             'nomor_kamar'           => $penyewaan_detail[0]->nomor_kamar,
             'payment'               => number_format($penyewaan_detail[0]->payment, 0, ',', '.'),
@@ -244,8 +259,9 @@ class LaporanController extends BaseController
         $file_pdf = 'laporan_pembayaran_' . $penyewaan_detail[0]->no_invoice;
         // setting paper
         $paper = 'A4';
+
         //orientasi paper potrait / landscape
-        $orientation = "landscape";
+        $orientation = "potrait";
 
         $html = view('laporan/cetak_pembayaran_detail', $data);
 
