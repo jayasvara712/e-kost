@@ -37,6 +37,7 @@
                                         <tr>
                                             <th>No</th>
                                             <th>Nama Fasilitas</th>
+                                            <th>Icon Fasilitas</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
@@ -46,6 +47,9 @@
                                                 <td><?= $key + 1 ?></td>
                                                 <td>
                                                     <?= $value->judul_fasilitas ?>
+                                                </td>
+                                                <td>
+                                                    <?= $value->icon_fasilitas ?>
                                                 </td>
                                                 <td>
                                                     <a href="<?= site_url($url . '/edit/' .  $value->id_fasilitas) ?>" class="btn btn-warning"><i class="fas fa-edit"></i></a>

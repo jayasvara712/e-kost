@@ -11,7 +11,7 @@ class ModelFasilitas extends Model
     protected $primaryKey           = 'id_fasilitas';
     protected $returnType           = 'object';
     protected $allowedFields        = [
-        'judul_fasilitas'
+        'judul_fasilitas', 'icon_fasilitas'
     ];
 
     public function count_all()

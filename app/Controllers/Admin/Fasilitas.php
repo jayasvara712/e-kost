@@ -74,6 +74,12 @@ class Fasilitas extends ResourceController
                     'is_unique' => 'Judul Fasilitas Sudah Terdaftar!'
                 ]
             ],
+            'icon_fasilitas' => [
+                'rules'  => 'required',
+                'errors' => [
+                    'required' => 'Masukan icon Fasilitas!',
+                ]
+            ],
         ]);
 
         if (!$validation) {
@@ -82,7 +88,8 @@ class Fasilitas extends ResourceController
         } else {
 
             $data = [
-                'judul_fasilitas' => $post['judul_fasilitas']
+                'judul_fasilitas' => $post['judul_fasilitas'],
+                'icon_fasilitas' => $post['icon_fasilitas']
             ];
             $this->modelFasilitas->insert($data);
             return redirect()->to(site_url($this->url))->with('success', 'Data Fasilitas Berhasil Ditambah');
@@ -124,6 +131,12 @@ class Fasilitas extends ResourceController
                     'required' => 'Masukan Judul Fasilitas!',
                 ]
             ],
+            'icon_fasilitas' => [
+                'rules'  => 'required',
+                'errors' => [
+                    'required' => 'Masukan Icon Fasilitas!',
+                ]
+            ],
         ]);
 
         if (!$validation) {
@@ -131,7 +144,8 @@ class Fasilitas extends ResourceController
         }
 
         $data = [
-            'judul_fasilitas' => $this->request->getPost('judul_fasilitas')
+            'judul_fasilitas' => $this->request->getPost('judul_fasilitas'),
+            'icon_fasilitas' => $this->request->getPost('icon_fasilitas')
         ];
         $this->modelFasilitas->update($id_fasilitas, $data);
         return redirect()->to(site_url($this->url))->with('success', 'Data Fasilitas Berhasil Dirubah');

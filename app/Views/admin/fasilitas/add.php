@@ -25,9 +25,18 @@
 
                                 <div class="form-group">
                                     <label>Judul Fasilitas</label>
-                                    <input type="text" class="form-control <?= (validation_show_error('judul_fasilitas')) ? 'is-invalid' : ''; ?>"" name=" judul_fasilitas" value="<?= old('judul_fasilitas') ?>">
+                                    <input type="text" class="form-control <?= (validation_show_error('judul_fasilitas')) ? 'is-invalid' : ''; ?>" name="judul_fasilitas" value="<?= old('judul_fasilitas') ?>">
                                     <div class="invalid-feedback">
                                         <?= (validation_show_error('judul_fasilitas')) ? validation_show_error('judul_fasilitas') : ''; ?>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Icon Fasilitas</label>
+                                    <p>Reference icon <a href="https://fontawesome.com/v5/search">Font Awesome.</a></p>
+                                    <input type="text" class="form-control <?= (validation_show_error('icon_fasilitas')) ? 'is-invalid' : ''; ?>" name="icon_fasilitas" value="<?= old('icon_fasilitas') ?>">
+                                    <div class="invalid-feedback">
+                                        <?= (validation_show_error('icon_fasilitas')) ? validation_show_error('icon_fasilitas') : ''; ?>
                                     </div>
                                 </div>
 

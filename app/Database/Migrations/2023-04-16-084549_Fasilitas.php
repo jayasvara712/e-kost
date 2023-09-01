@@ -19,6 +19,11 @@ class Fasilitas extends Migration
                 'type'           => 'VARCHAR',
                 'constraint'     => 250,
                 'unique'         => true
+            ],
+            'icon_fasilitas' => [
+                'type'           => 'VARCHAR',
+                'constraint'     => 250,
+                'unique'         => true
             ]
         ]);
         $this->forge->addKey('id_fasilitas', true);
