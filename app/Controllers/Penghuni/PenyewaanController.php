@@ -141,12 +141,14 @@ class PenyewaanController extends BaseController
             $id_kamar = $this->request->getPost('id_kamar');
             $tgl_penyewaan = $this->request->getPost('tgl_penyewaan');
             $lama_penyewaan = $this->request->getPost('lama_penyewaan');
+            $payment_method = $this->request->getPost('payment_method');
 
             $data1 = [
                 'id_penghuni' => $id_penghuni,
                 'id_kamar' => $id_kamar,
                 'tgl_penyewaan' => $tgl_penyewaan,
                 'lama_penyewaan' => $lama_penyewaan,
+                'payment_method' => $payment_method,
                 'last_payment' => 0,
                 'payment_period' => 0,
             ];
@@ -188,9 +190,69 @@ class PenyewaanController extends BaseController
         // dd($cekData);
         if ($cekData) {
 
-            $this->midtrans();
-            foreach ($cekData as $value) {
-                $status = \Midtrans\Transaction::status($value->order_id);
+            // apabila menggunakan midtrans
+            if ($cekData[0]->payment_method == 'M') {
+                $this->midtrans();
+                foreach ($cekData as $value) {
+                    $status = \Midtrans\Transaction::status($value->order_id);
+                    if ($status->transaction_status == 'settlement') {
+                        $data1 = [
+                            'transaction_status'    => $status->transaction_status,
+                            'transaction_time'      => $status->settlement_time,
+                        ];
+                        $data2 = [
+                            'last_transaction_status'    => $status->transaction_status,
+                            'last_transaction_time'      => $status->settlement_time,
+                            'last_payment'          => $status->gross_amount,
+                        ];
+                    } else {
+                        $data1 = [
+                            'transaction_status'    => $status->transaction_status,
+                            'transaction_time'      => $status->transaction_time,
+                        ];
+                        $data2 = [
+                            'last_transaction_status'    => $status->transaction_status,
+                            'last_transaction_time'      => $status->transaction_time,
+                            'last_payment'          => $status->gross_amount,
+                        ];
+                    }
+                    $this->modelPenyewaanDetail->update($value->id_penyewaan_detail, $data1);
+                    $this->modelPenyewaan->update($id, $data2);
+                }
+            }
+
+            $data = [
+                'url'               => $this->url,
+                'periode'           => (int)$periode->x,
+                'lama_penyewaan'    => $cekData[0]->lama_penyewaan,
+                'no_kamar'          => $cekData[0]->nomor_kamar,
+                'payment_method'    => $cekData[0]->payment_method,
+                'id_penyewaan'      => $id_penyewaan,
+                'penyewaan'         => $cekData,
+                'status'            => $cekData[0]->last_transaction_status,
+            ];
+
+            return view($this->url . '/penyewaan_detail', $data) . $this->menu2;
+        } else {
+            return view($this->url) . $this->menu2;
+        }
+    }
+
+    public function pembayaran_detail($id = null)
+    {
+        $cekData = $this->modelPenyewaanDetail->find($id);
+
+        if ($cekData) {
+
+            $dataPenyewaan = $this->modelPenyewaan->find($cekData->id_penyewaan);
+            $dataPenghuni = $this->modelPenghuni->find($dataPenyewaan->id_penghuni);
+            $dataKamar = $this->modelKamar->find($dataPenyewaan->id_kamar);
+            $periode = $this->modelPenyewaanDetail->periode($cekData->id_penyewaan)->getFieldCount();
+
+            if ($cekData->payment_method == 'M') {
+                $this->midtrans();
+                $status = \Midtrans\Transaction::status($cekData->order_id);
+
                 if ($status->transaction_status == 'settlement') {
                     $data1 = [
                         'transaction_status'    => $status->transaction_status,
@@ -212,38 +274,10 @@ class PenyewaanController extends BaseController
                         'last_payment'          => $status->gross_amount,
                     ];
                 }
-                $this->modelPenyewaanDetail->update($value->id_penyewaan_detail, $data1);
-                $this->modelPenyewaan->update($id, $data2);
+                $this->modelPenyewaanDetail->update($id, $data1);
+                $this->modelPenyewaan->update($cekData->id_penyewaan, $data2);
             }
-            $data = [
-                'url'               => $this->url,
-                'periode'            => (int)$periode->x,
-                'lama_penyewaan'   => $cekData[0]->lama_penyewaan,
-                'no_kamar'          => $cekData[0]->nomor_kamar,
-                'payment_method'    => $cekData[0]->payment_method,
-                'id_penyewaan'      => $id_penyewaan,
-                'penyewaan'         => $cekData,
-                'status'            => $cekData[0]->last_transaction_status,
-            ];
 
-            return view($this->url . '/penyewaan_detail', $data) . $this->menu2;
-        } else {
-            return view($this->url) . $this->menu2;
-        }
-    }
-
-    public function pembayaran_detail($id = null)
-    {
-        $cekData = $this->modelPenyewaanDetail->find($id);
-
-        if ($cekData) {
-            $this->midtrans();
-            $dataPenyewaan = $this->modelPenyewaan->find($cekData->id_penyewaan);
-            $dataPenghuni = $this->modelPenghuni->find($dataPenyewaan->id_penghuni);
-            $dataKamar = $this->modelKamar->find($dataPenyewaan->id_kamar);
-            $periode = $this->modelPenyewaanDetail->periode($cekData->id_penyewaan)->getFieldCount();
-
-            $status = \Midtrans\Transaction::status($cekData->order_id);
 
             $tgl_penyewaan = date('Y-m-d', strtotime($cekData->periode . ' month', strtotime($dataPenyewaan->tgl_penyewaan)));
             $tgl_pembayaran = date('Y-m-d', strtotime($cekData->transaction_time));
@@ -254,30 +288,6 @@ class PenyewaanController extends BaseController
             } else {
                 $keterlambatan = 0;
             }
-
-            if ($status->transaction_status == 'settlement') {
-                $data1 = [
-                    'transaction_status'    => $status->transaction_status,
-                    'transaction_time'      => $status->settlement_time,
-                ];
-                $data2 = [
-                    'last_transaction_status'    => $status->transaction_status,
-                    'last_transaction_time'      => $status->settlement_time,
-                    'last_payment'          => $status->gross_amount,
-                ];
-            } else {
-                $data1 = [
-                    'transaction_status'    => $status->transaction_status,
-                    'transaction_time'      => $status->transaction_time,
-                ];
-                $data2 = [
-                    'last_transaction_status'    => $status->transaction_status,
-                    'last_transaction_time'      => $status->transaction_time,
-                    'last_payment'          => $status->gross_amount,
-                ];
-            }
-            $this->modelPenyewaanDetail->update($id, $data1);
-            $this->modelPenyewaan->update($cekData->id_penyewaan, $data2);
 
             $data = [
                 'url'                   => $this->url,
@@ -290,6 +300,7 @@ class PenyewaanController extends BaseController
                 'transaction_status'    => $cekData->transaction_status,
                 'bank'                  => $cekData->bank,
                 'va_number'             => $cekData->va_number,
+                'payment_type'         => $cekData->payment_type,
                 'tgl_penyewaan'         => date('d M, Y', strtotime($dataPenyewaan->tgl_penyewaan)),
                 'transaction_time'      => date('d M, Y', strtotime($cekData->transaction_time)),
                 'lama_penyewaan'        => $dataPenyewaan->lama_penyewaan,
@@ -348,6 +359,7 @@ class PenyewaanController extends BaseController
                 'tgl_penyewaan'         => $dataPenyewaan->tgl_penyewaan,
                 'lama_penyewaan'        => $dataPenyewaan->lama_penyewaan,
                 'transaction_status'    => 'pending',
+                'payment_method'        => $dataPenyewaan->payment_method,
                 'bank'                  => '',
                 'va_number'             => '',
                 'tgl_penyewaan'         => date('d M, Y', strtotime($dataPenyewaan->tgl_penyewaan)),
@@ -381,33 +393,59 @@ class PenyewaanController extends BaseController
         session()->remove('pembayaran');
         session()->set(['pembayaran'       => 'none']);
 
-        $this->midtrans();
         $data = $this->modelPenyewaan->getAllDetail($id);
         $order_id = $this->modelPenyewaanDetail->getOrder($id);
-        if ($data[0]->last_transaction_status != 'cancel') {
-            \Midtrans\Transaction::cancel($order_id->order_id);
-            $status = \Midtrans\Transaction::status($order_id->order_id);
-            $data1 = [
-                'status_kamar' => 'Tersedia'
-            ];
-            $data2 = [
-                'last_transaction_time' => $status->transaction_time,
-                'last_transaction_status' => $status->transaction_status
-            ];
-            $data3 = [
-                'transaction_time' => $status->transaction_time,
-                'transaction_status' => $status->transaction_status
-            ];
-            $this->modelPenyewaan->update($id, $data2);
-            $this->modelPenyewaanDetail->update($order_id->id_penyewaan_detail, $data3);
-            $this->modelKamar->update($data[0]->id_kamar, $data1);
+        if ($data[0]->payment_method == 'M') {
+            $this->midtrans();
+            if ($data[0]->last_transaction_status != 'cancel') {
+                \Midtrans\Transaction::cancel($order_id->order_id);
+                $status = \Midtrans\Transaction::status($order_id->order_id);
+                $data1 = [
+                    'status_kamar' => 'Tersedia'
+                ];
+                $data2 = [
+                    'last_transaction_time' => $status->transaction_time,
+                    'last_transaction_status' => $status->transaction_status
+                ];
+                $data3 = [
+                    'transaction_time' => $status->transaction_time,
+                    'transaction_status' => $status->transaction_status
+                ];
+                $this->modelPenyewaan->update($id, $data2);
+                $this->modelPenyewaanDetail->update($order_id->id_penyewaan_detail, $data3);
+                $this->modelKamar->update($data[0]->id_kamar, $data1);
 
-            $json = [
-                'success' => 'Transaksi berhasil dibatalkan!'
-            ];
-            echo json_encode($json);
+                $json = [
+                    'success' => 'Transaksi berhasil dibatalkan!'
+                ];
+                echo json_encode($json);
+            } else {
+                return redirect()->to(site_url('penghuni/penyewaan'));
+            }
         } else {
-            return redirect()->to(site_url('penghuni/penyewaan'));
+            if ($data[0]->last_transaction_status != 'cancel') {
+                $data1 = [
+                    'status_kamar' => 'Tersedia'
+                ];
+                $data2 = [
+                    'last_transaction_time' => date("Y-m-d h:i:s"),
+                    'last_transaction_status' => 'cancel'
+                ];
+                $data3 = [
+                    'transaction_time' => date("Y-m-d h:i:s"),
+                    'transaction_status' => 'cancel'
+                ];
+                $this->modelPenyewaan->update($id, $data2);
+                $this->modelPenyewaanDetail->update($order_id->id_penyewaan_detail, $data3);
+                $this->modelKamar->update($data[0]->id_kamar, $data1);
+
+                $json = [
+                    'success' => 'Transaksi berhasil dibatalkan!'
+                ];
+                echo json_encode($json);
+            } else {
+                return redirect()->to(site_url('penghuni/penyewaan'));
+            }
         }
     }
 

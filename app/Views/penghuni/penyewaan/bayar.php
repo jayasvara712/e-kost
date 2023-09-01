@@ -14,13 +14,14 @@
         </div>
 
         <div class="section-body">
-            <form action="" method="POST" autocomplete="off" enctype="multipart/form-data">
-                <? csrf_field() ?>
-                <input type="hidden" id="no_invoice" value="<?= $no_invoice ?>">
-                <input type="hidden" id="id_penyewaan" value="<?= $id_penyewaan ?>">
-                <input type="hidden" id="periode" value="<?= $period ?>">
-                <input type="hidden" id="denda" value="<?= $total_denda ?>">
-                <input type="hidden" id="total_bayar" value="<?= $total_bayar ?>">
+            <form action="<?= $payment_method == 'C' ? site_url('/penyewaan_detail/payment') : '' ?>" method="POST" autocomplete="off" enctype="multipart/form-data">
+                <?= csrf_field() ?>
+
+                <input type="hidden" name="no_invoice" id="no_invoice" value="<?= $no_invoice ?>">
+                <input type="hidden" name="id_penyewaan" id="id_penyewaan" value="<?= $id_penyewaan ?>">
+                <input type="hidden" name="periode" id="periode" value="<?= $period ?>">
+                <input type="hidden" name="denda" id="denda" value="<?= $total_denda ?>">
+                <input type="hidden" name="total_bayar" id="total_bayar" value="<?= $total_bayar ?>">
 
                 <div class="invoice">
                     <div class="invoice-print">
@@ -42,6 +43,16 @@
                                     </div>
                                     <div class="col-md-6 text-md-right">
                                         <address>
+                                            <strong>Metode Pembayaran:</strong><br>
+                                            <?php
+                                            if ($payment_method == 'C') {
+                                                echo "<span class='badge badge-success'><i class='fas fa-money-bill'></i> Cash</span>";
+                                            } else if ($payment_method == 'M') {
+                                                echo "<span class='badge badge-success'><i class='fas fa-credit-card'></i> Online</span>";
+                                            }
+                                            ?><br>
+                                        </address>
+                                        <address>
                                             <strong>Status:</strong><br>
                                             <?php
                                             if ($transaction_status == 'settlement') {
@@ -50,6 +61,8 @@
                                                 echo "<span class='badge badge-warning'>Belum Di Bayar</span>";
                                             } else if ($transaction_status == 'failure') {
                                                 echo "<span class='badge badge-danger'>Pembayaran Gagal</span>";
+                                            } else if ($transaction_status == 'expire') {
+                                                echo "<span class='badge badge-danger'>Pembayaran Kadaluarsa</span>";
                                             } else if ($transaction_status == 'cancel') {
                                                 echo "<span class='badge badge-danger'>Pembayaran Dibatalkan</span>";
                                             }
@@ -118,6 +131,11 @@
                     <div class="text-md-right">
                         <?php
                         if (session('pembayaran') == 'yes') { ?>
+                            <?php if ($payment_method == 'C') { ?>
+                                <button class="btn btn-primary btn-icon icon-left"><i class="fas fa-money-bill"></i> Proses Pembayaran</button>
+                            <?php } else if ($payment_method == 'M') { ?>
+                                <button class="btn btn-primary btn-icon icon-left" id="btnBayar"><i class="fas fa-credit-card"></i> Proses Pembayaran</button>
+                            <?php } ?>
                             <div class="float-lg-left mb-lg-0 mb-3">
                                 <button class="btn btn-danger" id="btndelete1" type="button" onclick="deleteData(1,<?= $id_kamar ?>,'<?= '/' . $url ?>','<?= $alert ?>')"><i class="fas fa-times"></i> Cancel</button>
                             </div>
@@ -126,7 +144,6 @@
                                 <a href="<?= site_url($url . '/detail_penyewaan/' . $id_penyewaan) ?>" class="btn btn-danger btn-icon icon-left"><i class="fas fa-times"></i> Cancel</a>
                             </div>
                         <?php } ?>
-                        <button class="btn btn-primary btn-icon icon-left" id="btnBayar"><i class="fas fa-credit-card"></i> Proses Pembayaran</button>
                     </div>
                 </div>
             </form>

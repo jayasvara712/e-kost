@@ -5,7 +5,7 @@
 <div class="main-content">
     <section class="section">
         <div class="section-header">
-            <h1>Detail Komplain</h1>
+            <h1>Detail Komplain <?= $judul ?></h1>
             <div class="section-header-breadcrumb">
                 <div class="breadcrumb-item active"><a href="#">Komplain</a></div>
                 <div class="breadcrumb-item"><?= $judul_tiket ?></div>
@@ -28,7 +28,13 @@
                                         <div class="ticket-header">
                                             <div class="ticket-detail">
                                                 <div class="ticket-title">
-                                                    <h4><?= $value->user == 1 ? $value->nama_karyawan : 'admin' ?></h4>
+                                                    <h4>
+                                                        <?php if ($judul == 'Karyawan') { ?>
+                                                            <?= $value->user == 1 ? $value->nama_karyawan : 'admin' ?>
+                                                        <?php } else if ($judul == 'Penyewa') { ?>
+                                                            <?= $value->user == 1 ? $value->nama_penghuni : $value->nama_karyawan ?>
+                                                        <?php } ?>
+                                                    </h4>
                                                 </div>
                                                 <div class="ticket-info">
                                                     <div class="text-primary font-weight-600"><?= $value->tgl_pesan ?></div>

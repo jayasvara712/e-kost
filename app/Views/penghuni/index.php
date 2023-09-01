@@ -171,6 +171,17 @@
                                 </div>
                             </div>
 
+                            <div class=" form-group row mb-4">
+                                <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Metode Pembayaran</label>
+                                <div class="col-sm-12 col-md-7">
+                                    <select name="payment_method" class="form-control" id="payment_method">
+                                        <option value=""> Pilih Metode Pembayaran</option>
+                                        <option value="C" <?= ('C' == old('lama_penyewaan')) ? 'selected' : '' ?>>Cash</option>
+                                        <option value="M" <?= ('M' == old('lama_penyewaan')) ? 'selected' : '' ?>>Online</option>
+                                    </select>
+                                </div>
+                            </div>
+
                             <div class="form-group row mb-4 content-section">
                             </div>
 

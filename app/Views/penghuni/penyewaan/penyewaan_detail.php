@@ -26,7 +26,7 @@
                                 </div>
                             </div>
                         <?php endif ?>
-                        <?php if ($payment_method == 'M' && $periode < $lama_penyewaan && $status == 'settlement' || $status == 'expire') {
+                        <?php if ($periode < $lama_penyewaan && $status == 'settlement' || $status == 'expire') {
                         ?>
                             <div class="card-header">
                                 <p class="btn-group">
@@ -64,23 +64,25 @@
                                                     <?= $value->payment ?>
                                                 </td>
                                                 <td>
-                                                    <?= $value->bank ?>
+                                                    <?= $value->payment_method == 'C' ? $value->payment_type : $value->bank ?>
                                                 </td>
                                                 <td>
                                                     <?= $value->transaction_time ?>
                                                 </td>
                                                 <td>
-                                                    <?php if ($value->payment_method == 'M') {
-                                                        if ($value->transaction_status == 'pending') {
-                                                            echo "<span class='badge badge-warning'><i class='fas fa-clock'></i></span>";
-                                                        } else if ($value->transaction_status == 'settlement') {
-                                                            echo "<span class='badge badge-success'><i class='fas fa-check'></i></span>";
-                                                        } else {
-                                                            echo "<span class='badge badge-danger'><i class='fas fa-times'></i></span>";
-                                                        }
+                                                    <?php
+                                                    if ($value->transaction_status == 'pending') {
+                                                        echo "<span class='badge badge-warning'><i class='fas fa-clock'></i> Menunggu Pembayaran</span>";
+                                                    } else if ($value->transaction_status == 'settlement') {
+                                                        echo "<span class='badge badge-success'><i class='fas fa-check'></i> Sudah Terbayar</span>";
+                                                    } else if ($value->transaction_status == 'expire') {
+                                                        echo "<span class='badge badge-danger'><i class='fas fa-times'></i> Pembayaran Kadaluarsa</span>";
+                                                    } else if ($value->transaction_status == 'cancel') {
+                                                        echo "<span class='badge badge-danger'><i class='fas fa-times'></i> Pemesanan Dibatalkkan</span>";
                                                     } else {
                                                         "<span class='badge badge-success'><i class='fas fa-check'></i></span>";
-                                                    } ?>
+                                                    }
+                                                    ?>
                                                 </td>
                                                 <td>
                                                     <?php if ($value->last_transaction_status != 'cancel') { ?>

@@ -163,6 +163,48 @@ class PaymentController extends BaseController
                 'success' => 'Transaksi Berhasil, silahkan lakukan pembayaran!'
             ];
             echo json_encode($json);
+        } else {
+            session()->remove('pembayaran');
+            session()->set(['pembayaran'       => 'none']);
+
+            $no_invoice = $post['no_invoice'];
+            $id_penyewaan = $post['id_penyewaan'];
+            $payment = $post['total_bayar'];
+            $order_id = rand(000000000, 999999999);
+            $payment_type = 'cod';
+            $transaction_time = date("Y-m-d h:i:s");
+            $transaction_status = 'pending';
+            $va_number = '';
+            $bank = '';
+            $denda = $post['denda'];
+            $periode = $post['periode'];
+
+            $data1 = [
+                'last_payment' => $payment,
+                'payment_period' => $periode,
+                'payment_method' => 'C',
+                'last_transaction_time' => $transaction_time,
+                'last_transaction_status' => $transaction_status,
+            ];
+            $this->modelPenyewaan->update($id_penyewaan, $data1);
+
+            $data2 = [
+                'id_penyewaan' => $id_penyewaan,
+                'no_invoice' => $no_invoice,
+                'payment' => $payment,
+                'order_id' => $order_id,
+                'payment_type' => $payment_type,
+                'payment_method' => 'C',
+                'transaction_time' => $transaction_time,
+                'transaction_status' => $transaction_status,
+                'va_number' => $va_number,
+                'bank' => $bank,
+                'denda' => $denda,
+                'periode' => $periode,
+            ];
+            $this->modelPenyewaanDetail->insert($data2);
+
+            return redirect()->to(site_url('/penghuni/penyewaan'))->with('success', 'Transaksi Berhasil, silahkan lakukan pembayaran!');
         }
     }
 }

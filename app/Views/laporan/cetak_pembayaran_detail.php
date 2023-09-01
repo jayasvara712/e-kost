@@ -50,7 +50,7 @@
                 <tr>
                     <td>
                         <h5>Metode Pembayaran:</h5>
-                        <p><?= strtoupper($bank)  ?> : <?= $va_number ?></p>
+                        <p><?= $va_number == null ? strtoupper($payment_type) : strtoupper($bank) . ' ' . $va_number ?></p>
                     </td>
                     <td>
                         <h5>Tanggal Pemesanan:</h5>

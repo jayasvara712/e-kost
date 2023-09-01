@@ -5,10 +5,10 @@
 <div class="main-content">
     <section class="section">
         <div class="section-header">
-            <h1>List Data Komplain <?=$judul?></h1>
+            <h1>List Data Komplain <?= $judul ?></h1>
             <div class="section-header-breadcrumb">
                 <div class="breadcrumb-item">Data Komplain</div>
-                <div class="breadcrumb-item"><?=$judul?></div>
+                <div class="breadcrumb-item"><?= $judul ?></div>
             </div>
         </div>
 
@@ -18,7 +18,7 @@
                 <div class="col-12">
                     <div class="card">
 
-                    <?php if (session()->getFlashdata('success')) : ?>
+                        <?php if (session()->getFlashdata('success')) : ?>
                             <div id="success" style="visibility: hidden">
                                 <?= session()->getFlashdata('success') ?>
                             </div>
@@ -60,9 +60,7 @@
                                                     } ?>
                                                 </td>
                                                 <td>
-                                                    <?php if ($value->status_tiket != 'waiting') : ?>
-                                                        <a href="<?= site_url($url . 'detail/show/' .  $value->id_tiket) ?>" class="btn btn-info"><i class="fas fa-eye"></i></a>
-                                                    <?php endif ?>
+                                                    <!-- tiket menunggu di ambil oleh admin -->
                                                     <?php if ($value->id_penghuni == null && $value->status_tiket == 'waiting') :
                                                     ?>
                                                         <form action="<?= site_url($url . '/update/' . $value->id_tiket) ?>" class="d-inline" method="post">
@@ -70,9 +68,12 @@
                                                             <input type="hidden" name="status_tiket" value="ongoing">
                                                             <button class="btn btn-primary"><i class="fas fa-plus"></i></button>
                                                         </form>
-                                                    <?php
-                                                    endif;
-                                                    ?>
+                                                    <?php endif; ?>
+                                                    <!-- tiket sudah diambil oleh admin dan dalam proses penanganan -->
+                                                    <?php if ($value->status_tiket != 'waiting') : ?>
+                                                        <a href="<?= site_url($url . 'detail/show/' .  $value->id_tiket) ?>" class="btn btn-info"><i class="fas fa-eye"></i></a>
+                                                    <?php endif ?>
+                                                    <!-- tiket jika sudah selesai diproses oleh admin -->
                                                     <?php if ($value->id_penghuni == null && $value->status_tiket == 'ongoing') :
                                                     ?>
                                                         <form action="<?= site_url($url . '/update/' . $value->id_tiket) ?>" class="d-inline" method="post">
@@ -81,9 +82,11 @@
                                                             <input type="hidden" name="status_tiket" value="done">
                                                             <button class="btn btn-success"><i class="fas fa-check"></i></button>
                                                         </form>
-                                                    <?php
-                                                    endif;
-                                                    ?>
+                                                    <?php endif ?>
+                                                    <!-- tiket jika sudah selesai  -->
+                                                    <?php if ($value->status_tiket == 'done') : ?>
+                                                        <a href="<?= site_url('admin/laporan/cetak_komplain/' .  $value->id_tiket) ?>" class="btn btn-primary" target="_blank"><i class="fas fa-print"></i></a>
+                                                    <?php endif ?>
                                                 </td>
                                             </tr>
                                         <?php endforeach ?>

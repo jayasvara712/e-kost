@@ -5,10 +5,10 @@
 <div class="main-content">
     <section class="section">
         <div class="section-header">
-            <h1>List Data Komplain <?=$judul?></h1>
+            <h1>List Data Komplain <?= $judul ?></h1>
             <div class="section-header-breadcrumb">
                 <div class="breadcrumb-item">Data Komplain</div>
-                <div class="breadcrumb-item"><?=$judul?></div>
+                <div class="breadcrumb-item"><?= $judul ?></div>
             </div>
         </div>
 
@@ -18,20 +18,20 @@
                 <div class="col-12">
                     <div class="card">
 
-                    <?php if (session()->getFlashdata('success')) : ?>
+                        <?php if (session()->getFlashdata('success')) : ?>
                             <div id="success" style="visibility: hidden">
                                 <?= session()->getFlashdata('success') ?>
                             </div>
                         <?php endif ?>
 
-                        <?php if($judul != 'Penyewa') { ?>
-                        
-                        <div class="card-header">
-                            <h4 class="btn-group">
-                                <a href="<?= site_url($url . "/new") ?>" class="btn btn-success btn-lg">
-                                    <i class="fas fa-plus"></i> Buat Komplain</a>
-                            </h4>
-                        </div>
+                        <?php if ($judul != 'Penyewa') { ?>
+
+                            <div class="card-header">
+                                <h4 class="btn-group">
+                                    <a href="<?= site_url($url . "/new") ?>" class="btn btn-success btn-lg">
+                                        <i class="fas fa-plus"></i> Buat Komplain</a>
+                                </h4>
+                            </div>
 
                         <?php } ?>
 
@@ -62,18 +62,16 @@
                                                 <td>
                                                     <?php if ($value->status_tiket == 'waiting') {
                                                         echo "<span class='badge badge-warning'><i class='fas fa-clock'></i></span>";
-                                                    } else if ($value->status_tiket == 'done') {
-                                                        echo "<span class='badge badge-success'><i class='fas fa-check'></i></span>";
                                                     } else if ($value->status_tiket == 'ongoing') {
                                                         echo "<span class='badge badge-success'><i class='fas fa-spinner'></i></span>";
+                                                    } else if ($value->status_tiket == 'done') {
+                                                        echo "<span class='badge badge-success'><i class='fas fa-check'></i></span>";
                                                     } else {
                                                         "<span class='badge badge-success'><i class='fas fa-times'></i></span>";
                                                     } ?>
                                                 </td>
                                                 <td>
-                                                    <?php if ($value->status_tiket != 'waiting' || $value->id_penghuni == null) : ?>
-                                                        <a href="<?= site_url($url . 'detail/show/' .  $value->id_tiket) ?>" class="btn btn-info"><i class="fas fa-eye"></i></a>
-                                                    <?php endif ?>
+                                                    <!-- tiket menunggu di ambil oleh karyawan -->
                                                     <?php if ($value->status_tiket == 'waiting' && $value->id_penghuni != null) :
                                                     ?>
                                                         <form action="<?= site_url($url . '/update/' . $value->id_tiket) ?>" class="d-inline" method="post">
@@ -82,9 +80,12 @@
                                                             <input type="hidden" name="status_tiket" value="ongoing">
                                                             <button class="btn btn-primary"><i class="fas fa-plus"></i></button>
                                                         </form>
-                                                    <?php
-                                                    endif;
-                                                    ?>
+                                                    <?php endif ?>
+                                                    <!-- tiket sudah diambil oleh karaywan dan dalam proses penanganan -->
+                                                    <?php if ($value->status_tiket != 'waiting' || $value->id_penghuni == null) : ?>
+                                                        <a href="<?= site_url($url . 'detail/show/' .  $value->id_tiket) ?>" class="btn btn-info"><i class="fas fa-eye"></i></a>
+                                                    <?php endif ?>
+                                                    <!-- tiket jika sudah selesai diproses oleh karyawan -->
                                                     <?php if ($value->status_tiket == 'ongoing' && $value->id_penghuni != null) :
                                                     ?>
                                                         <form action="<?= site_url($url . '/update/' . $value->id_tiket) ?>" class="d-inline" method="post">
@@ -96,6 +97,10 @@
                                                     <?php
                                                     endif;
                                                     ?>
+                                                    <!-- tiket jika sudah selesai  -->
+                                                    <?php if ($value->status_tiket == 'done') : ?>
+                                                        <a href="<?= site_url('karyawan/laporan/cetak_komplain/' .  $value->id_tiket) ?>" class="btn btn-primary" target="_blank"><i class="fas fa-print"></i></a>
+                                                    <?php endif ?>
                                                 </td>
                                             </tr>
                                         <?php endforeach ?>

@@ -28,7 +28,13 @@
                                         <div class="ticket-header">
                                             <div class="ticket-detail">
                                                 <div class="ticket-title">
-                                                    <h4><?= $value->user == 1 ? $value->nama_karyawan : 'admin' ?></h4>
+                                                    <h4>
+                                                        <?php if ($judul == 'Karyawan') { ?>
+                                                            <?= $value->user == 1 ? $value->nama_karyawan : 'admin' ?>
+                                                        <?php } else if ($judul == 'Penyewa') { ?>
+                                                            <?= $value->user == 1 ? $value->nama_penghuni : $value->nama_karyawan ?>
+                                                        <?php } ?>
+                                                    </h4>
                                                 </div>
                                                 <div class="ticket-info">
                                                     <div class="text-primary font-weight-600"><?= $value->tgl_pesan ?></div>
@@ -58,7 +64,7 @@
                                         <?= csrf_field() ?>
                                         <label for="">Reply</label>
                                         <input type="hidden" name="id_tiket" value="<?= $value->id_tiket ?>">
-                                        <input type="hidden" name="user" value="<?=$value->id_penghuni!=null ? 2 : 1 ?>">
+                                        <input type="hidden" name="user" value="<?= $value->id_penghuni != null ? 2 : 1 ?>">
 
                                         <div class="form-group">
                                             <textarea class="form-control <?= (validation_show_error('pesan')) ? 'is-invalid' : ''; ?>" placeholder="Type a reply ..." name="pesan"></textarea>

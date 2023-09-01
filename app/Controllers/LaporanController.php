@@ -9,6 +9,8 @@ use App\Models\ModelKaryawan;
 use App\Models\ModelPenghuni;
 use App\Models\ModelPenyewaan;
 use App\Models\ModelPenyewaanDetail;
+use App\Models\ModelTiket;
+use App\Models\ModelTiketDetail;
 
 class LaporanController extends BaseController
 {
@@ -24,6 +26,8 @@ class LaporanController extends BaseController
     protected $modelPenyewaan;
     protected $modelPenyewaanDetail;
     protected $modelKamar;
+    protected $modelTiket;
+    protected $modelTiketDetail;
 
     function __construct()
     {
@@ -32,6 +36,8 @@ class LaporanController extends BaseController
         $this->modelPenghuni = new ModelPenghuni();
         $this->modelKaryawan = new ModelKaryawan();
         $this->modelKamar = new ModelKamar();
+        $this->modelTiket = new ModelTiket();
+        $this->modelTiketDetail = new ModelTiketDetail();
     }
 
     public function index()
@@ -217,9 +223,10 @@ class LaporanController extends BaseController
             'tgl_penyewaan'         => $penyewaan_detail[0]->tgl_penyewaan,
             'lama_penyewaan'        => $penyewaan_detail[0]->lama_penyewaan,
             'payment_method'        => $penyewaan_detail[0]->payment_method,
+            'payment_type'          => $penyewaan_detail[0]->payment_type,
             'transaction_status'    => $penyewaan_detail[0]->transaction_status,
             'bank'                  => $penyewaan_detail[0]->bank,
-            'va_number'             =>  $this->modelPenyewaanDetail->sensor_bank($penyewaan_detail[0]->va_number),
+            'va_number'             => $penyewaan_detail[0]->payment_method == 'M' ? $this->modelPenyewaanDetail->sensor_bank($penyewaan_detail[0]->va_number) : '',
             'tgl_penyewaan'         => date('d M, Y', strtotime($penyewaan_detail[0]->tgl_penyewaan)),
             'transaction_time'      => date('d M, Y', strtotime($penyewaan_detail[0]->transaction_time)),
             'lama_penyewaan'        => $penyewaan_detail[0]->lama_penyewaan,
@@ -241,6 +248,37 @@ class LaporanController extends BaseController
         $orientation = "landscape";
 
         $html = view('laporan/cetak_pembayaran_detail', $data);
+
+        // run dompdf
+        $Pdfgenerator->generate($html, $file_pdf, $paper, $orientation);
+    }
+
+    public function cetak_komplain($role, $id_tiket)
+    {
+        $Pdfgenerator = new Pdfgenerator();
+
+        // data
+        $data = $this->modelTiketDetail->getAll($id_tiket);
+        $tiket = $this->modelTiket->find($id_tiket);
+        // title dari pdf
+        $data = [
+            'role'      => $tiket->id_penghuni == null ? 'Karyawan' : 'Penyewa',
+            'title'     => 'Data Komplain ' . $tiket->judul_tiket,
+            'owner'     => $this->pemilik,
+            'company'   => $this->nama_perusahaan,
+            'alamat'    => $this->alamat,
+            'dataTiket' => $data,
+            'date'      => date('d M Y')
+        ];
+
+        // filename dari pdf ketika didownload
+        $file_pdf = 'laporan_data_komplain';
+        // setting paper
+        $paper = 'A4';
+        //orientasi paper potrait / landscape
+        $orientation = "potrait";
+
+        $html = view('laporan/cetak_komplain', $data);
 
         // run dompdf
         $Pdfgenerator->generate($html, $file_pdf, $paper, $orientation);

@@ -103,6 +103,8 @@ $routes->group('', ['namespace' => 'App\Controllers'], static function ($routes)
     $routes->get('(:any)/laporan/cetak_penyewaan', 'LaporanController::cetak_penyewaan');
     $routes->get('(:any)/laporan/cetak_pembayaran', 'LaporanController::cetak_pembayaran');
     $routes->get('(:any)/laporan/cetak_pembayaran_detail', 'LaporanController::cetak_pembayaran_detail');
+    // cetak komplain
+    $routes->get('(:any)/laporan/cetak_komplain/(:num)', 'LaporanController::cetak_komplain/$1/$2');
 
     // Auth
     $routes->get('(:any)/setting', 'Auth::setting');
