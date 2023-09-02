@@ -77,6 +77,7 @@ $routes->group('', ['namespace' => 'App\Controllers'], static function ($routes)
         $routes->presenter('tiketdetail');
         $routes->get('/', 'PenyewaanController::index');
         $routes->post('/', 'PenyewaanController::index');
+        $routes->get('kamar_detail/(:num)', 'PenyewaanController::kamar_detail/$1');
         $routes->group('penyewaan', ['filter' => 'isPenghuni', 'namespace' => 'App\Controllers\Penghuni'], static function ($routes) {
             $routes->get('/', 'PenyewaanController::penyewaan');
             $routes->post('/', 'PenyewaanController::save');
@@ -116,6 +117,7 @@ $routes->group('', ['namespace' => 'App\Controllers'], static function ($routes)
     $routes->get('/', 'Home::index', ['filter' => 'isGuest']);
     $routes->post('/', 'Home::index', ['filter' => 'isGuest']);
     $routes->get('/denah', 'Home::denah', ['filter' => 'isGuest']);
+    $routes->get('/(:any)/denah', 'Home::denah');
     $routes->get('/kamar_detail/(:num)', 'Home::kamar_detail/$1', ['filter' => 'isGuest']);
     $routes->post('/temp_sewa', 'Home::temp_sewa', ['filter' => 'isGuest']);
 });

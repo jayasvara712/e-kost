@@ -1,16 +1,9 @@
-<?= $this->extend('layout/template'); ?>
+<?= $this->extend('layout/template_penghuni'); ?>
 <?= $this->section('content'); ?>
 
 <!-- Main Content -->
 <div class="main-content">
     <section class="section">
-        <div class="section-header">
-            <h1>Buat Komplain</h1>
-            <div class="section-header-breadcrumb">
-                <div class="breadcrumb-item">Komplain</div>
-                <div class="breadcrumb-item">Buat</div>
-            </div>
-        </div>
 
         <div class="section-body">
 

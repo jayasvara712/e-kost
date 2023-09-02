@@ -1,16 +1,9 @@
-<?= $this->extend('layout/template'); ?>
+<?= $this->extend('layout/template_penghuni'); ?>
 <?= $this->section('content'); ?>
 
 <!-- Main Content -->
 <div class="main-content">
     <section class="section">
-        <div class="section-header">
-            <h1>Detail Komplain</h1>
-            <div class="section-header-breadcrumb">
-                <div class="breadcrumb-item active"><a href="#">Komplain</a></div>
-                <div class="breadcrumb-item"><?= $judul_tiket ?></div>
-            </div>
-        </div>
 
         <div class="section-body">
 

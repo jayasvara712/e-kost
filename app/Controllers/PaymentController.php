@@ -66,6 +66,7 @@ class PaymentController extends BaseController
     public function payMidtrans()
     {
         session()->remove('pembayaran');
+        session()->remove('firstPay');
         session()->set(['pembayaran'       => 'none']);
 
         if ($this->request->isAJAX()) {
@@ -165,6 +166,7 @@ class PaymentController extends BaseController
             echo json_encode($json);
         } else {
             session()->remove('pembayaran');
+            session()->remove('firstPay');
             session()->set(['pembayaran'       => 'none']);
 
             $no_invoice = $post['no_invoice'];

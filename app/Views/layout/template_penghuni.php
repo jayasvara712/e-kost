@@ -52,7 +52,7 @@
         <div class="main-wrapper container">
             <div class="navbar-bg"></div>
             <nav class="navbar navbar-expand-sm main-navbar">
-                <a href="index.html" class="navbar-brand sidebar-gone-hide"><?= getenv('judul_web') ?></a>
+                <a href="/" class="navbar-brand sidebar-gone-hide"><?= getenv('judul_web') ?></a>
                 <a href="#" class="nav-link sidebar-gone-show" data-toggle="sidebar"><i class="fas fa-bars"></i></a>
                 <div class="nav-collapse">
                     <a class="sidebar-gone-show nav-collapse-toggle nav-link" href="#">
@@ -64,28 +64,31 @@
                 </form>
 
                 <ul class="navbar-nav navbar-right">
-                    <li class="nav-item" id="m-home"><a href="/" class="nav-link"><i class="fas fa-home"></i> Kos</a></li>
-                    <li class="nav-item" id="m-denah"><a href="/denah" class="nav-link"><i class="fas fa-map"></i> Denah</a></li>
-                    <li class="nav-item"><a href="/login" class="nav-link btn btn-success"><i class="fas fa-door-open"></i> Masuk</a></li>
+                    <li class="nav-item" id="m-home"><a href="/" class="nav-link <?= session('pembayaran') == 'yes' ? 'disabled' : '' ?>"><i class="fas fa-home"></i> Kos</a></li>
+                    <li class="nav-item" id="m-denah"><a href="<?= session('role') == '' ? site_url("/denah") : site_url("/penghuni/denah") ?>" class="nav-link <?= session('pembayaran') == 'yes' ? 'disabled' : '' ?>"><i class="fas fa-map"></i> Denah</a></li>
+                    <?= session('role') == '' ? '<li class="nav-item "><a href="/login" class="nav-link btn btn-success"><i class="fas fa-door-open"></i> Masuk</a></li>' : '' ?>
                     <?php if (session('role') == 'penghuni') { ?>
+                        <li class="nav-item" id="m-penyewaan">
+                            <a href="<?= site_url("/penghuni/penyewaan") ?>" class="nav-link <?= session('pembayaran') == 'yes' ? 'disabled' : '' ?>"><i class="fas fa-house-user"></i><span> Penyewaan Kamar</span></a>
+                        </li>
+                        <li class="nav-item" id="m-ticket">
+                            <a href="<?= site_url("/penghuni/tiket") ?>" class="nav-link <?= session('pembayaran') == 'yes' ? 'disabled' : '' ?>"><i class="fas fa-comments"></i><span> Komplain</span></a>
+                        </li>
                         <li class="dropdown"><a href="#" data-toggle="dropdown" class="nav-link dropdown-toggle nav-link-lg nav-link-user">
-                                <div class="d-sm-none d-lg-inline-block">Hi, Ujang Maman</div>
+                                <img alt="image" src="<?= base_url() ?>/stisla/assets/img/avatar/avatar-1.png" class="rounded-circle mr-1">
+                                <div class="d-sm-none d-lg-inline-block"><?= session('name') ?></div>
                             </a>
                             <div class="dropdown-menu dropdown-menu-right">
-                                <div class="dropdown-title">Logged in 5 min ago</div>
-                                <a href="features-profile.html" class="dropdown-item has-icon">
-                                    <i class="far fa-user"></i> Profile
-                                </a>
-                                <a href="features-activities.html" class="dropdown-item has-icon">
-                                    <i class="fas fa-bolt"></i> Activities
-                                </a>
-                                <a href="features-settings.html" class="dropdown-item has-icon">
+                                <a href="<?= site_url(session()->role . '/setting') ?>" class="dropdown-item has-icon">
                                     <i class="fas fa-cog"></i> Settings
                                 </a>
                                 <div class="dropdown-divider"></div>
-                                <a href="#" class="dropdown-item has-icon text-danger">
-                                    <i class="fas fa-sign-out-alt"></i> Logout
-                                </a>
+                                <form action="/logout" method="post" id="logout">
+                                    <?= csrf_field() ?>
+                                    <a href="#" class="dropdown-item has-icon text-danger" onclick="logout()">
+                                        <i class="fas fa-sign-out-alt"></i> Logout
+                                    </a>
+                                </form>
                             </div>
                         </li>
                     <?php } ?>

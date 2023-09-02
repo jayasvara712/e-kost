@@ -1,17 +1,9 @@
-<?= $this->extend('layout/template'); ?>
+<?= $this->extend('layout/template_penghuni'); ?>
 <?= $this->section('content'); ?>
 
 <!-- Main Content -->
 <div class="main-content">
     <section class="section">
-        <div class="section-header">
-            <h1>Invoice</h1>
-            <div class="section-header-breadcrumb">
-                <div class="breadcrumb-item active"><a href="#">Penyewa</a></div>
-                <div class="breadcrumb-item">Penyewaan Kamar</div>
-                <div class="breadcrumb-item">Invoice</div>
-            </div>
-        </div>
 
         <div class="section-body">
             <form action="<?= $payment_method == 'C' ? site_url('/penyewaan_detail/payment') : '' ?>" method="POST" autocomplete="off" enctype="multipart/form-data">
@@ -136,9 +128,15 @@
                             <?php } else if ($payment_method == 'M') { ?>
                                 <button class="btn btn-primary btn-icon icon-left" id="btnBayar"><i class="fas fa-credit-card"></i> Proses Pembayaran</button>
                             <?php } ?>
-                            <div class="float-lg-left mb-lg-0 mb-3">
-                                <button class="btn btn-danger" id="btndelete1" type="button" onclick="deleteData(1,<?= $id_kamar ?>,'<?= '/' . $url ?>','<?= $alert ?>')"><i class="fas fa-times"></i> Cancel</button>
-                            </div>
+                            <?php if (session('firstPay') == 'yes') { ?>
+                                <div class="float-lg-left mb-lg-0 mb-3">
+                                    <button class="btn btn-danger" id="btndelete1" type="button" onclick="deleteData(1,<?= $id_kamar ?>,'<?= '/' . $url ?>','<?= $alert ?>')"><i class="fas fa-times"></i> Cancel</button>
+                                </div>
+                            <?php } else { ?>
+                                <div class="float-lg-left mb-lg-0 mb-3">
+                                    <a href="<?= site_url($url . '/detail_penyewaan/' . $id_penyewaan) ?>" class="btn btn-danger btn-icon icon-left"><i class="fas fa-times"></i> Cancel</a>
+                                </div>
+                            <?php } ?>
                         <?php } else { ?>
                             <div class="float-lg-left mb-lg-0 mb-3">
                                 <a href="<?= site_url($url . '/detail_penyewaan/' . $id_penyewaan) ?>" class="btn btn-danger btn-icon icon-left"><i class="fas fa-times"></i> Cancel</a>

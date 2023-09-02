@@ -1,17 +1,9 @@
-<?= $this->extend('layout/template'); ?>
+<?= $this->extend('layout/template_penghuni'); ?>
 <?= $this->section('content'); ?>
 
 <!-- Main Content -->
 <div class="main-content">
     <section class="section">
-        <div class="section-header">
-            <h1>Invoice</h1>
-            <div class="section-header-breadcrumb">
-                <div class="breadcrumb-item active"><a href="#">Penyewa</a></div>
-                <div class="breadcrumb-item">Penyewaan Kamar</div>
-                <div class="breadcrumb-item">Invoice</div>
-            </div>
-        </div>
 
         <div class="section-body">
             <? csrf_field() ?>

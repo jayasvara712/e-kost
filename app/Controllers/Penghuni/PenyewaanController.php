@@ -12,6 +12,7 @@ class PenyewaanController extends BaseController
 {
     private $menu1 = "<script language=\"javascript\">menu('m-kamar');</script>";
     private $menu2 = "<script language=\"javascript\">menu('m-penyewaan');</script>";
+    private $menu3 = "<script language=\"javascript\">menu('m-home');</script>";
     private $url = "penghuni/penyewaan";
 
     protected $modelPenghuni;
@@ -75,33 +76,27 @@ class PenyewaanController extends BaseController
     public function index()
     {
         $lantai_kamar = '';
-        $dataTemp = [];
-
         $post = $this->request->getPost();
         if (isset($post['lantai_kamar'])) {
             $lantai_kamar = $post['lantai_kamar'];
         }
 
-        if (session('id_kamar') != '' && session('nomor_kamar') != '' && session('harga_kamar') != '' && session('current_tab') != '') {
-            $dataTemp = [
-                'id_kamar'      => session('id_kamar'),
-                'nomor_kamar'   => session('nomor_kamar'),
-                'harga_kamar'   => session('harga_kamar'),
-                'current_tab'   => session('current_tab')
-            ];
-
-            $session_del = ['id_kamar', 'nomor_kamar', 'harga_kamar', 'current_tab'];
-            session()->remove($session_del);
-        }
-
-        // dd($dataTemp);
         $data = [
-            'no_invoice' => $this->invoice(),
             'dataKamar'     => $this->modelKamar->getAll_Available_filter($lantai_kamar),
-            'dataTemp'     => $dataTemp,
-            'url'       => $this->url
+            'lantai'        => $lantai_kamar
         ];
-        echo view('penghuni/index', $data) . $this->menu1;
+        echo view('penghuni/index', $data) . $this->menu3;
+    }
+
+    public function kamar_detail($id_kamar)
+    {
+        $dataKamar = $this->modelKamar->getSpecify($id_kamar);
+        $data = [
+            'kamar'     => $dataKamar['kamar'],
+            'fasilitas'     => $dataKamar['fasilitas'],
+            'gambar'     => $dataKamar['gambar'],
+        ];
+        echo view('penghuni/kamar_detail', $data) . $this->menu1;
     }
 
     public function save()
@@ -157,8 +152,12 @@ class PenyewaanController extends BaseController
                 'status_kamar' => 'Tidak Tersedia'
             ];
             $this->modelKamar->update($id_kamar, $data2);
-            session()->remove('pembayaran');
-            session()->set(['pembayaran'       => 'yes']);
+
+            $params = [
+                'pembayaran'       => 'yes',
+                'firstPay'       => 'yes',
+            ];
+            session()->set($params);
 
             return redirect()->to(site_url($this->url . '/bayar/' . $id_penyewaan))->with('success', 'Data Penyewaan Berhasil Ditambah');
         }
@@ -331,6 +330,16 @@ class PenyewaanController extends BaseController
 
     public function pay($id)
     {
+        session()->remove('pembayaran');
+        session()->set([
+            'pembayaran'       => 'yes',
+        ]);
+        if (session('firstPay') == 'yes') {
+            session()->remove('firstPay');
+            session()->set([
+                'firstPay'       => 'yes',
+            ]);
+        }
         $cekData = $this->modelPenyewaan->find($id);
 
         if ($cekData) {
@@ -392,7 +401,12 @@ class PenyewaanController extends BaseController
     public function cancel($id)
     {
         session()->remove('pembayaran');
-        session()->set(['pembayaran'       => 'none']);
+        session()->remove('firstPay');
+        $params = [
+            'pembayaran'       => 'none',
+            'firstPay'          => 'none',
+        ];
+        session()->set($params);
 
         $data = $this->modelPenyewaan->getAllDetail($id);
         $order_id = $this->modelPenyewaanDetail->getOrder($id);
@@ -457,8 +471,11 @@ class PenyewaanController extends BaseController
         ];
         $this->modelKamar->update($id_kamar, $data1);
         $this->modelPenyewaan->where('id_kamar', $id_kamar)->delete();
+        session()->remove('pembayaran');
+        session()->remove('firstPay');
         $params = [
-            'pembayaran'       => false
+            'pembayaran'       => 'none',
+            'firstPay'          => 'none',
         ];
         session()->set($params);
         $json = [
