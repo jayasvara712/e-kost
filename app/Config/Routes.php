@@ -116,6 +116,8 @@ $routes->group('', ['namespace' => 'App\Controllers'], static function ($routes)
     $routes->get('/', 'Home::index', ['filter' => 'isGuest']);
     $routes->post('/', 'Home::index', ['filter' => 'isGuest']);
     $routes->get('/denah', 'Home::denah', ['filter' => 'isGuest']);
+    $routes->get('/kamar_detail/(:num)', 'Home::kamar_detail/$1', ['filter' => 'isGuest']);
+    $routes->post('/temp_sewa', 'Home::temp_sewa', ['filter' => 'isGuest']);
 });
 
 $routes->presenter('dashboard');

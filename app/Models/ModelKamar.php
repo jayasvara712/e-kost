@@ -305,6 +305,102 @@ class ModelKamar extends Model
         return $dataKamar;
     }
 
+    public function getSpecify($id_kamar)
+    {
+        $dataTemp = [];
+
+        $kamar = [];
+        $fasilitas = [];
+        $gambar = [];
+
+        $builder = $this->db->table($this->table);
+        $builder->select('kamar.id_kamar,kamar.id_tipe_kamar,kamar.nomor_kamar,kamar.status_kamar,kamar.keterangan_kamar,kamar.harga_kamar, tipe_kamar.judul_tipe_kamar, tipe_kamar_fasilitas.id_fasilitas,tipe_kamar_fasilitas.id_tipe_kamar_fasilitas,fasilitas.judul_fasilitas,fasilitas.icon_fasilitas,tipe_kamar_gambar.image,tipe_kamar_gambar.id_tipe_kamar_gambar');
+        $builder->join('tipe_kamar', 'tipe_kamar.id_tipe_kamar =  kamar.id_tipe_kamar', 'LEFT');
+        $builder->join('tipe_kamar_fasilitas', 'tipe_kamar_fasilitas.id_tipe_kamar =  tipe_kamar.id_tipe_kamar', 'LEFT');
+        $builder->join('tipe_kamar_gambar', 'tipe_kamar_gambar.id_tipe_kamar =  tipe_kamar.id_tipe_kamar', 'LEFT');
+        $builder->join('fasilitas', 'fasilitas.id_fasilitas =  tipe_kamar_fasilitas.id_fasilitas', 'LEFT');
+        $builder->groupBy('kamar.id_kamar,kamar.id_tipe_kamar,kamar.nomor_kamar,kamar.status_kamar,kamar.keterangan_kamar,kamar.harga_kamar, tipe_kamar.judul_tipe_kamar, tipe_kamar_fasilitas.id_fasilitas,tipe_kamar_fasilitas.id_tipe_kamar_fasilitas,fasilitas.judul_fasilitas,fasilitas.icon_fasilitas,tipe_kamar_gambar.image,tipe_kamar_gambar.id_tipe_kamar_gambar');
+        $builder->orderBy('status_kamar', 'ASC');
+        $builder->where('kamar.id_kamar', $id_kamar);
+        $objKamar = $builder->get()->getResult();
+
+        foreach ($objKamar as $key => $value) {
+
+            array_push(
+                $dataTemp,
+                [
+                    'id_kamar'              => $value->id_kamar,
+                    'nomor_kamar'           => $value->nomor_kamar,
+                    'harga_kamar'           => $value->harga_kamar,
+                    'status_kamar'          => $value->status_kamar,
+                    'keterangan_kamar'      => $value->keterangan_kamar,
+                    'id_tipe_kamar'         => $value->id_tipe_kamar,
+                    'judul_tipe_kamar'      => $value->judul_tipe_kamar,
+                    'id_fasilitas'          => $value->id_fasilitas,
+                    'judul_fasilitas'       => $value->judul_fasilitas,
+                    'id_tipe_kamar_gambar'  => $value->id_tipe_kamar_gambar,
+                    'image'                 => $value->image,
+                ]
+            );
+
+            $temp_kamar =
+                [
+                    'id_kamar'          => $value->id_kamar,
+                    'nomor_kamar'       => $value->nomor_kamar,
+                    'harga_kamar'       => $value->harga_kamar,
+                    'status_kamar'      => $value->status_kamar,
+                    'keterangan_kamar'  => $value->keterangan_kamar,
+                    'id_tipe_kamar'     => $value->id_tipe_kamar,
+                    'judul_tipe_kamar'  => $value->judul_tipe_kamar,
+                ];
+
+            $temp_fasilitas =
+                [
+                    'id_kamar'          => $value->id_kamar,
+                    'id_tipe_kamar'  => $value->id_tipe_kamar,
+                    'id_fasilitas'      => $value->id_fasilitas,
+                    'judul_fasilitas'   => $value->judul_fasilitas,
+                    'icon_fasilitas'   => $value->icon_fasilitas,
+                ];
+
+            $temp_gambar =
+                [
+                    'id_kamar'              => $value->id_kamar,
+                    'id_tipe_kamar'  => $value->id_tipe_kamar,
+                    'id_tipe_kamar_gambar'  => $value->id_tipe_kamar_gambar,
+                    'image'                 => $value->image,
+                ];
+
+            if (!in_array($temp_kamar, $kamar)) {
+                array_push(
+                    $kamar,
+                    $temp_kamar
+                );
+            }
+            if (!in_array($temp_fasilitas, $fasilitas)) {
+                array_push(
+                    $fasilitas,
+                    $temp_fasilitas
+                );
+            }
+            if (!in_array($temp_gambar, $gambar)) {
+                array_push(
+                    $gambar,
+                    $temp_gambar
+                );
+            }
+        }
+
+        $dataKamar =
+            [
+                'kamar'     => $kamar[0],
+                'fasilitas' => $fasilitas,
+                'gambar'    => $gambar
+            ];
+
+        return $dataKamar;
+    }
+
     public function getAll_Fasilitas()
     {
         $builder = $this->db->table($this->table);

@@ -46,7 +46,7 @@
                     <input type="hidden" name="current_tab" id="current_tab" class="current_tab" value="<?= (isset($dataTemp['current_tab'])) ? $dataTemp['current_tab'] : 0 ?>">
                     <input type="hidden" name="id_kamar" id="id_kamar" class="id_kamar" value="<?= (isset($dataTemp['id_kamar'])) ? $dataTemp['id_kamar'] : '' ?>">
                     <input type="hidden" name="nomor_kamar" id="nomor_kamar" class="nomor_kamar" value="<?= (isset($dataTemp['nomor_kamar'])) ? $dataTemp['nomor_kamar'] : '' ?>">
-                    <input type="hidden" class="form-control" name="id_penghuni" id="id_penghuni" value="<?= session('id_penghuni') ?>">
+                    <input type="hidden" name="id_penghuni" id="id_penghuni" value="<?= session('id_penghuni') ?>">
 
                     <div class="row">
 

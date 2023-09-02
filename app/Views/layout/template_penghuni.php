@@ -26,12 +26,14 @@
     <link rel="stylesheet" href="<?= base_url(); ?>/stisla/node_modules/bootstrap-timepicker/css/bootstrap-timepicker.min.css">
     <link rel="stylesheet" href="<?= base_url(); ?>/stisla/node_modules/bootstrap-tagsinput/dist/bootstrap-tagsinput.css">
 
+    <!-- CSS Libraries -->
+    <link rel="stylesheet" href="<?= base_url(); ?>/asset/custom.css">
+
     <!-- Template CSS -->
     <link rel="stylesheet" href="<?= base_url(); ?>/stisla/assets/css/style.css">
     <link rel="stylesheet" href="<?= base_url(); ?>/stisla/assets/css/components.css">
-    <link rel="stylesheet" href="<?= base_url(); ?>/asset/backend.css">
-
     <!-- Start GA -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-94034622-3"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
 
@@ -45,24 +47,55 @@
     <!-- /END GA -->
 </head>
 
-
-<body class="<?= session('role') == 'penghuni' ? 'sidebar-mini' : '' ?>">
-
+<body class="layout-3">
     <div id="app">
-        <div class="main-wrapper">
-            <?php
-            if (session('isLoggedIn')) {
-                include('menu.php');
-            } else if (session('url') == 'home') {
-                include('menu_guest.php');
-            }
-            ?>
+        <div class="main-wrapper container">
+            <div class="navbar-bg"></div>
+            <nav class="navbar navbar-expand-sm main-navbar">
+                <a href="index.html" class="navbar-brand sidebar-gone-hide"><?= getenv('judul_web') ?></a>
+                <a href="#" class="nav-link sidebar-gone-show" data-toggle="sidebar"><i class="fas fa-bars"></i></a>
+                <div class="nav-collapse">
+                    <a class="sidebar-gone-show nav-collapse-toggle nav-link" href="#">
+                        <i class="fas fa-ellipsis-v"></i>
+                    </a>
+                </div>
+
+                <form class="form-inline ml-auto">
+                </form>
+
+                <ul class="navbar-nav navbar-right">
+                    <li class="nav-item" id="m-home"><a href="/" class="nav-link"><i class="fas fa-home"></i> Kos</a></li>
+                    <li class="nav-item" id="m-denah"><a href="/denah" class="nav-link"><i class="fas fa-map"></i> Denah</a></li>
+                    <li class="nav-item"><a href="/login" class="nav-link btn btn-success"><i class="fas fa-door-open"></i> Masuk</a></li>
+                    <?php if (session('role') == 'penghuni') { ?>
+                        <li class="dropdown"><a href="#" data-toggle="dropdown" class="nav-link dropdown-toggle nav-link-lg nav-link-user">
+                                <div class="d-sm-none d-lg-inline-block">Hi, Ujang Maman</div>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-right">
+                                <div class="dropdown-title">Logged in 5 min ago</div>
+                                <a href="features-profile.html" class="dropdown-item has-icon">
+                                    <i class="far fa-user"></i> Profile
+                                </a>
+                                <a href="features-activities.html" class="dropdown-item has-icon">
+                                    <i class="fas fa-bolt"></i> Activities
+                                </a>
+                                <a href="features-settings.html" class="dropdown-item has-icon">
+                                    <i class="fas fa-cog"></i> Settings
+                                </a>
+                                <div class="dropdown-divider"></div>
+                                <a href="#" class="dropdown-item has-icon text-danger">
+                                    <i class="fas fa-sign-out-alt"></i> Logout
+                                </a>
+                            </div>
+                        </li>
+                    <?php } ?>
+                </ul>
+            </nav>
+
             <?= $this->renderSection('content'); ?>
 
             <?php
-            if (session('isLoggedIn')) {
-                include('footer.php');
-            }
+            include('footer.php');
             ?>
         </div>
     </div>
@@ -114,7 +147,6 @@
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-94034622-3"></script>
     <script src="<?= base_url(); ?>/asset/js/custom.js"></script>
     <script src="<?= base_url(); ?>/asset/js/previewImage.js"></script>
-
 </body>
 
 </html>

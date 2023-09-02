@@ -1,11 +1,20 @@
-/* body.layout-3 .navbar-bg {
+body.layout-3 .main-content {
+    padding-top: 100px !important;
+  }
+
+body.layout-3 .navbar-bg {
     z-index: 889 !important;
     height: 70px !important;
 }
 
-body.layout-2 .main-content {
-    padding-top: 107px;
-    padding-left: 30px;
-    padding-right: 0;
-    width: calc(100% - 200px);
-} */
+.navbar .nav-link.nav-link-lg div {
+    margin-top: 0px !important;
+}
+
+.article-header{
+    height: 450px !important;
+}
+
+.gallery-item{
+    object-fit: cover !important;
+}

@@ -3,8 +3,10 @@
 namespace App\Controllers;
 
 use App\Controllers\BaseController;
+use App\Models\ModelKamar;
 use App\Models\ModelKaryawan;
 use App\Models\ModelPenghuni;
+use App\Models\ModelPenyewaan;
 use App\Models\ModelUser;
 
 class Auth extends BaseController
@@ -12,6 +14,8 @@ class Auth extends BaseController
     protected $user;
     protected $penghuni;
     protected $karyawan;
+    protected $modelPenyewaan;
+    protected $modelKamar;
     protected $helpers = ['form'];
 
     function __construct()
@@ -19,6 +23,8 @@ class Auth extends BaseController
         $this->user = new ModelUser();
         $this->penghuni = new ModelPenghuni();
         $this->karyawan = new ModelKaryawan();
+        $this->modelPenyewaan = new ModelPenyewaan();
+        $this->modelKamar = new ModelKamar();
     }
 
     public function index()
@@ -28,7 +34,6 @@ class Auth extends BaseController
 
     public function login()
     {
-
         session()->remove('url');
         if (session('id_user')) {
             return redirect()->to(site_url('/' . session('role')));
@@ -68,7 +73,39 @@ class Auth extends BaseController
                         'pembayaran'    => 'none'
                     ];
                     session()->set($params);
-                    return redirect()->to(site_url('/penghuni'))->with('success', 'Selamat Datang, anda berhasil login sebagai ' . $penghuni->nama_penghuni);
+                    if (session('temp_sewa') == 'yes') {
+                        if (session('id_kamar') == null && session('tgl_penyewaan') == null && session('lama_penyewaan') == null && session('payment_method') == null) {
+                            // apabila syarat tidak terpenuhi
+                            session()->remove('temp_sewa');
+                            return redirect()->to(site_url('/penghuni'));
+                        } else {
+                            $id_kamar = session('id_kamar');
+                            $tgl_penyewaan = session('tgl_penyewaan');
+                            $lama_penyewaan = session('lama_penyewaan');
+                            $payment_method = session('payment_method');
+
+                            $data1 = [
+                                'id_penghuni' => $penghuni->id_penghuni,
+                                'id_kamar' => $id_kamar,
+                                'tgl_penyewaan' => $tgl_penyewaan,
+                                'lama_penyewaan' => $lama_penyewaan,
+                                'payment_method' => $payment_method,
+                                'last_payment' => 0,
+                                'payment_period' => 0,
+                            ];
+                            $id_penyewaan = $this->modelPenyewaan->simpan($data1);
+                            $data2 = [
+                                'status_kamar' => 'Tidak Tersedia'
+                            ];
+                            $this->modelKamar->update($id_kamar, $data2);
+                            session()->remove('pembayaran');
+                            session()->set(['pembayaran'       => 'yes']);
+
+                            return redirect()->to(site_url('/penghuni/penyewaan/bayar/' . $id_penyewaan))->with('success', 'Data Penyewaan Berhasil Ditambah');
+                        }
+                    } else {
+                        return redirect()->to(site_url('/penghuni'))->with('success', 'Selamat Datang, anda berhasil login sebagai ' . $penghuni->nama_penghuni);
+                    }
                 } else if ($user->role == 'karyawan') {
                     $query = $this->karyawan->getWhere(['id_user' => $user->id_user]);
                     $karyawan = $query->getRow();
